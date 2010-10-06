@@ -7,7 +7,7 @@ namespace CommonContracts.WsBaseFaults
     /// <summary>
     /// Provides the minimum base common members that all <see cref="DataContractSerializer"/> based faults should provide.
     /// </summary>
-    /// <remarks>Inheritors should only use <see cref="DataMember.Order"/> values greater than 1.</remarks>
+    /// <remarks>Inheritors should only use <see cref="DataMemberAttribute.Order"/> values greater than 1.</remarks>
     [DataContract(IsReference = false, Name = "BaseFault", Namespace = Constants.WsBaseFaultsNamespace)]
     public abstract class BaseFault
     {
@@ -89,7 +89,7 @@ namespace CommonContracts.WsBaseFaults
             get { return this.faultCause; }
             set
             {
-                if (ReferenceEquals(this, value)) throw new ArgumentException("You cannot nest a BaseFault with the same reference as itself as this would cause a cirular reference in the FaultCause chain.", "FaultCause");
+                if (ReferenceEquals(this, value)) throw new ArgumentException("You cannot nest a BaseFault with the same reference as itself as this would cause a cirular reference in the FaultCause chain.", "value");
                 this.faultCause = value;
             }
         }
