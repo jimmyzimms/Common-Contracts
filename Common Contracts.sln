@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS BaseFaults", "WS BaseFaults\WS BaseFaults.csproj", "{32432083-7A57-40B8-AD5E-6E7D59A3481D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS BaseFaults Tests", "WS BaseFaults Tests\WS BaseFaults Tests.csproj", "{41EE37E6-47B5-4E81-860E-9C5EC6838E06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ADB38025-E178-4953-A0C5-EC371E1EA7EC}"
+	ProjectSection(SolutionItems) = preProject
+		Common Contracts.vsmdi = Common Contracts.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Libraries", "External Libraries", "{240A24BB-33F2-410E-B084-330460BD6A5B}"
+	ProjectSection(SolutionItems) = preProject
+		External Libraries\Moq.dll = External Libraries\Moq.dll
+		External Libraries\Moq.xml = External Libraries\Moq.xml
+		External Libraries\nunit.framework.dll = External Libraries\nunit.framework.dll
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs14
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = WS\u0020BaseFaults\u0020Tests\\WS\u0020BaseFaults\u0020Tests.csproj
+		SccProjectName1 = WS\u0020BaseFaults\u0020Tests
+		SccLocalPath1 = WS\u0020BaseFaults\u0020Tests
+		SccProjectUniqueName2 = WS\u0020BaseFaults\\WS\u0020BaseFaults.csproj
+		SccProjectName2 = WS\u0020BaseFaults
+		SccLocalPath2 = WS\u0020BaseFaults
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Common Contracts.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
