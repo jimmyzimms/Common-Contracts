@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Contracts;
 using System.Runtime.Serialization;
 
 namespace CommonContracts.WsBaseFaults
@@ -65,7 +66,11 @@ namespace CommonContracts.WsBaseFaults
         [DataMember(EmitDefaultValue = true, IsRequired = true, Name = "Timestamp", Order = 0)]
         public virtual DateTime Timestamp
         {
-            get { return this.timestamp; }
+            get
+            {
+                Contract.Ensures(Contract.Result<DateTime>().Kind == DateTimeKind.Utc);
+                return this.timestamp;
+            }
             protected set
             {
                 if (value.Kind != DateTimeKind.Utc) value = value.ToUniversalTime();
@@ -84,7 +89,7 @@ namespace CommonContracts.WsBaseFaults
             get { return this.faultCause; }
             set
             {
-                if (ReferenceEquals(this, value)) throw new ArgumentException("You cannot nest a BaseFault with the same reference as itself as this would cause a cirular reference in the FaultCause chain.");
+                if (ReferenceEquals(this, value)) throw new ArgumentException("You cannot nest a BaseFault with the same reference as itself as this would cause a cirular reference in the FaultCause chain.", "FaultCause");
                 this.faultCause = value;
             }
         }
