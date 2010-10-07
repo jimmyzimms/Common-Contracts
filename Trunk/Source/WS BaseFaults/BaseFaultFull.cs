@@ -238,9 +238,11 @@ namespace CommonContracts.WsBaseFaults
                 }
                 else if (reader.IsStartElement("FaultCause", Constants.WsBaseFaultsNamespace))
                 {
-                    var innerReder = XmlReader.Create(new StringReader(reader.ReadInnerXml()));
-                    innerReder.Read();
-                    this.faultCause = CreateFaultCause(innerReder);
+                    if (reader.IsEmptyElement) continue;
+
+                    var innerReader = XmlReader.Create(new StringReader(reader.ReadInnerXml()));
+                    innerReader.Read();
+                    this.faultCause = CreateFaultCause(innerReader);
                 }
                 else
                 {
