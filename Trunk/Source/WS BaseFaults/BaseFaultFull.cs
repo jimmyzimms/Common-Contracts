@@ -189,7 +189,7 @@ namespace CommonContracts.WsBaseFaults
             get { return this.faultCause; }
             set
             {
-                if (ReferenceEquals(this, value)) throw new ArgumentException("You cannot nest a BaseFault with the same reference as itself as this would cause a cirular reference in the FaultCause chain.");
+                if (ReferenceEquals(this, value)) throw new ArgumentException("You cannot nest a BaseFault with the same reference as itself as this would cause a cirular reference in the FaultCause chain.", "value");
                 this.faultCause = value;
             }
         }
