@@ -88,8 +88,8 @@ namespace CommonContracts.WsBaseFaults
         /// Gets or sets the cause of this fault.
         /// </summary>
         /// <remarks>
-        /// If being used on the client side for supporting nested faults, you should subclass this type
-        /// and indicate the set of possible issues via the <see cref="KnownTypeAttribute"/>.
+        /// If being used on the client side for supporting nested faults, you should subclass this type to represent
+        /// the top level fault and indicate the set of possible FaultCause types via the <see cref="KnownTypeAttribute"/>.
         /// </remarks>
         /// <value>The cause of this fault.</value>
         /// <exception cref="ArgumentException">The supplied value is the same reference as the current <see cref="BaseFault"/>.</exception>
