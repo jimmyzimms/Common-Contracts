@@ -280,6 +280,20 @@ namespace CommonContracts.WsBaseFaults.Tests
             Assert.That(target, Is.Not.Null);
             Assert.That(target.FaultCause, Is.Not.Null);
             Assert.That(target.FaultCause.Timestamp, Is.EqualTo(now));
+            Assert.That(target.FaultCause, Is.TypeOf<UnknownBaseFault>());
+        }
+
+        [Test()]
+        [Description("Confirms that we use the UnknownBaseFault type by default when deserializing FaultCause elements")]
+        [Category("Functional Tests")]
+        public void DeserializedNestedFaultsShouldDeserializeAsUnknownBaseFault()
+        {
+            const String xml = "<wsbf:BaseFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:FaultCause><wsbf:BaseFault><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp></wsbf:BaseFault></wsbf:FaultCause></wsbf:BaseFault>";
+            var reader = new XmlTextReader(new StringReader(xml));
+            var serializer = new XmlSerializer(typeof(TestFault));
+            var target = (BaseFaultFull)serializer.Deserialize(reader);
+
+            Assert.That(target.FaultCause, Is.TypeOf<UnknownBaseFault>());
         }
     }
 }
