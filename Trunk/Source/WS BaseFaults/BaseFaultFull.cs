@@ -26,7 +26,7 @@ namespace CommonContracts.WsBaseFaults
 
         private sealed class DescriptionCollection : Collection<Description>
         {
-            internal DescriptionCollection() { } //: base(CultureInfoEqualityComparer.Instance) { }
+            internal DescriptionCollection() { }
 
             internal DescriptionCollection(IEnumerable<Description> descriptions)
                 : this()
@@ -270,7 +270,7 @@ namespace CommonContracts.WsBaseFaults
         /// <summary>
         /// Allows customization of the <see cref="FaultCause"/> value to be created when reading from an XML source.
         /// </summary>
-        /// <remarks>This method only returns null. Override it to provide custom implementation.</remarks>
+        /// <remarks>This method always create a new instance of the <see cref="UnknownBaseFault"/> type. Override it to provide custom implementation.</remarks>
         /// <param name="reader">The <see cref="XmlReader"/> containing the XML content to process.</param>
         /// <returns>The appropriate <see cref="BaseFaultFull"/> type.</returns>
         [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
@@ -280,7 +280,7 @@ namespace CommonContracts.WsBaseFaults
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
             Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, "reader");
 
-            return null;
+            return new UnknownBaseFault(reader);
         }
 
         /// <summary>
