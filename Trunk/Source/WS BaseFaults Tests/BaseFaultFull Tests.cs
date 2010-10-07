@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace CommonContracts.WsBaseFaults.Tests
 {
     [TestFixture()]
-    public class BaseFaultFullTests
+    public partial class BaseFaultFullTests
     {
         [Test()]
         [Description("Confirms that the properties will be set by their constructor parameter counterparts")]
@@ -70,43 +70,6 @@ namespace CommonContracts.WsBaseFaults.Tests
             Assert.That(baseFault.Originator.ToEndpointAddress(), Is.SameAs(endpoint));
             Assert.That(baseFault.Timestamp, Is.EqualTo(utc));
         }
-
-        #region Private Test Class
-        
-        /// <summary>
-        /// Required for use on the <see cref="ConstructorShouldAllowNulls"/> as the constructors are ambiguous with a mock
-        /// </summary>
-        private sealed class TestFault : BaseFaultFull
-        {
-            internal TestFault() {}
-
-            internal TestFault(EndpointAddress originator)
-                : base(originator)
-            {
-            }
-
-            internal TestFault(IEnumerable<Description> descriptions)
-                : base(descriptions)
-            {
-            }
-
-            internal TestFault(ErrorCode errorCode)
-                : base(errorCode)
-            {
-            }
-
-            internal TestFault(DateTime utc)
-                : base(utc)
-            {
-            }
-
-            internal TestFault(DateTime utc, EndpointAddress originator, ErrorCode errorCode, IEnumerable<Description> descriptions)
-                : base(utc, originator, errorCode, descriptions)
-            {
-            }
-        }
-
-        #endregion
 
         [Test()]
         [Description("Confirms that nulls are allowed by the constructors")]
@@ -224,6 +187,7 @@ namespace CommonContracts.WsBaseFaults.Tests
 
         [Test()]
         [Description("Confirms that serialization logic works as expected")]
+        [Category("Functional Tests")]
         public void Serializable()
         {
             var endpoint = new EndpointAddress("http://someUri");
@@ -253,21 +217,45 @@ namespace CommonContracts.WsBaseFaults.Tests
             Assert.IsTrue(areEqual);
         }
 
-        /// <summary>
-        /// This type is required for the <see cref="Deserialize"/> test.
-        /// </summary>
-        [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaultsNamespace, DataType = Constants.WsBaseFaultsNamespace + ":BaseFaultType")]
-        public class Foo : BaseFaultFull{}
+        [Test()]
+        [Description("Specifically showing the use case for nested faults")]
+        [Category("Functional Tests")]
+        public void NestedFaultsShouldSerialize()
+        {
+            var now = new DateTime(2001, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+
+            var mock = new Mock<BaseFaultFull>();
+            mock.CallBase = true;
+            mock.SetupGet(item => item.Timestamp).Returns(now);
+            var innerFault = mock.Object;
+
+            var target = new TestFault(now) {FaultCause = innerFault};
+            var serializer = new XmlSerializer(typeof(BaseFaultFull));
+
+            XElement xml;
+
+            using (var stream = new MemoryStream())
+            {
+                serializer.Serialize(stream, target);
+                stream.Position = 0;
+
+                xml = XElement.Load(stream);
+            }
+            
+            var areEqual = XNode.DeepEquals(XElement.Parse("<wsbf:BaseFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:FaultCause><wsbf:BaseFault><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp></wsbf:BaseFault></wsbf:FaultCause></wsbf:BaseFault>"), xml.FirstNode);
+            Assert.IsTrue(areEqual);
+        }
 
         [Test()]
         [Description("Confirms that deserialization logic works as expected")]
+        [Category("Functional Tests")]
         public void Deserialize()
         {
             const String xml = "<wsbf:BaseFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:Originator xmlns:wsa='http://www.w3.org/2005/08/addressing' xsi:type='http://www.w3.org/2005/08/addressing:EndpointReference' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><wsa:Address>http://someuri/</wsa:Address></wsbf:Originator><wsbf:ErrorCode dialect='http://foo/'/><wsbf:Description>some desc</wsbf:Description></wsbf:BaseFault>";
 
             var reader = new XmlTextReader(new StringReader(xml));
 
-            var serializer = new XmlSerializer(typeof(Foo));
+            var serializer = new XmlSerializer(typeof(TestFault));
             var target = (BaseFaultFull)serializer.Deserialize(reader);
 
             Assert.That(target, Is.Not.Null);
@@ -275,6 +263,23 @@ namespace CommonContracts.WsBaseFaults.Tests
             Assert.That(target.FaultCause, Is.Null);
             Assert.That(target.Originator.ToEndpointAddress(), Is.EqualTo(new EndpointAddress("http://someuri/")));
             Assert.That(target.Timestamp, Is.EqualTo(new DateTime(2001, 1, 2, 3, 4, 5, DateTimeKind.Utc)));
+        }
+
+        [Test()]
+        [Description("Specifically showing the use case for nested faults")]
+        [Category("Functional Tests")]
+        public void NestedFaultsShouldDeserialize()
+        {
+            var now = new DateTime(2001, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+
+            const String xml = "<wsbf:BaseFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:FaultCause><wsbf:BaseFault><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp></wsbf:BaseFault></wsbf:FaultCause></wsbf:BaseFault>";
+            var reader = new XmlTextReader(new StringReader(xml));
+            var serializer = new XmlSerializer(typeof(TestFault));
+            var target = (BaseFaultFull)serializer.Deserialize(reader);
+
+            Assert.That(target, Is.Not.Null);
+            Assert.That(target.FaultCause, Is.Not.Null);
+            Assert.That(target.FaultCause.Timestamp, Is.EqualTo(now));
         }
     }
 }

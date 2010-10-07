@@ -238,7 +238,9 @@ namespace CommonContracts.WsBaseFaults
                 }
                 else if (reader.IsStartElement("FaultCause", Constants.WsBaseFaultsNamespace))
                 {
-                    this.faultCause = CreateFaultCause(reader.ReadSubtree());
+                    var innerReder = XmlReader.Create(new StringReader(reader.ReadInnerXml()));
+                    innerReder.Read();
+                    this.faultCause = CreateFaultCause(innerReder);
                 }
                 else
                 {
@@ -402,7 +404,9 @@ namespace CommonContracts.WsBaseFaults
 
             if (this.FaultCause != null)
             {
-                ((IXmlSerializable)this.FaultCause).WriteXml(writer);
+                writer.WriteStartElement(prefix, "FaultCause", Constants.WsBaseFaultsNamespace);
+                ((IXmlSerializable) this.FaultCause).WriteXml(writer);
+                writer.WriteEndElement();
             }
 
             writer.WriteEndElement();
