@@ -295,5 +295,27 @@ namespace CommonContracts.WsBaseFaults.Tests
 
             Assert.That(target.FaultCause, Is.TypeOf<UnknownBaseFault>());
         }
+
+        [Test()]
+        [Description("The FaultCause property must check that the value supplied does is not a reference to itself to help avoid circular references")]
+        public void CannotSetFaultCauseToSameReference()
+        {
+            var mock = new Mock<BaseFaultFull>();
+            mock.CallBase = true;
+
+            BaseFaultFull target = mock.Object;
+
+            Assert.IsFalse(ReferenceEquals(target, target.FaultCause)); // Sanity check
+            try
+            {
+                target.FaultCause = target;
+                Assert.Fail("Exception should have thrown");
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual("You cannot nest a BaseFault with the same reference as itself as this would cause a cirular reference in the FaultCause chain.\r\nParameter name: value", ex.Message);
+                Assert.AreEqual("value", ex.ParamName);
+            }
+        }
     }
 }
