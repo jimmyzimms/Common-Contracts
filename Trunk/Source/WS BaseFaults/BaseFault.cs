@@ -9,7 +9,7 @@ namespace CommonContracts.WsBaseFaults
     /// </summary>
     /// <remarks>Inheritors should only use <see cref="DataMemberAttribute.Order"/> values greater than 1.</remarks>
     [DataContract(IsReference = false, Name = "BaseFault", Namespace = Constants.WsBaseFaultsNamespace)]
-    public abstract class BaseFault
+    public abstract class BaseFault : IExtensibleDataObject
     {
         #region Fields
         
@@ -58,7 +58,13 @@ namespace CommonContracts.WsBaseFaults
         #endregion
 
         #region Properties
-        
+
+        /// <summary>
+        /// Gets or sets the structure that contains extra data.
+        /// </summary>
+        /// <value>An <see cref="ExtensionDataObject"/> that contains data that is not recognized as belonging to the data contract.</value>
+        public ExtensionDataObject ExtensionData { get; set; }
+
         /// <summary>
         /// Gets the time, in UTC, of the fault instance.
         /// </summary>
@@ -81,6 +87,10 @@ namespace CommonContracts.WsBaseFaults
         /// <summary>
         /// Gets or sets the cause of this fault.
         /// </summary>
+        /// <remarks>
+        /// If being used on the client side for supporting nested faults, you should subclass this type
+        /// and indicate the set of possible issues via the <see cref="KnownTypeAttribute"/>.
+        /// </remarks>
         /// <value>The cause of this fault.</value>
         /// <exception cref="ArgumentException">The supplied value is the same reference as the current <see cref="BaseFault"/>.</exception>
         [DataMember(EmitDefaultValue = true, IsRequired = false, Name = "FaultCause", Order = 1)]
