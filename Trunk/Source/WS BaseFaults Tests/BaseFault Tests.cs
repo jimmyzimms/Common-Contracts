@@ -132,8 +132,8 @@ namespace CommonContracts.WsBaseFaults.Tests
             }
             catch (ArgumentException ex)
             {
-                Assert.AreEqual("You cannot nest a BaseFault with the same reference as itself as this would cause a cirular reference in the FaultCause chain.\r\nParameter name: FaultCause", ex.Message);
-                Assert.AreEqual("FaultCause", ex.ParamName);
+                Assert.AreEqual("You cannot nest a BaseFault with the same reference as itself as this would cause a cirular reference in the FaultCause chain.\r\nParameter name: value", ex.Message);
+                Assert.AreEqual("value", ex.ParamName);
             }
         }
     }

@@ -15,7 +15,16 @@ namespace CommonContracts.WsBaseFaults
         /// <summary>
         /// Holds the namespace for the WS-BaseFaults types.
         /// </summary>
-        public const String WsBaseFaultsNamespace = "http://docs.oasis-open.org/wsrf/2004/06/wsrf-WS-BaseFaults-1.2-draft-02.xsd";
+        public const String WsBaseFaultsNamespace = "http://docs.oasis-open.org/wsrf/bf-2";
 
+        /// <summary>
+        /// Holds the namespace for the WS-Addressing types.
+        /// </summary>
+        internal const String WsAddressingNamespace = "http://www.w3.org/2005/08/addressing";
+
+        /// <summary>
+        /// Holds the namespace for the XSI types.
+        /// </summary>
+        internal const String XmlSchemaTypeNamespace = "http://www.w3.org/2001/XMLSchema-instance";
     }
 }
