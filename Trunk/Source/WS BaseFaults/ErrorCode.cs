@@ -76,7 +76,8 @@ namespace CommonContracts.WsBaseFaults
         /// Initializes a new instance of the <see cref="ErrorCode"/> class from the supplied <paramref name="reader"/>.
         /// </summary>
         /// <param name="reader">The <see cref="XmlReader"/> to create an instance from.</param>
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         public ErrorCode(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
@@ -89,6 +90,7 @@ namespace CommonContracts.WsBaseFaults
         /// Intializes a new instance of the <see cref="ErrorCode"/> class with the supplied <paramref name="dialect"/> value.
         /// </summary>
         /// <param name="dialect">The <see cref="Dialect"/> value.</param>
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         public ErrorCode(Uri dialect)
         {
             Contract.Requires<ArgumentNullException>(dialect != null, "dialect");
@@ -104,6 +106,7 @@ namespace CommonContracts.WsBaseFaults
         /// Gets the <see cref="Uri"/> value for the <see cref="ErrorCode"/>.
         /// </summary>
         /// <value>The <see cref="Uri"/> value for the <see cref="ErrorCode"/>.</value>
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         public virtual Uri Dialect
         {
             get { return this.dialect; }
@@ -129,7 +132,7 @@ namespace CommonContracts.WsBaseFaults
         /// and supplied to this method. The reader will always be positioned on the initial element.
         /// </remarks>
         /// <param name="reader">The <see cref="XmlReader"/> containing the XML to process.</param>
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Justification = "This is the parameter name of the code and globalization is not needed.")]
         protected virtual void ProcessAdditionalElements(XmlReader reader)
         {
@@ -148,7 +151,7 @@ namespace CommonContracts.WsBaseFaults
             return null;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Justification = "This is the parameter name of the code and globalization is not needed.")]
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
@@ -188,7 +191,7 @@ namespace CommonContracts.WsBaseFaults
         {
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Justification = "This is the parameter name of the code and globalization is not needed.")]
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {

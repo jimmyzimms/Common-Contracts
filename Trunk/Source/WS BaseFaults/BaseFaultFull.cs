@@ -272,10 +272,13 @@ namespace CommonContracts.WsBaseFaults
                 else if (reader.IsStartElement("Originator", Constants.WsBaseFaultsNamespace))
                 {
                     var epa = reader.ReadOuterXml();
-                    var innerReader = XmlReader.Create(new StringReader(epa));
-                    using (var dictionaryReader = XmlDictionaryReader.CreateDictionaryReader(innerReader))
+                    using (var stringReader = new StringReader(epa))
                     {
-                        this.originator = EndpointAddress10.FromEndpointAddress(EndpointAddress.ReadFrom(dictionaryReader));
+                        var innerReader = XmlReader.Create(stringReader);
+                        using (var dictionaryReader = XmlDictionaryReader.CreateDictionaryReader(innerReader))
+                        {
+                            this.originator = EndpointAddress10.FromEndpointAddress(EndpointAddress.ReadFrom(dictionaryReader));
+                        }
                     }
                 }
                 else if (reader.IsStartElement("ErrorCode", Constants.WsBaseFaultsNamespace))
@@ -291,9 +294,12 @@ namespace CommonContracts.WsBaseFaults
                 {
                     if (reader.IsEmptyElement) continue;
 
-                    var innerReader = XmlReader.Create(new StringReader(reader.ReadInnerXml()));
-                    innerReader.Read();
-                    this.faultCause = CreateFaultCause(innerReader);
+                    using (var stringReader = new StringReader(reader.ReadInnerXml()))
+                    {
+                        var innerReader = XmlReader.Create(stringReader);
+                        innerReader.Read();
+                        this.faultCause = CreateFaultCause(innerReader);
+                    }
                 }
                 else
                 {
@@ -312,7 +318,7 @@ namespace CommonContracts.WsBaseFaults
         /// </remarks>
         /// <param name="reader">The <see cref="XmlReader"/> containing the XML content to process.</param>
         /// <returns>The appropriate <see cref="ErrorCode"/> type.</returns>
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Justification = "This is the parameter name of the code and globalization is not needed.")]
         protected virtual ErrorCode CreateErrorCode(XmlReader reader)
         {
@@ -328,7 +334,7 @@ namespace CommonContracts.WsBaseFaults
         /// <remarks>This method always create a new instance of the <see cref="UnknownBaseFault"/> type. Override it to provide custom implementation.</remarks>
         /// <param name="reader">The <see cref="XmlReader"/> containing the XML content to process.</param>
         /// <returns>The appropriate <see cref="BaseFaultFull"/> type.</returns>
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Justification = "This is the parameter name of the code and globalization is not needed.")]
         protected virtual BaseFaultFull CreateFaultCause(XmlReader reader)
         {
@@ -352,7 +358,7 @@ namespace CommonContracts.WsBaseFaults
         /// </remarks>
         /// <param name="reader">The <see cref="XmlReader"/> to read the XML from.</param>
         /// <exception cref="InvalidOperationException">The current start element is not 'http://:BaseFault'. This is usually due to incorrect XML or forgetting to subclass this method to read the expected start element.</exception>
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Justification = "This is the parameter name of the code and globalization is not needed.")]
         protected virtual void ReadStartElement(XmlReader reader)
         {
@@ -397,7 +403,7 @@ namespace CommonContracts.WsBaseFaults
         /// start element.
         /// </remarks>
         /// <param name="writer">The <see cref="XmlWriter"/> to write the start element XML.</param>
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Justification = "This is the parameter name of the code and globalization is not needed.")]
         protected virtual void WriteStartElement(XmlWriter writer)
         {
@@ -414,11 +420,14 @@ namespace CommonContracts.WsBaseFaults
         /// </summary>
         /// <remarks>This method performs no work and is safe to not be called by inheritors.</remarks>
         /// <param name="writer">The <see cref="XmlWriter"/> to write any additional content XML.</param>
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         protected virtual void ProcessAdditionalElements(XmlWriter writer)
         {
+            Contract.Requires<ArgumentNullException>(writer != null, "writer");
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             Contract.Requires<ArgumentNullException>(writer != null, "writer");
@@ -476,6 +485,8 @@ namespace CommonContracts.WsBaseFaults
         /// </summary>
         /// <param name="xs">The <see cref="XmlSchemaSet"/> to add the schema for this type to.</param>
         /// <returns>The <see cref="XmlQualifiedName"/> for this type.</returns>
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "This parameter is validated via Code Contracts")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
         {
             Contract.Requires<ArgumentNullException>(xs != null, "xs");

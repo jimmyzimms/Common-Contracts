@@ -82,11 +82,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseFault.cs" />
+    <Compile Include="BaseFaultExtended.cs" />
     <Compile Include="BaseFaultFull.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Description.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="ErrorCode{T}.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnknownBaseFault.cs" />
   </ItemGroup>

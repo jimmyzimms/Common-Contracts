@@ -132,6 +132,7 @@ namespace CommonContracts.WsBaseFaults
         /// Extension point for additional xml content to be handled. This method simply creates a new element available via the <see cref="AdditionalContent"/> property containing the xml content of the current node.
         /// </summary>
         /// <param name="reader">The <see cref="XmlReader"/> containing the XML to process.</param>
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0", Justification = "This type is validated via Code Contracts")]
         protected override void ProcessAdditionalElements(XmlReader reader)
         {
             this.additionalContent.Add(XElement.Parse(reader.ReadOuterXml()));
@@ -158,6 +159,7 @@ namespace CommonContracts.WsBaseFaults
         /// Gets the unknown base fault element namespace uri.
         /// </summary>
         /// <value>The unknown base fault element namespace uri.</value>
+        [SuppressMessage("Microsoft.Design", "CA1056:UriPropertiesShouldNotBeStrings", Justification = "Due to the way this type is used as a class for serialization of unknown types this string value makes sense")]
         public String NamespaceUri
         {
             get

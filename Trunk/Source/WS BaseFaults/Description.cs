@@ -77,6 +77,7 @@ namespace CommonContracts.WsBaseFaults
         /// Initializes a new instance of the <see cref="Description"/> class from the supplied <paramref name="reader"/>.
         /// </summary>
         /// <param name="reader">The <see cref="XmlReader"/> to create an instance from.</param>
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         public Description(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
@@ -89,6 +90,7 @@ namespace CommonContracts.WsBaseFaults
         /// Initializes a new instance of the <see cref="Description"/> class.
         /// </summary>
         /// <param name="value">The <see cref="Value"/> property value.</param>
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         public Description(String value)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(value), "value");
@@ -109,7 +111,7 @@ namespace CommonContracts.WsBaseFaults
         }
 
         #endregion
-
+        
         #region Properties
 
         /// <summary>
@@ -141,7 +143,8 @@ namespace CommonContracts.WsBaseFaults
             return null;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is checked via Code Contracts. CA Engine does not yet understand how to deal with contracts.")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
