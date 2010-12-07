@@ -108,6 +108,7 @@ namespace CommonContracts.WsBaseFaults
         /// Extension point for additional xml content to be handled.
         /// </summary>
         /// <param name="reader">The <see cref="XmlReader"/> containing the XML to process.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Diagnostics.Contracts.__ContractsRuntime.Requires<System.ArgumentException>(System.Boolean,System.String,System.String)")]
         protected override void ProcessAdditionalElements(XmlReader reader)
         {
             this.content = new T();
