@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+  targetNamespace="http://schemas.xmlsoap.org/ws/2004/08/eventing"
+  xmlns:tns="http://schemas.xmlsoap.org/ws/2004/08/eventing"
+  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  blockDefault="#all">
+
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+
+    <xs:simpleType name="NonNegativeDurationType">
+        <xs:restriction base="xs:duration">
+            <xs:minInclusive value="P0Y0M0DT0H0M0S" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ExpirationType">
+        <xs:union memberTypes="xs:dateTime tns:NonNegativeDurationType" />
+    </xs:simpleType>
+</xs:schema>

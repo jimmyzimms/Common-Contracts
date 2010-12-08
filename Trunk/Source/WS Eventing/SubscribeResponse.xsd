@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+  targetNamespace="http://schemas.xmlsoap.org/ws/2004/08/eventing"
+  xmlns:tns="http://schemas.xmlsoap.org/ws/2004/08/eventing"
+  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  blockDefault="#all">
+    <xs:import namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+    <!-- Subscribe response -->
+    <xs:complexType name="SubscribeResponseType">
+        <xs:sequence>
+            <xs:element name="SubscriptionManager" type="wsa:EndpointReferenceType" />
+            <xs:element name="Expires" type="tns:ExpirationType" />
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:anyAttribute namespace="##other" processContents="lax" />
+    </xs:complexType>
+</xs:schema>

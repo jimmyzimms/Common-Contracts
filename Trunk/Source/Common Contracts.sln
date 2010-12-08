@@ -19,9 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Libraries", "Exter
 		External Libraries\nunit.framework.dll = External Libraries\nunit.framework.dll
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS Eventing", "WS Eventing\WS Eventing.csproj", "{A7EAFB06-148F-45FD-9535-A4A147E9C03B}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs14
 		SccLocalPath0 = .
@@ -31,23 +33,52 @@ Global
 		SccProjectUniqueName2 = WS\u0020BaseFaults\\WS\u0020BaseFaults.csproj
 		SccProjectName2 = WS\u0020BaseFaults
 		SccLocalPath2 = WS\u0020BaseFaults
+		SccProjectUniqueName3 = WS\u0020Eventing\\WS\u0020Eventing.csproj
+		SccProjectName3 = WS\u0020Eventing
+		SccLocalPath3 = WS\u0020Eventing
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Common Contracts.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{32432083-7A57-40B8-AD5E-6E7D59A3481D}.Release|x86.ActiveCfg = Release|Any CPU
 		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{41EE37E6-47B5-4E81-860E-9C5EC6838E06}.Release|x86.ActiveCfg = Release|Any CPU
+		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
