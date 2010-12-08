@@ -58,6 +58,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Xml;
 using System.Xml.Schema;
@@ -400,7 +401,7 @@ namespace CommonContracts.WsBaseFaults
         /// the BaseFault element, you should override this method, invoke the base version, and then add the appropriate
         /// xsi type attribute to the current element. If you are extending the BaseFault type, then do not call the base method
         /// and instead make a call to <see cref="XmlWriter.WriteStartElement(String, String, String)"/> to create the appropriate
-        /// start element.
+        /// start element. If you override this method you should also consider overriding <see cref="WriteEndElement"/> method as well.
         /// </remarks>
         /// <param name="writer">The <see cref="XmlWriter"/> to write the start element XML.</param>
         [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
@@ -413,6 +414,27 @@ namespace CommonContracts.WsBaseFaults
             if (String.IsNullOrEmpty(prefix)) prefix = "wsbf";
 
             writer.WriteStartElement(prefix, "BaseFault", Constants.WsBaseFaultsNamespace);
+        }
+
+        /// <summary>
+        /// Extension point for writing the end element. Since WS-BaseFaults supports extending the BaseFault element
+        /// or the BaseFault type, support for both approaches is required. This method provides a hook to allow customization
+        /// of the logic to be run for the end element name and namespace of the fault.
+        /// </summary>
+        /// <remarks>
+        /// This method will write assume you wrote a new start element in <see cref="WriteStartElement"/>. If you wrote
+        /// only a single element in the <seealso cref="WriteStartElement"/> method, you can simply call the base version. 
+        /// If instead you started more than one or wrote no start elements (for instance, relying on the default element
+        /// name from the <see cref="DataContractSerializer"/>) you can override this method and provide your own implementation.
+        /// </remarks>
+        /// <param name="writer">The <see cref="XmlWriter"/> to write the end element XML.</param>
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
+        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Justification = "This is the parameter name of the code and globalization is not needed.")]
+        protected virtual void WriteEndElement(XmlWriter writer)
+        {
+            Contract.Requires<ArgumentNullException>(writer != null, "writer");
+
+            writer.WriteEndElement();
         }
 
         /// <summary>
@@ -471,7 +493,7 @@ namespace CommonContracts.WsBaseFaults
                 writer.WriteEndElement();
             }
 
-            writer.WriteEndElement();
+            this.WriteEndElement(writer);
         }
 
         #endregion
