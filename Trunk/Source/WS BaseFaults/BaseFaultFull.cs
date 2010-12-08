@@ -83,16 +83,23 @@ namespace CommonContracts.WsBaseFaults
     /// </list>
     /// </para>
     /// <para>
-    /// When used in fault contracts along by throwing a <see cref="FaultException{T}"/> exception, the <see cref="WriteStartElement"/>
+    /// When used in fault contracts along with throwing a <see cref="FaultException{T}"/> exception, the <see cref="WriteStartElement"/>
     /// and <see cref="WriteEndElement"/> methods should be overriden with a no op implementation. This is due to how WCF will
     /// serialize the provided fault instance, the supplied <see cref="XmlWriter"/> already having the start and end tag functionality
-    /// coded.
+    /// coded. This approach limits your flexibility but will work for most use cases.
     /// </para>
     /// <para>
     /// When used with manual serialization, the BaseFault element will be automatically opened and closed by the default implementation.
-    /// If you want to provide a specific xsi:type attribute, call the base version, appending the require attribute with your type information.
-    /// If you want to instead leverage a custom extension to the element, override <seealso cref="WriteStartElement"/> and write the approriate
-    /// start tag to the suppleid writer. The base implementation does NOT need to be called in either case.
+    /// If you want to provide a specific xsi:type attribute, call the base version, appending the require attribute with your type information
+    /// afterwards. If you want to instead leverage a custom extension to the element, override <seealso cref="WriteStartElement"/> and
+    /// write the approriate start tag to the supplied writer. The base implementation does NOT need to be called in either case. If you
+    /// open more than one start element in <seealso cref="WriteStartElement"/> you will need to override <seealso cref="WriteEndElement"/>
+    /// and close any remaining tags.
+    /// </para>
+    /// <para>
+    /// When implementing a custom fault type you should always add an <see cref="XmlRootAttribute"/> to indicate the xml type and element QName
+    /// the type will serialize with and a <see cref="XmlSchemaProviderAttribute"/> <b>if</b> using a custom extension and not relying on xsi:type
+    /// at runtime.
     /// </para>
     /// </remarks>
     [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaultsNamespace, DataType = Constants.WsBaseFaultsNamespace + ":BaseFaultType")]

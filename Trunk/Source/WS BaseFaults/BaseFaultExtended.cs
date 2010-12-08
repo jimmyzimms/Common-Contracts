@@ -73,17 +73,17 @@ namespace CommonContracts.WsBaseFaults
     /// type and not the <see cref="BaseFaultExtended"/> type.
     /// </para>
     /// <para>
-    /// Due to the schema of the BaseFaultType, the <see cref="DataContractSerializer"/> requires
-    /// use of the of the <see cref="XElement"/> on the fault contract. It is intended however that
-    /// direct use of the properties is avoided where possible and the use the strongly typed constructors
-    /// to support initializing the needed xml values.
+    /// Due to the schema of the BaseFaultType, the <see cref="DataContractSerializer"/> requires use of the
+    /// of the <see cref="XElement"/> on the fault contract. It is intended however that direct use of the
+    /// properties is avoided where possible and the use the strongly typed constructors to support initializing
+    /// the needed xml values. This type performs NO XML Schema validation on any directly supplied XML content.
     /// </para>
     /// <para>
-    /// Due to way the <seealso cref="DataContractSerializer"/> operates, only a single <see cref="Description"/>
-    /// can be handled with this type. If you find that you need to support sequences, then it is suggested
-    /// that a custom <see cref="Exception"/> type is defined containing the contract types. This exception
-    /// should be thrown instead of <see cref="FaultException"/>. Leverage a custom <see cref="IErrorHandler"/>
-    /// that understands your custom exception and can provide a fault return message.
+    /// Due to way the <seealso cref="DataContractSerializer"/> operates, only a single <see cref="CommonContracts.WsBaseFaults.Description"/>
+    /// can be handled with this type. In addition, any <see cref="CommonContracts.WsBaseFaults.Description.Language"/> value will be ignored.
+    /// If you find that you need to support sequences, then it is suggested that a custom <see cref="Exception"/> type is defined containing
+    /// the contract types. This exception should be thrown instead of <see cref="FaultException"/> based types. Leverage a custom
+    /// <see cref="IErrorHandler"/> that understands your custom exception and can provide a fault return message based on the custom exception.
     /// </para>
     /// </remarks>
     public abstract class BaseFaultExtended : BaseFault

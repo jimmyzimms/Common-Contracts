@@ -58,7 +58,13 @@ namespace CommonContracts.WsBaseFaults
     /// <summary>
     /// Provides the minimum base common members that all <see cref="DataContractSerializer"/> based faults should provide.
     /// </summary>
-    /// <remarks>Inheritors should only use <see cref="DataMemberAttribute.Order"/> values greater than 4.</remarks>
+    /// <remarks>
+    /// <para>
+    /// This type accelerates contract development of <seealso cref="DataContractSerializer"/> based faults that implement
+    /// the minimum level of WS-BaseFaults 1.2 specification. Simply subclass this type, supplying a new <see cref="DataContractAttribute"/>
+    /// with the approiate name and namespace value for your custom fault type.
+    /// </para>
+    /// Inheritors should only use <see cref="DataMemberAttribute.Order"/> values greater than 4.</remarks>
     [DataContract(IsReference = false, Name = "BaseFault", Namespace = Constants.WsBaseFaultsNamespace)]
     public abstract class BaseFault : IExtensibleDataObject
     {
