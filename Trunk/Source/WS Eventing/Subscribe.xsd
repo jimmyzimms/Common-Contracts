@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+  targetNamespace="http://schemas.xmlsoap.org/ws/2004/08/eventing"
+  xmlns:tns="http://schemas.xmlsoap.org/ws/2004/08/eventing"
+  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  blockDefault="#all">
+    <xs:import namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+    <!-- Subscribe request -->
+    <xs:complexType name="SubscribeType">
+        <xs:sequence>
+            <xs:element name="EndTo" type="wsa:EndpointReferenceType" minOccurs="0" />
+            <xs:element name="Delivery" type="tns:DeliveryType" />
+            <xs:element name="Expires" type="tns:ExpirationType" minOccurs="0" />
+            <xs:element name="Filter" type="tns:FilterType" minOccurs="0" />
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:anyAttribute namespace="##other" processContents="lax" />
+    </xs:complexType>
+    <xs:complexType name="FilterType" mixed="true">
+        <xs:sequence>
+            <xs:any namespace="##other" processContents="lax"
+              minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="Dialect" type="xs:anyURI" use="optional" />
+        <xs:anyAttribute namespace="##other" processContents="lax" />
+    </xs:complexType>
+</xs:schema>

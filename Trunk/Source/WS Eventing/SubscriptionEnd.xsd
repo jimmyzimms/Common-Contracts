@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+  targetNamespace="http://schemas.xmlsoap.org/ws/2004/08/eventing"
+  xmlns:tns="http://schemas.xmlsoap.org/ws/2004/08/eventing"
+  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  blockDefault="#all">
+
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xs:import namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
+
+    <!-- SubscriptionEnd message -->
+    <xs:complexType name="SubscriptionEndType">
+        <xs:sequence>
+            <xs:element name="SubscriptionManager" type="wsa:EndpointReferenceType" />
+            <xs:element name="Status" type="tns:OpenSubscriptionEndCodeType" />
+            <xs:element name="Reason" type="tns:LanguageSpecificStringType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:anyAttribute namespace="##other" processContents="lax" />
+    </xs:complexType>
+
+    <xs:complexType name="LanguageSpecificStringType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute ref="xml:lang" />
+                <xs:anyAttribute namespace="##other" processContents="lax" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="SubscriptionEndCodeType">
+        <xs:restriction base="xs:anyURI">
+            <xs:enumeration value="http://schemas.xmlsoap.org/ws/2004/08/eventing/DeliveryFailure" />
+            <xs:enumeration value="http://schemas.xmlsoap.org/ws/2004/08/eventing/SourceShuttingDown" />
+            <xs:enumeration value="http://schemas.xmlsoap.org/ws/2004/08/eventing/SourceCancelling" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="OpenSubscriptionEndCodeType">
+        <xs:union memberTypes="tns:SubscriptionEndCodeType xs:anyURI" />
+    </xs:simpleType>
+</xs:schema>
