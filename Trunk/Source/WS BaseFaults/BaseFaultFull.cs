@@ -60,6 +60,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -69,7 +70,31 @@ namespace CommonContracts.WsBaseFaults
     /// <summary>
     /// Provides the full members that are possible for WS-BaseFaults type.
     /// </summary>
-    /// <remarks>Due to the schema of the BaseFaultType, WCF requires use of the <see cref="XmlSerializerFormatAttribute"/> on your service contracts.</remarks>
+    /// <remarks>
+    /// <para>
+    /// <note type="warning">Due to the schema of the BaseFaultType, WCF requires use of the <see cref="XmlSerializerFormatAttribute"/> 
+    /// on your service contracts to use this type in fault contracts!</note>
+    /// </para>
+    /// <para>
+    /// This type works with two basic modes:
+    /// <list type="bullet">
+    /// <item><description>XML Serializable <see cref="FaultContractAttribute">Fault Contracts</see></description></item>
+    /// <item><description>Manual Serialization with direct <see cref="Message"/> creation</description></item>
+    /// </list>
+    /// </para>
+    /// <para>
+    /// When used in fault contracts along by throwing a <see cref="FaultException{T}"/> exception, the <see cref="WriteStartElement"/>
+    /// and <see cref="WriteEndElement"/> methods should be overriden with a no op implementation. This is due to how WCF will
+    /// serialize the provided fault instance, the supplied <see cref="XmlWriter"/> already having the start and end tag functionality
+    /// coded.
+    /// </para>
+    /// <para>
+    /// When used with manual serialization, the BaseFault element will be automatically opened and closed by the default implementation.
+    /// If you want to provide a specific xsi:type attribute, call the base version, appending the require attribute with your type information.
+    /// If you want to instead leverage a custom extension to the element, override <seealso cref="WriteStartElement"/> and write the approriate
+    /// start tag to the suppleid writer. The base implementation does NOT need to be called in either case.
+    /// </para>
+    /// </remarks>
     [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaultsNamespace, DataType = Constants.WsBaseFaultsNamespace + ":BaseFaultType")]
     [XmlSchemaProvider("AcquireSchema")]
     public abstract class BaseFaultFull : IXmlSerializable
