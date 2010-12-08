@@ -59,6 +59,7 @@ namespace CommonContracts.WsBaseFaults
     /// Provides the minimum base common members that all <see cref="DataContractSerializer"/> based faults should provide.
     /// </summary>
     /// <remarks>Inheritors should only use <see cref="DataMemberAttribute.Order"/> values greater than 4.</remarks>
+    [DataContract(IsReference = false, Name = "BaseFault", Namespace = Constants.WsBaseFaultsNamespace)]
     public abstract class BaseFault : IExtensibleDataObject
     {
         #region Fields
@@ -143,7 +144,7 @@ namespace CommonContracts.WsBaseFaults
         /// </remarks>
         /// <value>The cause of this fault.</value>
         /// <exception cref="ArgumentException">The supplied value is the same reference as the current <see cref="BaseFault"/>.</exception>
-        [DataMember(EmitDefaultValue = true, IsRequired = false, Name = "FaultCause", Order = 4)]
+        [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "FaultCause", Order = 4)]
         public virtual BaseFault FaultCause
         {
             get { return this.faultCause; }
