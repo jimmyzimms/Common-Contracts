@@ -150,6 +150,7 @@
     <EmbeddedResource Include="Subscribe.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="Settings.StyleCop" />
     <None Include="SubscribeResponse.xsd">
       <SubType>Designer</SubType>
     </None>

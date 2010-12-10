@@ -112,7 +112,6 @@
     <Compile Include="Description.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="ErrorCode{T}.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnknownBaseFault.cs" />
   </ItemGroup>
@@ -120,6 +119,9 @@
     <EmbeddedResource Include="Ws-BaseFaults Schema.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Settings.StyleCop" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -93,10 +93,18 @@ namespace CommonContracts.WsEventing
 
         #region Constructors
         
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Delivery"/> class with the default <see cref="Constants.WsEventing.DeliverModes.Push"/> delivery mode.
+        /// </summary>
         public Delivery() : this(new Uri(Constants.WsEventing.DeliverModes.Push), null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Delivery"/> class with the suppleid <paramref name="mode"/> and <paramref name="notifyTo"/> <see cref="Uri"/> parameter values.
+        /// </summary>
+        /// <param name="mode">A <see cref="Uri"/> containing the <see cref="DeliveryMode"/> value.</param>
+        /// <param name="notifyTo">An <see cref="EndpointAddress"/> containing the location to notify an event message to.</param>
         public Delivery(Uri mode, EndpointAddress notifyTo)
         {
             Contract.Requires<ArgumentNullException>(mode != null, "mode");
@@ -105,6 +113,10 @@ namespace CommonContracts.WsEventing
             this.notifyTo = notifyTo;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Delivery"/> class from the supplied <paramref name="reader"/>.
+        /// </summary>
+        /// <param name="reader">An <see cref="XmlReader"/> to create an instance of the <see cref="Delivery"/> class from.</param>
         public Delivery(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
@@ -175,6 +187,11 @@ namespace CommonContracts.WsEventing
 
         #region Schema
 
+        /// <summary>
+        /// Adds an <see cref="XmlSchema"/> instance for this type to the supplied <see cref="XmlSchemaSet"/>.
+        /// </summary>
+        /// <param name="xs">The <see cref="XmlSchemaSet"/> to add an <see cref="XmlSchema"/> to.</param>
+        /// <returns>An <see cref="XmlQualifiedName"/> for the current object.</returns>
         public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
         {
             Contract.Requires<ArgumentNullException>(xs != null, "xs");
