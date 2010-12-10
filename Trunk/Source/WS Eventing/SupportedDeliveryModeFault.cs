@@ -133,7 +133,10 @@ namespace CommonContracts.WsEventing
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("wse", "SupportedDeliveryMode", Constants.WsEventing.Namespace);
+            var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
+            if (String.IsNullOrEmpty(prefix)) prefix = "wse";
+
+            writer.WriteStartElement(prefix, "SupportedDeliveryMode", Constants.WsEventing.Namespace);
             if (this.Modes != null && this.Modes.Any())
             {
                 foreach (var mode in this.Modes)
