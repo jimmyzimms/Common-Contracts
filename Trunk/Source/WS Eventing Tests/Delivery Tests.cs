@@ -65,6 +65,85 @@ namespace CommonContracts.WsEventing.Tests
     public class DeliveryTests
     {
         [Test()]
+        public void ConstructorShouldSetExpectedValues()
+        {
+            var delivery = new Delivery();
+            delivery.DeliveryMode = new Uri(Constants.WsEventing.DeliverModes.Push);
+            Assert.That(delivery.Extensions, Is.Not.Null);
+            Assert.That(delivery.Extensions, Is.Empty);
+            Assert.That(delivery.NotifyTo.ToEndpointAddress(), Is.EqualTo(new EndpointAddress(Constants.WsAddressing.NoAddress)));
+
+            delivery = new Delivery(new Uri(Constants.WsEventing.DeliverModes.Wrapped), new EndpointAddress("http://someaddress"));
+            delivery.DeliveryMode = new Uri(Constants.WsEventing.DeliverModes.Wrapped);
+            Assert.That(delivery.Extensions, Is.Not.Null);
+            Assert.That(delivery.Extensions, Is.Empty);
+            Assert.That(delivery.NotifyTo.ToEndpointAddress(), Is.EqualTo(new EndpointAddress("http://someaddress")));
+        }
+
+        [Test()]
+        public void CanAddRemoveExtensionElements()
+        {
+            var delivery = new Delivery(new Uri(Constants.WsEventing.DeliverModes.Wrapped), new EndpointAddress("http://someaddress"));
+            delivery.Extensions.Add(AddressHeader.CreateAddressHeader("name", "namespace", "value"));
+            Assert.That(delivery.Extensions.Count, Is.EqualTo(1));
+            Assert.That(delivery.Extensions.First().Name, Is.EqualTo("name"));
+            Assert.That(delivery.Extensions.First().Namespace, Is.EqualTo("namespace"));
+            Assert.That(delivery.Extensions.First().GetValue<String>(), Is.EqualTo("value"));
+
+            delivery.Extensions.RemoveAt(0);
+            Assert.That(delivery.Extensions, Is.Empty);
+        }
+
+        [Test()]
+        public void ConstructorShouldRequireMode()
+        {
+            var exception = Assert.Throws<ArgumentNullException>(() => new Delivery(null, new EndpointAddress("http://someaddress")));
+
+            Assert.That(exception.Message, Is.EqualTo("Precondition failed: mode != null  mode\r\nParameter name: mode"));
+            Assert.That(exception.ParamName, Is.EqualTo("mode"));
+        }
+
+        [Test()]
+        public void ConstructorShouldRequireEndpoint()
+        {
+            var exception = Assert.Throws<ArgumentNullException>(() => new Delivery(new Uri(Constants.WsEventing.DeliverModes.Push), null));
+
+            Assert.That(exception.Message, Is.EqualTo("Precondition failed: notifyTo != null  notifyTo\r\nParameter name: notifyTo"));
+            Assert.That(exception.ParamName, Is.EqualTo("notifyTo"));
+        }
+
+        [Test()]
+        public void CanSetMode()
+        {
+            var newValue = new Uri("http://someuri");
+            
+            var delivery = new Delivery();
+            delivery.DeliveryMode = newValue;
+            Assert.That(delivery.DeliveryMode, Is.SameAs(newValue));
+        }
+
+        [Test()]
+        public void ModeShouldDefaultToPush()
+        {
+            var expected = new Uri(Constants.WsEventing.DeliverModes.Push);
+
+            var delivery = new Delivery();
+            delivery.DeliveryMode = new Uri(Constants.WsEventing.DeliverModes.Wrapped);
+            delivery.DeliveryMode = null;
+            Assert.That(delivery.DeliveryMode, Is.EqualTo(expected));
+        }
+
+        [Test()]
+        public void NotifyToShouldBeRequired()
+        {
+            var delivery = new Delivery();
+            var exception = Assert.Throws<ArgumentNullException>(() => delivery.NotifyTo = null);
+
+            Assert.That(exception.Message, Is.EqualTo("Precondition failed: value != null  NotifyTo\r\nParameter name: NotifyTo"));
+            Assert.That(exception.ParamName, Is.EqualTo("NotifyTo"));
+        }
+
+        [Test()]
         public void Serialize()
         {
             var serializer = new XmlSerializer(typeof(TestXmlWrapper<Delivery>));
@@ -83,7 +162,7 @@ namespace CommonContracts.WsEventing.Tests
             Assert.IsTrue(areEqual);
 
             // Now we'll confirm that the custom headers are created
-            delivery.Add(AddressHeader.CreateAddressHeader("testElement", "urn:unittests", "value"));
+            delivery.Extensions.Add(AddressHeader.CreateAddressHeader("testElement", "urn:unittests", "value"));
             XElement withHeaders;
             using (var stream = new MemoryStream())
             {
@@ -116,11 +195,11 @@ namespace CommonContracts.WsEventing.Tests
             Delivery delivery = (Delivery)serializer.Deserialize(xml.CreateReader());
             Assert.That(delivery.DeliveryMode, Is.EqualTo(new Uri(Constants.WsEventing.DeliverModes.Push)));
             Assert.That(delivery.NotifyTo.ToEndpointAddress(), Is.EqualTo(new EndpointAddress("http://tempuri.org")));
-            Assert.That(delivery, Is.Empty);
+            Assert.That(delivery.Extensions, Is.Empty);
 
             xml = XElement.Parse("<wse:Delivery xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>");
             delivery = (Delivery)serializer.Deserialize(xml.CreateReader());
-            Assert.That(delivery.Select(header => header.Namespace + ":" + header.Name).ToList(), Is.EquivalentTo(new[] { "urn:unittests:testElement" }));
+            Assert.That(delivery.Extensions.Select(header => header.Namespace + ":" + header.Name).ToList(), Is.EquivalentTo(new[] { "urn:unittests:testElement" }));
 
             xml = XElement.Parse("<wse:Delivery wse:Mode='http://schemas.xmlsoap.org/ws/2004/08/eventing/DeliveryModes/Wrap' xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>");
             delivery = (Delivery)serializer.Deserialize(xml.CreateReader());

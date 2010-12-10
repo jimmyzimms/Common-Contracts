@@ -167,6 +167,11 @@ namespace CommonContracts.WsEventing
             /// Provides the namespace value for the WS-Addressing spec.
             /// </summary>
             public const String Namespace = "http://schemas.xmlsoap.org/ws/2004/08/addressing";
+
+            /// <summary>
+            /// A well known EndPointReference whose address with this value MUST be discarded (i.e. not sent). This URI is typically used in EPRs that designate the concept of a "No Endpoint" Endpoint.
+            /// </summary>
+            public const String NoAddress = "http://www.w3.org/2005/08/addressing/none";
         }
     }
 }
