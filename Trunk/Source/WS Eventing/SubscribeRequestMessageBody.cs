@@ -156,7 +156,7 @@ namespace CommonContracts.WsEventing
             {
                 if (reader.IsStartElement("EndTo", Constants.WsEventing.Namespace))
                 {
-                    this.EndTo = EndpointAddress.ReadFrom(AddressingVersion.WSAddressing10, reader);
+                    this.EndTo = EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader);
                 }
                 else if (reader.IsStartElement("Delivery", Constants.WsEventing.Namespace))
                 {
@@ -192,7 +192,7 @@ namespace CommonContracts.WsEventing
             writer.WriteStartElement(prefix, "Subscribe", Constants.WsEventing.Namespace);
             if (this.EndTo != null)
             {
-                this.EndTo.WriteTo(AddressingVersion.WSAddressing10, writer, "EndTo", Constants.WsEventing.Namespace);
+                this.EndTo.WriteTo(AddressingVersion.WSAddressingAugust2004, writer, "EndTo", Constants.WsEventing.Namespace);
             }
             if (Delivery != null)
             {

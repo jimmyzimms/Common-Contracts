@@ -71,7 +71,7 @@ namespace CommonContracts.WsEventing
         #region Fields
 
         private Uri mode;
-        private EndpointAddress notifyTo;
+        private EndpointAddressAugust2004 notifyTo;
         
         #endregion
 
@@ -79,14 +79,14 @@ namespace CommonContracts.WsEventing
         
         public virtual Uri DeliveryMode
         {
-            get { return mode; }
-            set { mode = value; }
+            get { return this.mode; }
+            set { this.mode = value; }
         }
 
-        public virtual EndpointAddress NotifyTo
+        public virtual EndpointAddressAugust2004 NotifyTo
         {
-            get { return notifyTo; }
-            set { notifyTo = value; }
+            get { return this.notifyTo; }
+            set { this.notifyTo = value; }
         }
 
         #endregion
@@ -110,7 +110,9 @@ namespace CommonContracts.WsEventing
             Contract.Requires<ArgumentNullException>(mode != null, "mode");
 
             this.mode = mode;
-            this.notifyTo = notifyTo;
+            if (notifyTo == null) return;
+
+            this.notifyTo = EndpointAddressAugust2004.FromEndpointAddress(notifyTo);
         }
 
         /// <summary>
@@ -145,11 +147,11 @@ namespace CommonContracts.WsEventing
             }
 
             String modeAsString = reader.GetAttribute("Mode", Constants.WsEventing.Namespace);
-            DeliveryMode = String.IsNullOrEmpty(modeAsString) ? DeliveryMode = new Uri(Constants.WsEventing.DeliverModes.Push) : new Uri(modeAsString);
+            this.DeliveryMode = String.IsNullOrEmpty(modeAsString) ? DeliveryMode = new Uri(Constants.WsEventing.DeliverModes.Push) : new Uri(modeAsString);
 
             reader.ReadToDescendant("NotifyTo", Constants.WsEventing.Namespace);
-            NotifyTo = EndpointAddress.ReadFrom(AddressingVersion.WSAddressing10, reader);
-            if (NotifyTo == null) throw new XmlException("Missing element 'NotifyTo'");
+            this.NotifyTo = EndpointAddressAugust2004.FromEndpointAddress(EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader));
+            if (this.NotifyTo == null) throw new XmlException("Missing element 'NotifyTo'");
 
             // option: additional headers
             while (reader.NodeType != XmlNodeType.EndElement)
@@ -163,17 +165,22 @@ namespace CommonContracts.WsEventing
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            if (NotifyTo == null) throw new InvalidOperationException("Cannot serialize Delivery contract as there is no NotifyTo value");
+            if (this.NotifyTo == null) throw new InvalidOperationException("Cannot serialize Delivery contract as there is no NotifyTo value");
 
             var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wse";
 
             writer.WriteStartElement(prefix, "Delivery", Constants.WsEventing.Namespace);
-            if (!DeliveryMode.Equals(Constants.WsEventing.DeliverModes.Push))
+            if (!this.DeliveryMode.Equals(Constants.WsEventing.DeliverModes.Push))
             {
-                writer.WriteAttributeString("wse", "Mode", Constants.WsEventing.Namespace, DeliveryMode.ToString());
+                writer.WriteAttributeString(prefix, "Mode", Constants.WsEventing.Namespace, DeliveryMode.ToString());
             }
-            NotifyTo.WriteTo(AddressingVersion.WSAddressing10, writer, "NotifyTo", Constants.WsEventing.Namespace);
+            writer.WriteStartElement(prefix, "NotifyTo", Constants.WsEventing.Namespace);
+
+            ((IXmlSerializable)this.NotifyTo).WriteXml(writer);
+            //this.NotifyTo.ToEndpointAddress().WriteTo(AddressingVersion.WSAddressingAugust2004, writer, "NotifyTo", Constants.WsEventing.Namespace);
+
+            writer.WriteEndElement();
 
             // option: additional headers
             for (int ii = 0; ii < base.Count; ii++)
@@ -203,7 +210,7 @@ namespace CommonContracts.WsEventing
                 var schema = XmlSchema.Read(stream, null);
                 xs.Add(schema);
             }
-
+            EndpointAddressAugust2004.GetSchema(xs);
             return new XmlQualifiedName("DeliveryType", Constants.WsEventing.Namespace);
         }
 

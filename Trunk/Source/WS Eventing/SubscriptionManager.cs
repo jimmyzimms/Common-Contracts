@@ -125,14 +125,14 @@ namespace CommonContracts.WsEventing
             Contract.Requires<ArgumentNullException>(reader != null);
             //Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, String.Format(null, "The supplied XmlReader must be in the 'Interactive' state. The current state is '{0}'", reader.ReadState));
 
-            this.EndpointAddress = EndpointAddress.ReadFrom(AddressingVersion.WSAddressing10, reader, "SubscriptionManager", Constants.WsEventing.Namespace);
+            this.EndpointAddress = EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader, "SubscriptionManager", Constants.WsEventing.Namespace);
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             if (this.EndpointAddress != null)
             {
-                this.EndpointAddress.WriteTo(AddressingVersion.WSAddressing10, writer, "SubscriptionManager", Constants.WsEventing.Namespace);
+                this.EndpointAddress.WriteTo(AddressingVersion.WSAddressingAugust2004, writer, "SubscriptionManager", Constants.WsEventing.Namespace);
             }
         }
 
