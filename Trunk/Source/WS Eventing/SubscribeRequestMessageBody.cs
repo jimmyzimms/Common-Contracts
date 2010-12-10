@@ -204,7 +204,7 @@ namespace CommonContracts.WsEventing
             }
             if (Filter != null)
             {
-                this.Filter.WriteXPathTo(writer, "wse", "Filter", Constants.WsEventing.Namespace, true);
+                this.Filter.WriteXPathTo(writer, prefix, "Filter", Constants.WsEventing.Namespace, true);
             }
             writer.WriteEndElement();
         }

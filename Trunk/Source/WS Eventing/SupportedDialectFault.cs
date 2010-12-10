@@ -142,7 +142,10 @@ namespace CommonContracts.WsEventing
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            writer.WriteStartElement("wse", "SupportedDialect", Constants.WsEventing.Namespace);
+            var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
+            if (String.IsNullOrEmpty(prefix)) prefix = "wse";
+
+            writer.WriteStartElement(prefix, "SupportedDialect", Constants.WsEventing.Namespace);
             if (this.Dialects != null && this.Dialects.Any())
             {
                 foreach (var dialect in this.Dialects)
