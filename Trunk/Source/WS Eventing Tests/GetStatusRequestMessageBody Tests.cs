@@ -49,66 +49,58 @@
 
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Reflection;
-using System.Xml;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using NUnit.Framework;
 
-namespace CommonContracts.WsEventing
+namespace CommonContracts.WsEventing.Tests
 {
-    /// <summary>
-    /// Represents the "http://schemas.xmlsoap.org/ws/2004/08/eventing:UnsubscribeType" type.
-    /// </summary>
-    [XmlSchemaProvider("AcquireSchema")]
-    [XmlRoot(DataType = Constants.WsEventing.Namespace + ":UnsubscribeType", ElementName = "Unsubscribe", Namespace = Constants.WsEventing.Namespace)]
-    public class UnsubscribeRequestMessageBody : IXmlSerializable
+    [TestFixture()]
+    public class GetStatusRequestMessageBodyTests
     {
-        #region IXmlSerializable Members
-
-        XmlSchema IXmlSerializable.GetSchema()
+        [Test()]
+        public void Serialize()
         {
-            return null;
-        }
+            var serializer = new XmlSerializer(typeof(GetStatusRequestMessageBody));
 
-        void IXmlSerializable.ReadXml(XmlReader reader)
-        {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            var message = new GetStatusRequestMessageBody();
 
-            reader.ReadStartElement("Unsubscribe", Constants.WsEventing.Namespace);
-            reader.ReadEndElement();
-        }
-
-        void IXmlSerializable.WriteXml(XmlWriter writer)
-        {
-            var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
-            if (String.IsNullOrEmpty(prefix)) prefix = "wse";
-
-            writer.WriteStartElement(prefix, "Unsubscribe", Constants.WsEventing.Namespace);
-            writer.WriteEndElement();
-        }
-
-        #endregion
-
-        #region Schema
-
-        public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
-        {
-            Contract.Requires<ArgumentNullException>(xs != null, "xs");
-
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CommonContracts.WsEventing.Unsubscribe.xsd"))
+            XElement xml;
+            using (var stream = new MemoryStream())
             {
-                Debug.Assert(stream != null, "Resource Stream 'CommonContracts.WsEventing.Unsubscribe.xsd' was not able to be opened");
-
-                var schema = XmlSchema.Read(stream, null);
-                xs.Add(schema);
+                serializer.Serialize(stream, message);
+                stream.Position = 0;
+                xml = XElement.Load(stream);
             }
-
-            return new XmlQualifiedName("UnsubscribeType", Constants.WsEventing.Namespace);
+            var areEqual = XNode.DeepEquals(XElement.Parse("<wse:GetStatus xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing' />"), xml.FirstNode);
+            Assert.IsTrue(areEqual);
         }
 
-        #endregion
+        [Test()]
+        public void Deserialize()
+        {
+            var serializer = new XmlSerializer(typeof(GetStatusRequestMessageBody));
+
+            var xml = XElement.Parse("<wse:GetStatus xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'/>");
+            GetStatusRequestMessageBody body = (GetStatusRequestMessageBody)serializer.Deserialize(xml.CreateReader());
+
+            Assert.That(body, Is.Not.Null);
+        }
+
+        [Test()]
+        public void AcquireSchemaShouldLoadSchemas()
+        {
+            var schemas = new XmlSchemaSet();
+            var qName = GetStatusRequestMessageBody.AcquireSchema(schemas);
+
+            Assert.That(qName.Name, Is.EqualTo("GetStatusType"));
+            Assert.That(qName.Namespace, Is.EqualTo(Constants.WsEventing.Namespace));
+
+            Assert.That(schemas.Count, Is.EqualTo(1));
+            Assert.That(schemas.Schemas().Cast<XmlSchema>().Select(schema => schema.TargetNamespace), Is.EquivalentTo(new[] { Constants.WsEventing.Namespace }));
+        }
     }
 }

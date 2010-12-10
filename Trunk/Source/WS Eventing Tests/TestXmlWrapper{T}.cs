@@ -50,65 +50,29 @@
 #endregion
 
 using System;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace CommonContracts.WsEventing
+namespace CommonContracts.WsEventing.Tests
 {
-    /// <summary>
-    /// Represents the "http://schemas.xmlsoap.org/ws/2004/08/eventing:UnsubscribeType" type.
-    /// </summary>
-    [XmlSchemaProvider("AcquireSchema")]
-    [XmlRoot(DataType = Constants.WsEventing.Namespace + ":UnsubscribeType", ElementName = "Unsubscribe", Namespace = Constants.WsEventing.Namespace)]
-    public class UnsubscribeRequestMessageBody : IXmlSerializable
+    [XmlRoot()]
+    public class TestXmlWrapper<T> : IXmlSerializable where T : IXmlSerializable
     {
-        #region IXmlSerializable Members
-
-        XmlSchema IXmlSerializable.GetSchema()
+        public T Item { get; set; }
+        public XmlSchema GetSchema()
         {
-            return null;
+            throw new NotImplementedException();
         }
 
-        void IXmlSerializable.ReadXml(XmlReader reader)
+        public void ReadXml(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
-
-            reader.ReadStartElement("Unsubscribe", Constants.WsEventing.Namespace);
-            reader.ReadEndElement();
+            throw new NotImplementedException();
         }
 
-        void IXmlSerializable.WriteXml(XmlWriter writer)
+        public void WriteXml(XmlWriter writer)
         {
-            var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
-            if (String.IsNullOrEmpty(prefix)) prefix = "wse";
-
-            writer.WriteStartElement(prefix, "Unsubscribe", Constants.WsEventing.Namespace);
-            writer.WriteEndElement();
+            ((IXmlSerializable)this.Item).WriteXml(writer);
         }
-
-        #endregion
-
-        #region Schema
-
-        public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
-        {
-            Contract.Requires<ArgumentNullException>(xs != null, "xs");
-
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CommonContracts.WsEventing.Unsubscribe.xsd"))
-            {
-                Debug.Assert(stream != null, "Resource Stream 'CommonContracts.WsEventing.Unsubscribe.xsd' was not able to be opened");
-
-                var schema = XmlSchema.Read(stream, null);
-                xs.Add(schema);
-            }
-
-            return new XmlQualifiedName("UnsubscribeType", Constants.WsEventing.Namespace);
-        }
-
-        #endregion
     }
 }

@@ -129,39 +129,39 @@
     <Compile Include="UnsubscribeResponseMessage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DeliveryType.xsd">
+    <EmbeddedResource Include="DeliveryType.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="ExpirationType.xsd">
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExpirationType.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="GetStatus.xsd">
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetStatus.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="GetStatusResponse.xsd">
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetStatusResponse.xsd">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <None Include="Renew.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="RenewResponse.xsd">
+    <EmbeddedResource Include="RenewResponse.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Subscribe.xsd">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Subscribe.xsd">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <None Include="SubscribeResponse.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="SubscriptionEnd.xsd">
+    <EmbeddedResource Include="SubscriptionEnd.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Unsubscribe.xsd">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Unsubscribe.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="WsAddressing.xsd">
+    </EmbeddedResource>
+    <EmbeddedResource Include="WsAddressing.xsd">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
