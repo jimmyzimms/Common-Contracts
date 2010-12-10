@@ -79,7 +79,7 @@ namespace CommonContracts.WsEventing.Tests
                 withoutHeaders = XElement.Load(stream);
             }
 
-            var areEqual = XNode.DeepEquals(XElement.Parse("<wse:Delivery xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo></wse:Delivery>"), withoutHeaders.FirstNode);
+            var areEqual = XNode.DeepEquals(XElement.Parse("<wse:Delivery xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo></wse:Delivery>"), withoutHeaders.FirstNode);
             Assert.IsTrue(areEqual);
 
             // Now we'll confirm that the custom headers are created
@@ -91,7 +91,7 @@ namespace CommonContracts.WsEventing.Tests
                 stream.Position = 0;
                 withHeaders = XElement.Load(stream);
             }
-            areEqual = XNode.DeepEquals(XElement.Parse("<wse:Delivery xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>"), withHeaders.FirstNode);
+            areEqual = XNode.DeepEquals(XElement.Parse("<wse:Delivery xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>"), withHeaders.FirstNode);
             Assert.IsTrue(areEqual);
 
             // Last the use of custom Push types are correctly serialized
@@ -103,7 +103,7 @@ namespace CommonContracts.WsEventing.Tests
                 stream.Position = 0;
                 withCustomDeliveryMode = XElement.Load(stream);
             }
-            areEqual = XNode.DeepEquals(XElement.Parse("<wse:Delivery wse:Mode='http://schemas.xmlsoap.org/ws/2004/08/eventing/DeliveryModes/Wrap' xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>"), withCustomDeliveryMode.FirstNode);
+            areEqual = XNode.DeepEquals(XElement.Parse("<wse:Delivery wse:Mode='http://schemas.xmlsoap.org/ws/2004/08/eventing/DeliveryModes/Wrap' xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>"), withCustomDeliveryMode.FirstNode);
             Assert.IsTrue(areEqual);
         }
 
@@ -112,17 +112,17 @@ namespace CommonContracts.WsEventing.Tests
         {
             var serializer = new XmlSerializer(typeof(Delivery));
 
-            var xml = XElement.Parse("<wse:Delivery xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo></wse:Delivery>");
+            var xml = XElement.Parse("<wse:Delivery xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo></wse:Delivery>");
             Delivery delivery = (Delivery)serializer.Deserialize(xml.CreateReader());
             Assert.That(delivery.DeliveryMode, Is.EqualTo(new Uri(Constants.WsEventing.DeliverModes.Push)));
-            Assert.IsTrue(delivery.NotifyTo.Equals(new EndpointAddress("http://tempuri.org")));
+            Assert.That(delivery.NotifyTo.ToEndpointAddress(), Is.EqualTo(new EndpointAddress("http://tempuri.org")));
             Assert.That(delivery, Is.Empty);
 
-            xml = XElement.Parse("<wse:Delivery xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>");
+            xml = XElement.Parse("<wse:Delivery xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>");
             delivery = (Delivery)serializer.Deserialize(xml.CreateReader());
             Assert.That(delivery.Select(header => header.Namespace + ":" + header.Name).ToList(), Is.EquivalentTo(new[] { "urn:unittests:testElement" }));
 
-            xml = XElement.Parse("<wse:Delivery wse:Mode='http://schemas.xmlsoap.org/ws/2004/08/eventing/DeliveryModes/Wrap' xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>");
+            xml = XElement.Parse("<wse:Delivery wse:Mode='http://schemas.xmlsoap.org/ws/2004/08/eventing/DeliveryModes/Wrap' xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>");
             delivery = (Delivery)serializer.Deserialize(xml.CreateReader());
             Assert.That(delivery.DeliveryMode, Is.EqualTo(new Uri(Constants.WsEventing.DeliverModes.Wrapped)));
         }
@@ -136,8 +136,8 @@ namespace CommonContracts.WsEventing.Tests
             Assert.That(qName.Name, Is.EqualTo("DeliveryType"));
             Assert.That(qName.Namespace, Is.EqualTo(Constants.WsEventing.Namespace));
 
-            Assert.That(schemas.Count, Is.EqualTo(2));
-            Assert.That(schemas.Schemas().Cast<XmlSchema>().Select(schema => schema.TargetNamespace).ToList(), Is.EquivalentTo(new[] { "http://www.w3.org/XML/1998/namespace", "http://schemas.xmlsoap.org/ws/2004/08/eventing" }));
+            Assert.That(schemas.Count, Is.EqualTo(3));
+            Assert.That(schemas.Schemas().Cast<XmlSchema>().Select(schema => schema.TargetNamespace).ToList(), Is.EquivalentTo(new[] { "http://www.w3.org/XML/1998/namespace", "http://schemas.xmlsoap.org/ws/2004/08/eventing", "http://schemas.xmlsoap.org/ws/2004/08/addressing" }));
         }
     }
 }

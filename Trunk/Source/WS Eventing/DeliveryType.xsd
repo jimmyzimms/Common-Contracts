@@ -7,10 +7,12 @@
   elementFormDefault="qualified"
   blockDefault="#all">
     <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xs:import namespace="http://schemas.xmlsoap.org/ws/2004/08/addressing" />
 
     <!-- Types and global elements -->
     <xs:complexType name="DeliveryType" mixed="true">
         <xs:sequence>
+            <xs:element name="NotifyTo" type="wsa:EndpointReferenceType" minOccurs="1" maxOccurs="1"/>
             <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
         <xs:attribute name="Mode" type="xs:anyURI" use="optional" />

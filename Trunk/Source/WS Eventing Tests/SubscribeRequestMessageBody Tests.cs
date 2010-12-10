@@ -89,7 +89,7 @@ namespace CommonContracts.WsEventing.Tests
                 stream.Position = 0;
                 xml = XElement.Load(stream);
             }
-            var areEqual = XNode.DeepEquals(XElement.Parse("<wse:Subscribe xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:EndTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/endTo</Address></wse:EndTo><wse:Filter>/foo</wse:Filter></wse:Subscribe>"), xml.FirstNode);
+            var areEqual = XNode.DeepEquals(XElement.Parse("<wse:Subscribe xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:EndTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/endTo</Address></wse:EndTo><wse:Filter>/foo</wse:Filter></wse:Subscribe>"), xml.FirstNode);
             Assert.IsTrue(areEqual);
         }
 
@@ -98,7 +98,7 @@ namespace CommonContracts.WsEventing.Tests
         {
             var serializer = new XmlSerializer(typeof(SubscribeRequestMessageBody));
 
-            var xml = XElement.Parse("<wse:Subscribe xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:EndTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/endTo</Address></wse:EndTo><wse:Delivery><wse:NotifyTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo></wse:Delivery><wse:Expires>2010-08-23T00:00:00Z</wse:Expires><wse:Filter>/foo</wse:Filter></wse:Subscribe>");
+            var xml = XElement.Parse("<wse:Subscribe xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:EndTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/endTo</Address></wse:EndTo><wse:Delivery><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo></wse:Delivery><wse:Expires>2010-08-23T00:00:00Z</wse:Expires><wse:Filter>/foo</wse:Filter></wse:Subscribe>");
             SubscribeRequestMessageBody body = (SubscribeRequestMessageBody)serializer.Deserialize(xml.CreateReader());
             Assert.That(body.Delivery, Is.Not.Null);
             Assert.That(body.Expires, Is.Not.Null);
@@ -111,7 +111,7 @@ namespace CommonContracts.WsEventing.Tests
         {
             var serializer = new XmlSerializer(typeof(SubscribeRequestMessageBody));
 
-            var xml = XElement.Parse("<wse:Subscribe xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:EndTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/endTo</Address></wse:EndTo><wse:Delivery><wse:NotifyTo><Address xmlns='http://www.w3.org/2005/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo></wse:Delivery><wse:Expires>2010-08-23T00:00:00Z</wse:Expires><wse:Filter Dialect='urn:fakeDialect'>/foo</wse:Filter></wse:Subscribe>");
+            var xml = XElement.Parse("<wse:Subscribe xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:EndTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/endTo</Address></wse:EndTo><wse:Delivery><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo></wse:Delivery><wse:Expires>2010-08-23T00:00:00Z</wse:Expires><wse:Filter Dialect='urn:fakeDialect'>/foo</wse:Filter></wse:Subscribe>");
             var body = (SubscribeRequestMessageBody)serializer.Deserialize(xml.CreateReader());
             Assert.That(body.Filter, Is.Null);
             Assert.That(body.FilterDialect, Is.EqualTo("urn:fakeDialect"));
