@@ -51,6 +51,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.ServiceModel.Channels;
@@ -58,10 +59,35 @@ using System.ServiceModel.Channels;
 namespace CommonContracts.WsEventing
 {
     /// <summary>
-    /// Provides a base type for XML elements that can have expando values added to them.
+    /// Provides a collection type for contract types that have XML elements that can have expando values added to them.
     /// </summary>
-    public abstract class HeaderCollection : List<AddressHeader>
+    /// <remarks>
+    /// Since the presence of additional XML information is supported by some elements, the
+    /// use of <see cref="AddressHeader"/> elements, each repesenting a single additional child
+    /// element simplies the consumption of this information.
+    /// </remarks>
+    public class HeaderCollection : Collection<AddressHeader>
     {
+        #region Overrides
+        
+        protected override void InsertItem(int index, AddressHeader item)
+        {
+            if (item == null) throw new ArgumentNullException("item");
+
+            base.InsertItem(index, item);
+        }
+
+        protected override void SetItem(int index, AddressHeader item)
+        {
+            if (item == null) throw new ArgumentNullException("item");
+
+            base.SetItem(index, item);
+        }
+
+        #endregion
+
+        #region Methods
+        
         protected virtual IQueryable<AddressHeader> CreateQuery(String name, String ns)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(name), "name");
@@ -74,7 +100,7 @@ namespace CommonContracts.WsEventing
             return query;
         }
 
-        public IEnumerable<AddressHeader> FindAll(String name, String ns)
+        public virtual IEnumerable<AddressHeader> FindAll(String name, String ns)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(name), "name");
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(ns), "ns");
@@ -83,7 +109,7 @@ namespace CommonContracts.WsEventing
             return result;
         }
 
-        public AddressHeader FindFirst(String name, String ns)
+        public virtual AddressHeader FindFirst(String name, String ns)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(name), "name");
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(ns), "ns");
@@ -92,7 +118,7 @@ namespace CommonContracts.WsEventing
             return result;
         }
 
-        public T GetValue<T>(String name, String ns)
+        public virtual T GetValue<T>(String name, String ns)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(name), "name");
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(ns), "ns");
@@ -100,5 +126,7 @@ namespace CommonContracts.WsEventing
             AddressHeader ah = this.FindFirst(name, ns);
             return ah == null ? default(T) : ah.GetValue<T>();
         }
+
+        #endregion
     }
 }

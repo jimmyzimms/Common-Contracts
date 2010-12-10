@@ -50,6 +50,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Reflection;
@@ -66,27 +67,58 @@ namespace CommonContracts.WsEventing
     /// </summary>
     [XmlSchemaProvider("AcquireSchema")]
     [XmlRoot(DataType = Constants.WsEventing.Namespace + ":Delivery", ElementName = "Delivery", Namespace = Constants.WsEventing.Namespace)]
-    public class Delivery : HeaderCollection, IXmlSerializable
+    public class Delivery : IXmlSerializable
     {
         #region Fields
 
         private Uri mode;
         private EndpointAddressAugust2004 notifyTo;
-        
+        private HeaderCollection additionalElements;
+
         #endregion
 
         #region Properties
         
         public virtual Uri DeliveryMode
         {
-            get { return this.mode; }
-            set { this.mode = value; }
+            get
+            {
+                Contract.Ensures(Contract.Result<Uri>() != null);
+
+                return this.mode;
+            }
+            set
+            {
+                if (value == null) value = new Uri(Constants.WsEventing.DeliverModes.Push);
+                this.mode = value;
+            }
         }
 
         public virtual EndpointAddressAugust2004 NotifyTo
         {
-            get { return this.notifyTo; }
-            set { this.notifyTo = value; }
+            get
+            {
+                Contract.Ensures(Contract.Result<EndpointAddressAugust2004>() != null);
+
+                return this.notifyTo;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value != null, "NotifyTo");
+
+                this.notifyTo = value;
+            }
+        }
+        
+        public virtual IList<AddressHeader> Extensions
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IList<AddressHeader>>() != null);
+                Contract.Ensures(Contract.ForAll(Contract.Result<IList<AddressHeader>>(), item => item != null));
+
+                return this.additionalElements;
+            }
         }
 
         #endregion
@@ -94,9 +126,10 @@ namespace CommonContracts.WsEventing
         #region Constructors
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="Delivery"/> class with the default <see cref="Constants.WsEventing.DeliverModes.Push"/> delivery mode.
+        /// Initializes a new instance of the <see cref="Delivery"/> class with the default <see cref="Constants.WsEventing.DeliverModes.Push"/> delivery mode. This constructor should only be used for deserialization.
         /// </summary>
-        public Delivery() : this(new Uri(Constants.WsEventing.DeliverModes.Push), null)
+        [Obsolete("This method is required for the XmlSerializer and not not be directly called")]
+        public Delivery() : this(new Uri(Constants.WsEventing.DeliverModes.Push), new EndpointAddress(Constants.WsAddressing.NoAddress))
         {
         }
 
@@ -108,11 +141,11 @@ namespace CommonContracts.WsEventing
         public Delivery(Uri mode, EndpointAddress notifyTo)
         {
             Contract.Requires<ArgumentNullException>(mode != null, "mode");
+            Contract.Requires<ArgumentNullException>(notifyTo != null, "notifyTo");
 
             this.mode = mode;
-            if (notifyTo == null) return;
-
             this.notifyTo = EndpointAddressAugust2004.FromEndpointAddress(notifyTo);
+            this.additionalElements = new HeaderCollection();
         }
 
         /// <summary>
@@ -153,13 +186,13 @@ namespace CommonContracts.WsEventing
             this.NotifyTo = EndpointAddressAugust2004.FromEndpointAddress(EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader));
             if (this.NotifyTo == null) throw new XmlException("Missing element 'NotifyTo'");
 
-            // option: additional headers
             while (reader.NodeType != XmlNodeType.EndElement)
             {
                 AddressHeader ah = AddressHeader.CreateAddressHeader(reader.Name, reader.NamespaceURI, reader.ReadElementContentAsObject());
-                this.Add(ah);
+                this.additionalElements.Add(ah);
                 reader.MoveToContent();
             }
+
             reader.ReadEndElement();
         }
 
@@ -178,15 +211,14 @@ namespace CommonContracts.WsEventing
             writer.WriteStartElement(prefix, "NotifyTo", Constants.WsEventing.Namespace);
 
             ((IXmlSerializable)this.NotifyTo).WriteXml(writer);
-            //this.NotifyTo.ToEndpointAddress().WriteTo(AddressingVersion.WSAddressingAugust2004, writer, "NotifyTo", Constants.WsEventing.Namespace);
 
             writer.WriteEndElement();
 
-            // option: additional headers
-            for (int ii = 0; ii < base.Count; ii++)
+            foreach (var header in this.additionalElements)
             {
-                base[ii].WriteAddressHeader(writer);
+                header.WriteAddressHeader(writer);
             }
+            
             writer.WriteEndElement();
         }
 
