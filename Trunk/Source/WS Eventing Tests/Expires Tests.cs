@@ -50,65 +50,56 @@
 #endregion
 
 using System;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Reflection;
-using System.Xml;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using NUnit.Framework;
 
-namespace CommonContracts.WsEventing
+namespace CommonContracts.WsEventing.Tests
 {
-    /// <summary>
-    /// Represents the "http://schemas.xmlsoap.org/ws/2004/08/eventing:UnsubscribeType" type.
-    /// </summary>
-    [XmlSchemaProvider("AcquireSchema")]
-    [XmlRoot(DataType = Constants.WsEventing.Namespace + ":UnsubscribeType", ElementName = "Unsubscribe", Namespace = Constants.WsEventing.Namespace)]
-    public class UnsubscribeRequestMessageBody : IXmlSerializable
+    [TestFixture()]
+    public class ExpiresTests
     {
-        #region IXmlSerializable Members
-
-        XmlSchema IXmlSerializable.GetSchema()
+        [Test()]
+        public void Serialize()
         {
-            return null;
-        }
+            var serializer = new XmlSerializer(typeof(TestXmlWrapper<Expires>));
 
-        void IXmlSerializable.ReadXml(XmlReader reader)
-        {
-            Contract.Requires<ArgumentNullException>(reader != null);
-
-            reader.ReadStartElement("Unsubscribe", Constants.WsEventing.Namespace);
-            reader.ReadEndElement();
-        }
-
-        void IXmlSerializable.WriteXml(XmlWriter writer)
-        {
-            var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
-            if (String.IsNullOrEmpty(prefix)) prefix = "wse";
-
-            writer.WriteStartElement(prefix, "Unsubscribe", Constants.WsEventing.Namespace);
-            writer.WriteEndElement();
-        }
-
-        #endregion
-
-        #region Schema
-
-        public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
-        {
-            Contract.Requires<ArgumentNullException>(xs != null, "xs");
-
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CommonContracts.WsEventing.Unsubscribe.xsd"))
+            var expires = new Expires(new DateTime(2010, 8, 23));
+            XElement xml;
+            using (var stream = new MemoryStream())
             {
-                Debug.Assert(stream != null, "Resource Stream 'CommonContracts.WsEventing.Unsubscribe.xsd' was not able to be opened");
-
-                var schema = XmlSchema.Read(stream, null);
-                xs.Add(schema);
+                serializer.Serialize(stream, new TestXmlWrapper<Expires> {Item = expires});
+                stream.Position = 0;
+                xml = XElement.Load(stream);
             }
-
-            return new XmlQualifiedName("UnsubscribeType", Constants.WsEventing.Namespace);
+            var areEqual = XNode.DeepEquals(XElement.Parse("<wse:Expires xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'>2010-08-23T00:00:00Z</wse:Expires>"), xml.FirstNode);
+            Assert.IsTrue(areEqual);
         }
 
-        #endregion
+        [Test()]
+        public void Deserialize()
+        {
+            var serializer = new XmlSerializer(typeof(Expires));
+
+            var xml = XElement.Parse("<wse:Expires xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'>2010-08-23T00:00:00Z</wse:Expires>");
+            Expires expires = (Expires)serializer.Deserialize(xml.CreateReader());
+            Assert.That(expires.Value, Is.EqualTo(new DateTime(2010, 8, 23)));
+        }
+
+        [Test()]
+        public void AcquireSchemaShouldLoadSchemas()
+        {
+            var schemas = new XmlSchemaSet();
+            var qName = Expires.AcquireSchema(schemas);
+
+            Assert.That(qName.Name, Is.EqualTo("ExpirationType"));
+            Assert.That(qName.Namespace, Is.EqualTo(Constants.WsEventing.Namespace));
+
+            Assert.That(schemas.Count, Is.EqualTo(2));
+            Assert.That(schemas.Schemas().Cast<XmlSchema>().Select(schema => schema.TargetNamespace), Is.EquivalentTo(new[] { "http://www.w3.org/XML/1998/namespace", "http://schemas.xmlsoap.org/ws/2004/08/eventing" }));
+        }
     }
 }

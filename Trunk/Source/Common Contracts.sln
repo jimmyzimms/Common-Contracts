@@ -21,9 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Libraries", "Exter
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS Eventing", "WS Eventing\WS Eventing.csproj", "{A7EAFB06-148F-45FD-9535-A4A147E9C03B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS Eventing Tests", "WS Eventing Tests\WS Eventing Tests.csproj", "{03B579BB-771E-40CF-AA98-A00EA1BADE4C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs14
 		SccLocalPath0 = .
@@ -36,6 +38,9 @@ Global
 		SccProjectUniqueName3 = WS\u0020Eventing\\WS\u0020Eventing.csproj
 		SccProjectName3 = WS\u0020Eventing
 		SccLocalPath3 = WS\u0020Eventing
+		SccProjectUniqueName4 = WS\u0020Eventing\u0020Tests\\WS\u0020Eventing\u0020Tests.csproj
+		SccProjectName4 = WS\u0020Eventing\u0020Tests
+		SccLocalPath4 = WS\u0020Eventing\u0020Tests
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Common Contracts.vsmdi
@@ -79,6 +84,16 @@ Global
 		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A7EAFB06-148F-45FD-9535-A4A147E9C03B}.Release|x86.ActiveCfg = Release|Any CPU
+		{03B579BB-771E-40CF-AA98-A00EA1BADE4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03B579BB-771E-40CF-AA98-A00EA1BADE4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03B579BB-771E-40CF-AA98-A00EA1BADE4C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{03B579BB-771E-40CF-AA98-A00EA1BADE4C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{03B579BB-771E-40CF-AA98-A00EA1BADE4C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{03B579BB-771E-40CF-AA98-A00EA1BADE4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03B579BB-771E-40CF-AA98-A00EA1BADE4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03B579BB-771E-40CF-AA98-A00EA1BADE4C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{03B579BB-771E-40CF-AA98-A00EA1BADE4C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{03B579BB-771E-40CF-AA98-A00EA1BADE4C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

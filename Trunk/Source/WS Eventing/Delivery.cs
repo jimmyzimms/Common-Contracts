@@ -179,9 +179,9 @@ namespace CommonContracts.WsEventing
         {
             Contract.Requires<ArgumentNullException>(xs != null, "xs");
 
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ProvPubs.Soupbone.Contracts.WsEventing.DeliveryType.xsd"))
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CommonContracts.WsEventing.DeliveryType.xsd"))
             {
-                Debug.Assert(stream != null, "Resource Stream 'ProvPubs.Soupbone.Contracts.WsEventing.DeliveryType.xsd' was not able to be opened");
+                Debug.Assert(stream != null, "Resource Stream 'CommonContracts.WsEventing.DeliveryType.xsd' was not able to be opened");
 
                 var schema = XmlSchema.Read(stream, null);
                 xs.Add(schema);

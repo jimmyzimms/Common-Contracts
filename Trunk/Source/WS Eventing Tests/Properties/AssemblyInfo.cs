@@ -49,66 +49,36 @@
 
 #endregion
 
-using System;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Reflection;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+using System.Runtime.InteropServices;
 
-namespace CommonContracts.WsEventing
-{
-    /// <summary>
-    /// Represents the "http://schemas.xmlsoap.org/ws/2004/08/eventing:UnsubscribeType" type.
-    /// </summary>
-    [XmlSchemaProvider("AcquireSchema")]
-    [XmlRoot(DataType = Constants.WsEventing.Namespace + ":UnsubscribeType", ElementName = "Unsubscribe", Namespace = Constants.WsEventing.Namespace)]
-    public class UnsubscribeRequestMessageBody : IXmlSerializable
-    {
-        #region IXmlSerializable Members
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+[assembly: AssemblyTitle("WS Eventing Common Contracts Tests")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Jimmy Zimmerman")]
+[assembly: AssemblyProduct("WS Eventing Common Contracts Tests")]
+[assembly: AssemblyCopyright("Copyright © Jimmy Zimmerman 2010")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
-        XmlSchema IXmlSerializable.GetSchema()
-        {
-            return null;
-        }
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
+[assembly: ComVisible(false)]
 
-        void IXmlSerializable.ReadXml(XmlReader reader)
-        {
-            Contract.Requires<ArgumentNullException>(reader != null);
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("aa387942-8ed5-485b-bbb6-b2c1065cb360")]
 
-            reader.ReadStartElement("Unsubscribe", Constants.WsEventing.Namespace);
-            reader.ReadEndElement();
-        }
-
-        void IXmlSerializable.WriteXml(XmlWriter writer)
-        {
-            var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
-            if (String.IsNullOrEmpty(prefix)) prefix = "wse";
-
-            writer.WriteStartElement(prefix, "Unsubscribe", Constants.WsEventing.Namespace);
-            writer.WriteEndElement();
-        }
-
-        #endregion
-
-        #region Schema
-
-        public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
-        {
-            Contract.Requires<ArgumentNullException>(xs != null, "xs");
-
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CommonContracts.WsEventing.Unsubscribe.xsd"))
-            {
-                Debug.Assert(stream != null, "Resource Stream 'CommonContracts.WsEventing.Unsubscribe.xsd' was not able to be opened");
-
-                var schema = XmlSchema.Read(stream, null);
-                xs.Add(schema);
-            }
-
-            return new XmlQualifiedName("UnsubscribeType", Constants.WsEventing.Namespace);
-        }
-
-        #endregion
-    }
-}
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+[assembly: AssemblyVersion("1.0.*")]

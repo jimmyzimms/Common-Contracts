@@ -170,9 +170,9 @@ namespace CommonContracts.WsEventing
         {
             Contract.Requires<ArgumentNullException>(xs != null, "xs");
 
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ProvPubs.Soupbone.Contracts.WsEventing.SubscribeResponse.xsd"))
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CommonContracts.WsEventing.SubscribeResponse.xsd"))
             {
-                Debug.Assert(stream != null, "Resource Stream 'ProvPubs.Soupbone.Contracts.WsEventing.SubscribeResponse.xsd' was not able to be opened");
+                Debug.Assert(stream != null, "Resource Stream 'CommonContracts.WsEventing.SubscribeResponse.xsd' was not able to be opened");
 
                 var schema = XmlSchema.Read(stream, null);
 
@@ -193,9 +193,9 @@ namespace CommonContracts.WsEventing
                 xs.Add(schema);
             }
 
-            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ProvPubs.Soupbone.Contracts.WsEventing.WsAddressing.xsd"))
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CommonContracts.WsEventing.WsAddressing.xsd"))
             {
-                Debug.Assert(stream != null, "Resource Stream 'ProvPubs.Soupbone.Contracts.WsEventing.WsAddressing.xsd' was not able to be opened");
+                Debug.Assert(stream != null, "Resource Stream 'CommonContracts.WsEventing.WsAddressing.xsd' was not able to be opened");
 
                 var schema = XmlSchema.Read(stream, null);
                 xs.Add(schema);
