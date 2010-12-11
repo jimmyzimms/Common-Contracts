@@ -66,13 +66,14 @@ namespace CommonContracts.WsEventing
     /// <summary>
     /// Represents the "http://schemas.xmlsoap.org/ws/2004/08/eventing:SubscribeType" type.
     /// </summary>
+    /// <remarks>This message body element only supports XPath message filtering.</remarks>
     [XmlSchemaProvider("AcquireSchema")]
     [XmlRoot(DataType = Constants.WsEventing.Namespace + ":SubscribeType", ElementName = "Subscribe", Namespace = Constants.WsEventing.Namespace)]
     public class SubscribeRequestMessageBody : IXmlSerializable
     {
         #region Fields
 
-        private EndpointAddress endTo;
+        private EndpointAddressAugust2004 endTo;
         private Delivery delivery;
         private Expires expires;
         private XPathMessageFilter filter;
@@ -82,24 +83,88 @@ namespace CommonContracts.WsEventing
 
         #region Properties
 
-        public virtual EndpointAddress EndTo
+        /// <summary>
+        /// Gets or sets the <see cref="EndpointAddressAugust2004"/> that a notification should be sent to if a subscription is terminated. This value may be null.
+        /// </summary>
+        /// <remarks>
+        /// A subscriber can indicated where to send a <see cref="SubscriptionEndMessage"/> if the subscription is terminated unexpectedly. The default behavior is not to send this message.
+        /// An event source is not required to respect this parameter if it is supplied.
+        /// </remarks>
+        /// <value>The <see cref="EndpointAddressAugust2004"/> that a notification should be sent to if a subscription is terminated.</value>
+        public virtual EndpointAddressAugust2004 EndTo
         {
             get { return this.endTo; }
             set { this.endTo = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="Delivery"/> destination for notification messages. This value is required.
+        /// </summary>
+        /// <value>The <see cref="Delivery"/> destination for notification messages, using some delivery mode.</value>
         public virtual Delivery Delivery
         {
-            get { return this.delivery; }
-            set { this.delivery = value; }
+            get
+            {
+                Contract.Ensures(Contract.Result<Delivery>() != null);
+
+                return this.delivery;
+            }
+            set
+            {
+                Contract.Requires<ArgumentNullException>(value != null, "Delivery");
+
+                this.delivery = value;
+            }
         }
 
+        /// <summary>
+        /// Gets or sets the requested <see cref="Expires"/> time for the subscription. This value may be null.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The event source defines the actual expiration and is not constrained to use a time less or greater
+        /// than the requested expiration. The expiration time may be a specific time or a duration from the
+        /// subscription's creation time. Both specific times and durations are interpreted based on the event
+        /// source's clock.
+        /// </para>
+        /// <para>
+        /// If this value is null, then the request is for a subscription that will not expire. That is, the subscriber
+        /// is requesting the event source to create a subscription with an indefinite lifetime. If the event source
+        /// grants such a subscription, it may be terminated by the subscriber using an <see cref="UnsubscribeRequestMessage"/>, 
+        /// or it may be terminated by the event source at any time for reasons such as connection termination, resource
+        /// constraints, or system shut-down.
+        /// </para>
+        /// <para>
+        /// If the expiration time is either a zero duration or a specific time that occurs in the past according to the
+        /// event source, then the request MUST fail, and the event source MAY generate a wse:InvalidExpirationTime fault
+        /// indicating that an invalid expiration time was requested.
+        /// </para>
+        /// <para>
+        /// Some event sources may not have a "wall time" clock available, and so are only able to accept durations as
+        /// expirations. If such a source receives a <see cref="SubscribeRequestMessage"/> containing a specific time
+        /// expiration, then the request MAY fail; if so, the event source MAY generate a wse:UnsupportedExpirationType
+        /// fault indicating that an unsupported expiration type was requested.
+        /// </para>
+        /// </remarks>
+        /// <value>The requested <see cref="Expires"/> time for the subscription.</value>
         public virtual Expires Expires
         {
             get { return this.expires; }
             set { this.expires = value; }
         }
 
+        /// <summary>
+        /// Gets or sets an <see cref="XPathMessageFilter"/>
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The XPath 1.0 expression that evaluates to a boolean value for a notification. If the evaluation is false,
+        /// the notification MUST NOT be sent to the event sink specified in the <see cref="Delivery"/> property. If null,
+        /// the implied value is an expression that always returns true. If the event source does not support filtering,
+        /// then a request that specifies a filter MUST fail, and the event source MAY generate a wse:FilteringNotSupported
+        /// fault indicating that filtering is not supported.
+        /// </para>
+        /// </remarks>
         public virtual XPathMessageFilter Filter
         {
             get { return this.filter; }
@@ -110,26 +175,61 @@ namespace CommonContracts.WsEventing
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating the dialect of the filter to be used by the event source to determine if a subscriber is
+        /// interested in a notification.
+        /// </summary>
+        /// <remarks>
+        /// <para>The default value is assumed to be XPath 1.0 as specified in <see cref="Constants.WsEventing.Dialects.XPath"/>.</para>
+        /// <para>
+        /// If the event source supports filtering but cannot honor the requested filtering, the request MUST fail, and the
+        /// event source MAY generate a wse:FilteringRequestedUnavailable fault indicating that the requested filter dialect
+        /// is not supported.
+        /// </para>
+        /// </remarks>
+        /// <value>Gets a value indicating the dialect of the filter to be used by the event source to determine if a subscriber is interested in a notification.</value>
         public virtual String FilterDialect
         {
-            get { return filterDialect; }
+            get
+            {
+                Contract.Ensures(!String.IsNullOrWhiteSpace(Contract.Result<String>()));
+
+                return this.filterDialect;
+            }
         }
 
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeRequestMessageBody"/> class.
+        /// </summary>
         [Obsolete("This method is required for the XmlSerializer and not not be directly called")]
-        public SubscribeRequestMessageBody() : this(new Delivery(), null)
+        public SubscribeRequestMessageBody() : this(new Delivery())
         {
         }
 
-        public SubscribeRequestMessageBody(Delivery delivery, EndpointAddress endTo)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeRequestMessageBody"/> class with the supplied <paramref name="delivery"/>.
+        /// </summary>
+        /// <param name="delivery">The <see cref="Delivery"/> value.</param>
+        public SubscribeRequestMessageBody(Delivery delivery) : this(delivery, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeRequestMessageBody"/> class with the supplied <paramref name="delivery"/> and optional <see cref="EndpointAddress"/> to send a notice if a subscription is terminated.
+        /// </summary>
+        /// <param name="delivery">The <see cref="Delivery"/> value.</param>
+        /// <param name="endTo">An optional <see cref="EndpointAddress"/> containing the EPR that should be used when to send a notice if a subscription is terminated.</param>
+        public SubscribeRequestMessageBody(Delivery delivery, EndpointAddress endTo = null)
         {
             Contract.Requires<ArgumentNullException>(delivery != null, "delivery");
 
             this.delivery = delivery;
-            this.endTo = endTo;
+            if (endTo == null) return;
+            this.endTo = EndpointAddressAugust2004.FromEndpointAddress(endTo);
         }
 
         #endregion
@@ -156,7 +256,7 @@ namespace CommonContracts.WsEventing
             {
                 if (reader.IsStartElement("EndTo", Constants.WsEventing.Namespace))
                 {
-                    this.EndTo = EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader);
+                    this.EndTo = EndpointAddressAugust2004.FromEndpointAddress(EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader));
                 }
                 else if (reader.IsStartElement("Delivery", Constants.WsEventing.Namespace))
                 {
@@ -192,9 +292,9 @@ namespace CommonContracts.WsEventing
             writer.WriteStartElement(prefix, "Subscribe", Constants.WsEventing.Namespace);
             if (this.EndTo != null)
             {
-                this.EndTo.WriteTo(AddressingVersion.WSAddressingAugust2004, writer, "EndTo", Constants.WsEventing.Namespace);
+                this.EndTo.ToEndpointAddress().WriteTo(AddressingVersion.WSAddressingAugust2004, writer, "EndTo", Constants.WsEventing.Namespace);
             }
-            if (Delivery != null)
+            if (this.Delivery != null)
             {
                 ((IXmlSerializable)this.Delivery).WriteXml(writer);
             }
@@ -202,7 +302,7 @@ namespace CommonContracts.WsEventing
             {
                 ((IXmlSerializable)this.Expires).WriteXml(writer);
             }
-            if (Filter != null)
+            if (this.Filter != null)
             {
                 this.Filter.WriteXPathTo(writer, prefix, "Filter", Constants.WsEventing.Namespace, true);
             }

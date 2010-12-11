@@ -71,7 +71,7 @@ namespace CommonContracts.WsEventing.Tests
             delivery.DeliveryMode = new Uri(Constants.WsEventing.DeliverModes.Push);
             Assert.That(delivery.Extensions, Is.Not.Null);
             Assert.That(delivery.Extensions, Is.Empty);
-            Assert.That(delivery.NotifyTo.ToEndpointAddress(), Is.EqualTo(new EndpointAddress(Constants.WsAddressing.NoAddress)));
+            Assert.That(delivery.NotifyTo.ToEndpointAddress(), Is.EqualTo(new EndpointAddress(EndpointAddress.NoneUri)));
 
             delivery = new Delivery(new Uri(Constants.WsEventing.DeliverModes.Wrapped), new EndpointAddress("http://someaddress"));
             delivery.DeliveryMode = new Uri(Constants.WsEventing.DeliverModes.Wrapped);
