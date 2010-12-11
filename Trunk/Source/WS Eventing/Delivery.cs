@@ -63,7 +63,7 @@ using System.Xml.Serialization;
 namespace CommonContracts.WsEventing
 {
     /// <summary>
-    /// Represents the "http://schemas.xmlsoap.org/ws/2004/08/eventing:Delivery" element.
+    /// Represents the "http://schemas.xmlsoap.org/ws/2004/08/eventing:Delivery" element describing subscriber notification message delivery information.
     /// </summary>
     [XmlSchemaProvider("AcquireSchema")]
     [XmlRoot(DataType = Constants.WsEventing.Namespace + ":Delivery", ElementName = "Delivery", Namespace = Constants.WsEventing.Namespace)]
@@ -79,6 +79,13 @@ namespace CommonContracts.WsEventing
 
         #region Properties
         
+        /// <summary>
+        /// Gets or sets a <see cref="Uri"/> indicating the delivery mode to be used for notification messages sent in relation to a subscription.
+        /// </summary>
+        /// <remarks>
+        /// The implied value is <see cref="Constants.WsEventing.DeliverModes.Push"/>, which indicates that Push Mode delivery should be used.
+        /// </remarks>
+        /// <value>The delivery mode to be used for notification messages sent in relation to a subscription.</value>
         public virtual Uri DeliveryMode
         {
             get
@@ -94,6 +101,10 @@ namespace CommonContracts.WsEventing
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="EndpointAddressAugust2004"/> reference describing the endpoint used to send messages to a subscriber.
+        /// </summary>
+        /// <value>The <see cref="EndpointAddressAugust2004"/> reference describing the endpoint used to send messages to a subscriber.</value>
         public virtual EndpointAddressAugust2004 NotifyTo
         {
             get
@@ -109,8 +120,16 @@ namespace CommonContracts.WsEventing
                 this.notifyTo = value;
             }
         }
-        
-        public virtual IList<AddressHeader> Extensions
+
+        /// <summary>
+        /// Gets the <see cref="HeaderCollection"/> containing any additional information specified by a subscriber that should be included in each notification.
+        /// </summary>
+        /// <remarks>
+        /// A typical implentation pattern is where the event sink lists a wsa:ReferenceProperties element that identifies the subscription. This extension is
+        /// custom to an event source and should be communicated / documented out of band.
+        /// </remarks>
+        /// <value>The <see cref="HeaderCollection"/> containing any additional information specified by a subscriber that should be included in each notification.</value>
+        public virtual HeaderCollection Extensions
         {
             get
             {
@@ -129,7 +148,7 @@ namespace CommonContracts.WsEventing
         /// Initializes a new instance of the <see cref="Delivery"/> class with the default <see cref="Constants.WsEventing.DeliverModes.Push"/> delivery mode. This constructor should only be used for deserialization.
         /// </summary>
         [Obsolete("This method is required for the XmlSerializer and not not be directly called")]
-        public Delivery() : this(new Uri(Constants.WsEventing.DeliverModes.Push), new EndpointAddress(Constants.WsAddressing.NoAddress))
+        public Delivery() : this(new Uri(Constants.WsEventing.DeliverModes.Push), new EndpointAddress(EndpointAddress.NoneUri))
         {
         }
 

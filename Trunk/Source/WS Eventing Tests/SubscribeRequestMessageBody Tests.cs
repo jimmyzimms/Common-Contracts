@@ -75,7 +75,7 @@ namespace CommonContracts.WsEventing.Tests
             var delivery = new Mock<Delivery>(MockBehavior.Strict);
             delivery.As<IXmlSerializable>().Setup(item => item.WriteXml(It.IsAny<XmlWriter>()));
             message.Delivery = delivery.Object;
-            message.EndTo = new EndpointAddress("http://tempuri.org/endTo");
+            message.EndTo = EndpointAddressAugust2004.FromEndpointAddress(new EndpointAddress("http://tempuri.org/endTo"));
             // Supply mock Expires
             var expires = new Mock<Expires>(MockBehavior.Strict);
             expires.As<IXmlSerializable>().Setup(item => item.WriteXml(It.IsAny<XmlWriter>()));
