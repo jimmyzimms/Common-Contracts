@@ -55,6 +55,9 @@ using System.ServiceModel;
 
 namespace CommonContracts.WsEventing
 {
+    /// <summary>
+    /// The request message for the <see cref="ISubscriptionManager.GetStatus"/> operation.
+    /// </summary>
     [MessageContract(IsWrapped = false)]
     public class GetStatusRequestMessage
     {
@@ -67,12 +70,20 @@ namespace CommonContracts.WsEventing
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStatusRequestMessage"/> with the default values. This constructor should only be used for deserialization.
+        /// </summary>
         [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public GetStatusRequestMessage()
         {
             this.identifier = new Identifier();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStatusRequestMessage"/> with the supplied <paramref name="id"/> and <paramref name="body"/> values.
+        /// </summary>
+        /// <param name="id">The identifier for the subscription request.</param>
+        /// <param name="body">The body of the subscription request.</param>
         public GetStatusRequestMessage(Identifier id, GetStatusRequestMessageBody body)
         {
             Contract.Requires<ArgumentNullException>(id != null, "id");
@@ -85,6 +96,10 @@ namespace CommonContracts.WsEventing
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the <see cref="Identifier"/> value for the subscription request.
+        /// </summary>
+        /// <value>The <see cref="Identifier"/> value for the subscription request.</value>
         [MessageHeader(Name ="Identifier", Namespace = Constants.WsEventing.Namespace)]
         public Identifier Identifier
         {
@@ -92,6 +107,10 @@ namespace CommonContracts.WsEventing
             set { this.identifier = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="GetStatusRequestMessageBody"/> content for the subscription request.
+        /// </summary>
+        /// <value>The <see cref="GetStatusRequestMessageBody"/> content for the subscription request.</value>
         [MessageBodyMember(Name = "GetStatus", Namespace = Constants.WsEventing.Namespace, Order = 0)]
         public GetStatusRequestMessageBody Body
         {

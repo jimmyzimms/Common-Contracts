@@ -62,6 +62,7 @@ namespace CommonContracts.WsEventing
     /// <summary>
     /// Represents the "http://schemas.xmlsoap.org/ws/2004/08/eventing:GetStatusType" type.
     /// </summary>
+    /// <remarks>While the contract allows open-ended extensibility, this type ignores any additional xml content that is supplied in a request.</remarks>
     [XmlSchemaProvider("AcquireSchema")]
     [XmlRoot(DataType = Constants.WsEventing.Namespace + ":GetStatusType", ElementName = "GetStatus", Namespace = Constants.WsEventing.Namespace)]
     public class GetStatusRequestMessageBody : IXmlSerializable
