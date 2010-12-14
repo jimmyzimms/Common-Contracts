@@ -67,7 +67,7 @@ namespace CommonContracts.WsEventing
 
         #region Constructors
 
-        [Obsolete("This constructor is required for by the XmlSerializer")]
+        [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public GetStatusRequestMessage()
         {
             this.identifier = new Identifier();

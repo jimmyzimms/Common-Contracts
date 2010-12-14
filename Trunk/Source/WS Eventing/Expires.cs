@@ -74,21 +74,25 @@ namespace CommonContracts.WsEventing
 
         #region Properties
         
+        /// <summary>
+        /// Gets or sets the <see cref="DateTime"/> that the subscription is requested to end.
+        /// </summary>
+        /// <value>The <see cref="DateTime"/> that the subscription is requested to end.</value>
         public virtual DateTime Value
         {
             get
             {
-                if (expires.StartsWith("P"))
+                if (this.expires.StartsWith("P"))
                 {
                     DateTime dt = DateTime.Now.Add(XmlConvert.ToTimeSpan(expires)).ToUniversalTime();
-                    expires = XmlConvert.ToString(dt, XmlDateTimeSerializationMode.Utc);
+                    this.expires = XmlConvert.ToString(dt, XmlDateTimeSerializationMode.Utc);
                     return dt;
                 }
                 return XmlConvert.ToDateTime(expires, XmlDateTimeSerializationMode.Utc);
             }
             set
             {
-                expires = XmlConvert.ToString(value, XmlDateTimeSerializationMode.Utc);
+                this.expires = XmlConvert.ToString(value, XmlDateTimeSerializationMode.Utc);
             }
         }
         
@@ -96,21 +100,36 @@ namespace CommonContracts.WsEventing
 
         #region Constructors
         
-        [Obsolete("This constructor is required for by the XmlSerializer")]
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Expires"/> class with the default values. This constructor should only be used for deserialization.
+        /// </summary>
+        [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public Expires()
         {
         }
 
-        public Expires(DateTime dt)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Expires"/> class based on the supplied <paramref name="expirationDate"/>.
+        /// </summary>
+        /// <param name="expirationDate">The <see cref="DateTime"/> when the subscription is requested to expire.</param>
+        public Expires(DateTime expirationDate)
         {
-            expires = XmlConvert.ToString(dt, XmlDateTimeSerializationMode.Utc);
-        }
-        
-        public Expires(TimeSpan duration)
-        {
-            expires = XmlConvert.ToString(duration);
+            this.expires = XmlConvert.ToString(expirationDate, XmlDateTimeSerializationMode.Utc);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Expires"/> class based on the supplied <paramref name="duration"/>.
+        /// </summary>
+        /// <param name="duration">A <see cref="TimeSpan"/> is requested to expire.</param>
+        public Expires(TimeSpan duration)
+        {
+            this.expires = XmlConvert.ToString(duration);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Expires"/> class from the supplied <paramref name="reader"/>.
+        /// </summary>
+        /// <param name="reader">The <see cref="XmlReader"/> to construct an instance of the <see cref="Expires"/> class from.</param>
         public Expires(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
@@ -178,6 +197,12 @@ namespace CommonContracts.WsEventing
 
         #region Validations
 
+        /// <summary>
+        /// Indicates if the supplied <paramref name="timeToParse"/> is able to be parsed into an expiration value.
+        /// </summary>
+        /// <remarks>This does not confirm if the value is an acceptable expiration value, only that it is an acceptable format.</remarks>
+        /// <param name="timeToParse">The string value to parse.</param>
+        /// <returns>True if the supplied <paramref name="timeToParse"/> value can be parsed into an expiration value; otherwise false.</returns>
         public static Boolean IsValidTime(String timeToParse)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(timeToParse), "timeToParse");
@@ -185,6 +210,12 @@ namespace CommonContracts.WsEventing
             return !timeToParse.StartsWith("P") && DateTime.Parse(timeToParse) < DateTime.Now ? false : true;
         }
 
+        /// <summary>
+        /// Indicates is the supplied <paramref name="timeToParse"/> is in duration format (AKA <see cref="TimeSpan"/>).
+        /// </summary>
+        /// <remarks>This does not confirm if the value is an acceptable expiration value, only that it is an acceptable format.</remarks>
+        /// <param name="timeToParse">The string value to parse.</param>
+        /// <returns>True if the supplied <paramref name="timeToParse"/> value is in duration format; otherwise false.</returns>
         public static Boolean IsDurationTime(String timeToParse)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(timeToParse), "timeToParse");
