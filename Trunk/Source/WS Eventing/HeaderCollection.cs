@@ -64,20 +64,43 @@ namespace CommonContracts.WsEventing
     /// <remarks>
     /// Since the presence of additional XML information is supported by some elements, the
     /// use of <see cref="AddressHeader"/> elements, each repesenting a single additional child
-    /// element simplies the consumption of this information.
+    /// element simplies the consumption of this information despite the fact that technically
+    /// the additional information is not a header.
     /// </remarks>
     public class HeaderCollection : Collection<AddressHeader>
     {
         #region Overrides
         
-        protected override void InsertItem(int index, AddressHeader item)
+        /// <summary>
+        /// Inserts an element into the <see cref="HeaderCollection"/> at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param>
+        /// <param name="item">The <see cref="AddressHeader"/> to insert.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="item"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para><paramref name="index"/> is less than zero</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="index"/> is greater than <see cref="Collection{T}.Count"/>.</para>
+        /// </exception>
+        protected override void InsertItem(Int32 index, AddressHeader item)
         {
             if (item == null) throw new ArgumentNullException("item");
 
             base.InsertItem(index, item);
         }
 
-        protected override void SetItem(int index, AddressHeader item)
+        /// <summary>
+        /// Replaces the element at the specified index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the element to replace.</param>
+        /// <param name="item">The new value for the element at the specified index.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="item"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para><paramref name="index"/> is less than zero</para>
+        /// <para>-or-</para>
+        /// <para><paramref name="index"/> is greater than <see cref="Collection{T}.Count"/>.</para>
+        /// </exception>
+        protected override void SetItem(Int32 index, AddressHeader item)
         {
             if (item == null) throw new ArgumentNullException("item");
 
@@ -88,6 +111,12 @@ namespace CommonContracts.WsEventing
 
         #region Methods
         
+        /// <summary>
+        /// Creates a new query expression based on the supplied QName component values to find an <see cref="AddressHeader"/> in the collection.
+        /// </summary>
+        /// <param name="name">The local name of the <see cref="AddressHeader"/> to find.</param>
+        /// <param name="ns">The namespace of the <seealso cref="AddressHeader"/> to find.</param>
+        /// <returns>A query expression that will match the supplied QName component values.</returns>
         protected virtual IQueryable<AddressHeader> CreateQuery(String name, String ns)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(name), "name");
@@ -100,6 +129,12 @@ namespace CommonContracts.WsEventing
             return query;
         }
 
+        /// <summary>
+        /// Returns all <see cref="AddressHeader"/> instances found that match the supplied <paramref name="name"/> and <paramref name="ns"/>.
+        /// </summary>
+        /// <param name="name">The local name of the <see cref="AddressHeader"/> to find.</param>
+        /// <param name="ns">The namespace of the <seealso cref="AddressHeader"/> to find.</param>
+        /// <returns>A sequence containing all <see cref="AddressHeader"/> instances found matching the supplied QName component values.</returns>
         public virtual IEnumerable<AddressHeader> FindAll(String name, String ns)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(name), "name");
@@ -109,6 +144,12 @@ namespace CommonContracts.WsEventing
             return result;
         }
 
+        /// <summary>
+        /// Returns the first <see cref="AddressHeader"/> instance found that matches the supplied <paramref name="name"/> and <paramref name="ns"/>.
+        /// </summary>
+        /// <param name="name">The local name of the <see cref="AddressHeader"/> to find.</param>
+        /// <param name="ns">The namespace of the <seealso cref="AddressHeader"/> to find.</param>
+        /// <returns>If found, the first instance of the <see cref="AddressHeader"/> that matches the supplied QName component values; otherwise null.</returns>
         public virtual AddressHeader FindFirst(String name, String ns)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(name), "name");
@@ -118,6 +159,13 @@ namespace CommonContracts.WsEventing
             return result;
         }
 
+        /// <summary>
+        /// Returns the value cast as <typeparamref name="T"/> for the first <see cref="AddressHeader"/> instance found that matches the supplied <paramref name="name"/> and <paramref name="ns"/>.
+        /// </summary>
+        /// <typeparam name="T">The type to cast the value of the <see cref="AddressHeader"/> to.</typeparam>
+        /// <param name="name">The local name of the <see cref="AddressHeader"/> to find.</param>
+        /// <param name="ns">The namespace of the <seealso cref="AddressHeader"/> to find.</param>
+        /// <returns>If found, the value, cast as <typeparamref name="T"/>, of the first instance of the <see cref="AddressHeader"/> that matches the supplied QName component values; otherwise the default value of <typeparamref name="T"/>.</returns>
         public virtual T GetValue<T>(String name, String ns)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(name), "name");

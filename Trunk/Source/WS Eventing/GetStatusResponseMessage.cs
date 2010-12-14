@@ -55,15 +55,26 @@ using System.ServiceModel;
 
 namespace CommonContracts.WsEventing
 {
+    /// <summary>
+    /// The response message for the <see cref="ISubscriptionManager.GetStatus"/> operation.
+    /// </summary>
     [MessageContract(IsWrapped = false)]
     public class GetStatusResponseMessage
     {
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStatusResponseMessage"/> with the default values. This constructor should only be used for deserialization.
+        /// </summary>
+        [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public GetStatusResponseMessage()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStatusResponseMessage"/> with the supplied <paramref name="body"/> content.
+        /// </summary>
+        /// <param name="body">The <see cref="GetStatusResponseMessageBody"/> containing the content of the response message.</param>
         public GetStatusResponseMessage(GetStatusResponseMessageBody body)
         {
             Contract.Requires<ArgumentNullException>(body == null, "body");
@@ -81,6 +92,10 @@ namespace CommonContracts.WsEventing
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the <see cref="GetStatusResponseMessageBody"/> value containing the contents of the response message.
+        /// </summary>
+        /// <value>The <see cref="GetStatusResponseMessageBody"/> value containing the contents of the response message.</value>
         [MessageBodyMember(Name = "GetStatusResponse", Namespace = Constants.WsEventing.Namespace, Order = 0)]
         public virtual GetStatusResponseMessageBody Body
         {

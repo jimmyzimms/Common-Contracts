@@ -75,11 +75,19 @@ namespace CommonContracts.WsEventing
 
         #region Constructors
 
-        [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStatusResponseMessageBody"/> indicating that a subscription is not found.
+        /// </summary>
+        /// <remarks>This constructor is used if the subscription is not value or has expired.</remarks>
         public GetStatusResponseMessageBody()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStatusResponseMessageBody"/> class with the supplied <paramref name="expires"/> value.
+        /// </summary>
+        /// <remarks>This constructor is used if the subscription is valid and has not expired.</remarks>
+        /// <param name="expires">An <see cref="Expires"/> instance indicating the status of the subscription indicated in a <see cref="GetStatusResponseMessage"/>.</param>
         public GetStatusResponseMessageBody(Expires expires)
         {
             Contract.Requires<ArgumentNullException>(expires != null, "expires");
@@ -91,15 +99,15 @@ namespace CommonContracts.WsEventing
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the <see cref="Expires"/> value indicating the status of the requested subscription.
+        /// </summary>
+        /// <remarks>If the subscription is value and not expired, the value MUST be not null. If the subscription is not valid or the subscription is expired, this value MUST be null.</remarks>
+        /// <value>The <see cref="Expires"/> value indicating the status of the current message. This value may be null.</value>
         public virtual Expires Expires
         {
             get { return this.expires; }
-            set
-            {
-                Contract.Requires<ArgumentNullException>(value != null, "Expires");
-
-                this.expires = value;
-            }
+            set { this.expires = value; }
         }
 
         #endregion
@@ -116,7 +124,9 @@ namespace CommonContracts.WsEventing
             Contract.Requires<ArgumentNullException>(reader != null);
 
             reader.ReadStartElement("GetStatusResponse", Constants.WsEventing.Namespace);
-            this.Expires = new Expires(reader);
+
+            if (reader.IsStartElement("Expires", Constants.WsEventing.Namespace)) this.Expires = new Expires(reader);
+
             reader.ReadEndElement();
         }
 
@@ -126,7 +136,9 @@ namespace CommonContracts.WsEventing
             if (String.IsNullOrEmpty(prefix)) prefix = "wse";
 
             writer.WriteStartElement(prefix, "GetStatusResponse", Constants.WsEventing.Namespace);
-            ((IXmlSerializable)this.Expires).WriteXml(writer);
+
+            if (this.Expires != null) ((IXmlSerializable)this.Expires).WriteXml(writer);
+
             writer.WriteEndElement();
         }
 
