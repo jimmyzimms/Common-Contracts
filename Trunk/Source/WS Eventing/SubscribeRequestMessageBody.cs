@@ -205,7 +205,7 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Initializes a new instance of the <see cref="SubscribeRequestMessageBody"/> class.
         /// </summary>
-        [Obsolete("This method is required for the XmlSerializer and not not be directly called")]
+        [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public SubscribeRequestMessageBody() : this(new Delivery())
         {
         }

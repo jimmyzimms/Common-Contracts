@@ -147,7 +147,7 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Initializes a new instance of the <see cref="Delivery"/> class with the default <see cref="Constants.WsEventing.DeliverModes.Push"/> delivery mode. This constructor should only be used for deserialization.
         /// </summary>
-        [Obsolete("This method is required for the XmlSerializer and not not be directly called")]
+        [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public Delivery() : this(new Uri(Constants.WsEventing.DeliverModes.Push), new EndpointAddress(EndpointAddress.NoneUri))
         {
         }
