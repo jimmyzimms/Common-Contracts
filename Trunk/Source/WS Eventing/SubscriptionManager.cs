@@ -82,7 +82,7 @@ namespace CommonContracts.WsEventing
         {
             get
             {
-                Contract.Ensures(Contract.Result<EndpointAddressAugust2004>() != null);
+                Contract.Ensures(Contract.Result<EndpointAddress>() != null);
 
                 return this.epa;
             }
@@ -92,26 +92,7 @@ namespace CommonContracts.WsEventing
         {
             get { return new Identifier(EndpointAddress); }
         }
-
-        /// <summary>
-        /// Gets the <see cref="HeaderCollection"/> containing any additional information specified by an event source that should be included in each call to a <see cref="ISubscriptionManager"/> for this subscription.
-        /// </summary>
-        /// <remarks>
-        /// A typical implentation pattern is where the event source provides a wsa:ReferenceProperties element that identifies the subscription. This extension is
-        /// custom to an event source and should be communicated / documented out of band.
-        /// </remarks>
-        /// <value>The <see cref="HeaderCollection"/> containing any additional information specified by a subscriber that should be included in each notification.</value>
-        public virtual HeaderCollection Extensions
-        {
-            get
-            {
-                Contract.Ensures(Contract.Result<IList<AddressHeader>>() != null);
-                Contract.Ensures(Contract.ForAll(Contract.Result<IList<AddressHeader>>(), item => item != null));
-
-                return this.additionalElements;
-            }
-        }
-
+        
         #endregion
 
         #region Constructors
@@ -169,7 +150,7 @@ namespace CommonContracts.WsEventing
             Contract.Requires<ArgumentNullException>(reader != null);
             //Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, String.Format(null, "The supplied XmlReader must be in the 'Interactive' state. The current state is '{0}'", reader.ReadState));
 
-            this.EndpointAddress = EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader, "SubscriptionManager", Constants.WsEventing.Namespace);
+            this.epa = EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader, "SubscriptionManager", Constants.WsEventing.Namespace);
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
