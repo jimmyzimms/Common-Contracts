@@ -50,8 +50,10 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -78,15 +80,38 @@ namespace CommonContracts.WsEventing
         
         public virtual EndpointAddress EndpointAddress
         {
-            get { return this.epa; }
-            set { this.epa = value; }
+            get
+            {
+                Contract.Ensures(Contract.Result<EndpointAddressAugust2004>() != null);
+
+                return this.epa;
+            }
         }
         
         public Identifier Identifier
         {
             get { return new Identifier(EndpointAddress); }
         }
-        
+
+        /// <summary>
+        /// Gets the <see cref="HeaderCollection"/> containing any additional information specified by an event source that should be included in each call to a <see cref="ISubscriptionManager"/> for this subscription.
+        /// </summary>
+        /// <remarks>
+        /// A typical implentation pattern is where the event source provides a wsa:ReferenceProperties element that identifies the subscription. This extension is
+        /// custom to an event source and should be communicated / documented out of band.
+        /// </remarks>
+        /// <value>The <see cref="HeaderCollection"/> containing any additional information specified by a subscriber that should be included in each notification.</value>
+        public virtual HeaderCollection Extensions
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<IList<AddressHeader>>() != null);
+                Contract.Ensures(Contract.ForAll(Contract.Result<IList<AddressHeader>>(), item => item != null));
+
+                return this.additionalElements;
+            }
+        }
+
         #endregion
 
         #region Constructors
@@ -96,16 +121,35 @@ namespace CommonContracts.WsEventing
         {
         }
         
+        public SubscriptionManager(Uri address)
+        {
+            Contract.Requires(address != null, "address");
+
+            this.epa = new EndpointAddress(address);
+        }
+
         public SubscriptionManager(Uri address, Identifier id)
         {
-            this.epa= new EndpointAddress(address, new [] { id.AddressHeader });
+            Contract.Requires(address != null, "address");
+            Contract.Requires(id != null, "id");
+
+            this.epa = new EndpointAddress(address, new [] { id.AddressHeader });
         }
         
-        public SubscriptionManager(Uri address, AddressHeader[] headers)
+        public SubscriptionManager(Uri address, IEnumerable<AddressHeader> headers)
         {
-            this.epa = new EndpointAddress(address, headers);
+            Contract.Requires(address != null, "address");
+            Contract.Requires(headers != null, "headers");
+            Contract.Requires(Contract.ForAll(headers, item => item != null));
+
+            this.epa = new EndpointAddress(address, headers.ToArray());
         }
         
+        public SubscriptionManager(EndpointAddress address)
+        {
+            
+        }
+
         public SubscriptionManager(XmlReader reader)
         {
             ((IXmlSerializable)this).ReadXml(reader);
