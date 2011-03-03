@@ -72,17 +72,17 @@ namespace CommonContracts.WsEventing
     {
         #region Fields
 
-        private EndpointAddress epa;
+        private EndpointAddressAugust2004 epa;
         
         #endregion
 
         #region Properties
         
-        public virtual EndpointAddress EndpointAddress
+        public virtual EndpointAddressAugust2004 EndpointAddress
         {
             get
             {
-                Contract.Ensures(Contract.Result<EndpointAddress>() != null);
+                Contract.Ensures(Contract.Result<EndpointAddressAugust2004>() != null);
 
                 return this.epa;
             }
@@ -90,7 +90,7 @@ namespace CommonContracts.WsEventing
         
         public Identifier Identifier
         {
-            get { return new Identifier(EndpointAddress); }
+            get { return new Identifier(this.EndpointAddress.ToEndpointAddress()); }
         }
         
         #endregion
@@ -106,7 +106,7 @@ namespace CommonContracts.WsEventing
         {
             Contract.Requires(address != null, "address");
 
-            this.epa = new EndpointAddress(address);
+            this.epa = EndpointAddressAugust2004.FromEndpointAddress(new EndpointAddress(address));
         }
 
         public SubscriptionManager(Uri address, Identifier id)
@@ -114,7 +114,7 @@ namespace CommonContracts.WsEventing
             Contract.Requires(address != null, "address");
             Contract.Requires(id != null, "id");
 
-            this.epa = new EndpointAddress(address, new [] { id.AddressHeader });
+            this.epa = EndpointAddressAugust2004.FromEndpointAddress(new EndpointAddress(address, new [] { id.AddressHeader }));
         }
         
         public SubscriptionManager(Uri address, IEnumerable<AddressHeader> headers)
@@ -123,7 +123,7 @@ namespace CommonContracts.WsEventing
             Contract.Requires(headers != null, "headers");
             Contract.Requires(Contract.ForAll(headers, item => item != null));
 
-            this.epa = new EndpointAddress(address, headers.ToArray());
+            this.epa = EndpointAddressAugust2004.FromEndpointAddress( new EndpointAddress(address, headers.ToArray()));
         }
         
         public SubscriptionManager(EndpointAddress address)
@@ -150,14 +150,14 @@ namespace CommonContracts.WsEventing
             Contract.Requires<ArgumentNullException>(reader != null);
             //Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, String.Format(null, "The supplied XmlReader must be in the 'Interactive' state. The current state is '{0}'", reader.ReadState));
 
-            this.epa = EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader, "SubscriptionManager", Constants.WsEventing.Namespace);
+            this.epa = EndpointAddressAugust2004.FromEndpointAddress(System.ServiceModel.EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader, "SubscriptionManager", Constants.WsEventing.Namespace));
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             if (this.EndpointAddress != null)
             {
-                this.EndpointAddress.WriteTo(AddressingVersion.WSAddressingAugust2004, writer, "SubscriptionManager", Constants.WsEventing.Namespace);
+                this.EndpointAddress.ToEndpointAddress().WriteTo(AddressingVersion.WSAddressingAugust2004, writer, "SubscriptionManager", Constants.WsEventing.Namespace);
             }
         }
 

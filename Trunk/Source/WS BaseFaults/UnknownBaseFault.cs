@@ -54,7 +54,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
-using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -62,9 +62,12 @@ using System.Xml.Serialization;
 namespace CommonContracts.WsBaseFaults
 {
     /// <summary>
-    /// A custom <see cref="BaseFaultFull"/> type that is usuful when the deserialization occurs of a base fault extension that you do not have a class representation of.
+    /// A custom <see cref="BaseFaultFull"/> type that is useful when the deserialization occurs of a base fault extension that you do not have a class representation of.
     /// </summary>
-    /// <remarks>Due to the schema of the BaseFaultType, WCF requires use of the <see cref="XmlSerializerFormatAttribute"/> on your service contracts.</remarks>
+    /// <remarks>
+    /// This type can be used whenever you have untyped <see cref="Message"/> based service client proxies and need to represent a unknown (or any derivation thereof)
+    /// of a WS-BaseFaults compliant fault. While not a firm requirement, this class is generally used by service clients.
+    /// </remarks>
     [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaultsNamespace, DataType = Constants.WsBaseFaultsNamespace + ":BaseFaultType")]
     [XmlSchemaProvider("AcquireSchema")]
     public class UnknownBaseFault : BaseFaultFull

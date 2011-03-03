@@ -72,10 +72,6 @@ namespace CommonContracts.WsBaseFaults
     /// </summary>
     /// <remarks>
     /// <para>
-    /// <note type="warning">Due to the schema of the BaseFaultType, WCF requires use of the <see cref="XmlSerializerFormatAttribute"/> 
-    /// on your service contracts to use this type in fault contracts!</note>
-    /// </para>
-    /// <para>
     /// This type works with two basic modes:
     /// <list type="bullet">
     /// <item><description>XML Serializable <see cref="FaultContractAttribute">Fault Contracts</see></description></item>
