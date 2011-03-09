@@ -67,7 +67,7 @@ namespace CommonContracts.Globalization
     /// WCF messages (usually as a supplied <see cref="MessageHeaderAttribute">SOAP Message Header</see>).</para>
     /// </remarks>
     [DebuggerDisplay("Locale = '{Locale}', Timezone = '{Timezone}', Preferences.Count = '{Preferences.Content.Count}'")]
-    [DataContract(Name = "international", Namespace = "http://www.w3.org/2005/09/ws-i18n")]
+    [DataContract(Name = "international", Namespace = Constants.Namespace)]
     public class International
     {
         #region Fields

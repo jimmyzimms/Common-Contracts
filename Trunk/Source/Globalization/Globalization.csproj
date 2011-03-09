@@ -96,6 +96,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="InternationalBasic.cs" />
     <Compile Include="Preferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
