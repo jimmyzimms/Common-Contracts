@@ -67,7 +67,7 @@ namespace CommonContracts.Globalization
     /// WCF messages (usually as a supplied <see cref="MessageHeaderAttribute">SOAP Message Header</see>).</para>
     /// </remarks>
     [DebuggerDisplay("Locale = '{Locale}', Timezone = '{Timezone}', Preferences.Count = '{Preferences.Content.Count}'")]
-    [DataContract(Name = "International", Namespace = "http://www.w3.org/2005/09/ws-i18n")]
+    [DataContract(Name = "international", Namespace = "http://www.w3.org/2005/09/ws-i18n")]
     public class International
     {
         #region Fields
@@ -125,7 +125,7 @@ namespace CommonContracts.Globalization
         /// </para>
         /// </remarks>
         /// <value>The value that defines the locale. The value will default to the string '$default'.</value>
-        [DataMember(Name = "Locale", Order = 1)]
+        [DataMember(Name = "locale", Order = 1)]
         public virtual String Locale
         {
             get { return this.locale ?? "$default"; }
@@ -148,7 +148,7 @@ namespace CommonContracts.Globalization
         /// of values is indicated.
         /// </remarks>
         /// <value></value>
-        [DataMember(Name = "TZ", Order = 2, IsRequired = false)]
+        [DataMember(Name = "tz", Order = 2, IsRequired = false)]
         public virtual String Timezone
         {
             get { return this.timeZone; }
@@ -171,7 +171,7 @@ namespace CommonContracts.Globalization
         /// in the output stream though it may contain no elements.
         /// </remarks>
         /// <value>The information, if any, that defines the locale preferences. This value will not be null but may be empty.</value>
-        [DataMember(Name = "Preferences", Order = 3, IsRequired = false)]
+        [DataMember(Name = "preferences", Order = 3, IsRequired = false)]
         public virtual Preferences Preferences
         {
             get { return this.preferences; }

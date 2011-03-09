@@ -91,7 +91,7 @@ namespace Globalization.Tests
                 xml = XElement.Load(stream);
             }
 
-            var areEqual = XNode.DeepEquals(xml, XElement.Parse("<International xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><Locale>$default</Locale><TZ i:nil='true' /><Preferences /></International>"));
+            var areEqual = XNode.DeepEquals(xml, XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>$default</locale><tz i:nil='true' /><preferences /></international>"));
             Assert.IsTrue(areEqual);
 
             using (var stream = new MemoryStream())
@@ -101,7 +101,7 @@ namespace Globalization.Tests
                 xml = XElement.Load(stream);
             }
 
-            areEqual = XNode.DeepEquals(xml, XElement.Parse("<International xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><Locale>en-US</Locale><TZ i:nil='true' /><Preferences /></International>"));
+            areEqual = XNode.DeepEquals(xml, XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>en-US</locale><tz i:nil='true' /><preferences /></international>"));
             Assert.IsTrue(areEqual);
 
             using (var stream = new MemoryStream())
@@ -113,7 +113,7 @@ namespace Globalization.Tests
                 xml = XElement.Load(stream);
             }
 
-            areEqual = XNode.DeepEquals(xml, XElement.Parse("<International xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><Locale>$default</Locale><TZ i:nil='true' /><Preferences><test xmlns='' /></Preferences></International>"));
+            areEqual = XNode.DeepEquals(xml, XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>$default</locale><tz i:nil='true' /><preferences><test xmlns='' /></preferences></international>"));
             Assert.IsTrue(areEqual);
 
             using (var stream = new MemoryStream())
@@ -124,7 +124,7 @@ namespace Globalization.Tests
                 xml = XElement.Load(stream);
             }
 
-            areEqual = XNode.DeepEquals(xml, XElement.Parse("<International xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><Locale>$default</Locale><TZ>Europe/Andorra</TZ><Preferences /></International>"));
+            areEqual = XNode.DeepEquals(xml, XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>$default</locale><tz>Europe/Andorra</tz><preferences /></international>"));
             Assert.IsTrue(areEqual);            
         }
 
@@ -133,25 +133,25 @@ namespace Globalization.Tests
         {
             var serializer = new DataContractSerializer(typeof(International));
 
-            XElement xml = XElement.Parse("<International xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><Locale>$default</Locale><TZ i:nil='true' /><Preferences /></International>");
+            XElement xml = XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>$default</locale><tz i:nil='true' /><preferences /></international>");
             var target = serializer.ReadObject(xml.CreateReader()) as International;
             Assert.That(target.Locale, Is.EqualTo("$default"));
             Assert.That(target.Preferences, Is.Not.Null);
             Assert.That(target.Timezone, Is.Empty);
 
-            xml = XElement.Parse("<International xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><Locale>en-US</Locale><TZ i:nil='true' /><Preferences /></International>");
+            xml = XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>en-US</locale><tz i:nil='true' /><preferences /></international>");
             target = serializer.ReadObject(xml.CreateReader()) as International;
             Assert.That(target.Locale, Is.EqualTo("en-US"));
             Assert.That(target.Preferences, Is.Not.Null);
             Assert.That(target.Timezone, Is.Empty);
 
-            xml = XElement.Parse("<International xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><Locale>$default</Locale><TZ i:nil='true' /><Preferences><test xmlns='' /></Preferences></International>");
+            xml = XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>$default</locale><tz i:nil='true' /><preferences><test xmlns='' /></preferences></international>");
             target = serializer.ReadObject(xml.CreateReader()) as International;
             Assert.That(target.Locale, Is.EqualTo("$default"));
             Assert.That(target.Preferences, Is.Not.Null);
             Assert.That(target.Timezone, Is.Empty);
 
-            xml = XElement.Parse("<International xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><Locale>$default</Locale><TZ>Europe/Andorra</TZ><Preferences /></International>");
+            xml = XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>$default</locale><tz>Europe/Andorra</tz><preferences /></international>");
             target = serializer.ReadObject(xml.CreateReader()) as International;
             Assert.That(target.Locale, Is.EqualTo("$default"));
             Assert.That(target.Preferences, Is.Not.Null);
