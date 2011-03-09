@@ -98,7 +98,7 @@ namespace CommonContracts.WsBaseFaults
     /// at runtime.
     /// </para>
     /// </remarks>
-    [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaultsNamespace, DataType = Constants.WsBaseFaultsNamespace + ":BaseFaultType")]
+    [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaults.Namespace, DataType = Constants.WsBaseFaults.Namespace + ":BaseFaultType")]
     [XmlSchemaProvider("AcquireSchema")]
     public abstract class BaseFaultFull : IXmlSerializable
     {
@@ -294,11 +294,11 @@ namespace CommonContracts.WsBaseFaults
 
             while (reader.NodeType != XmlNodeType.EndElement)
             {
-                if (reader.IsStartElement("Timestamp", Constants.WsBaseFaultsNamespace))
+                if (reader.IsStartElement("Timestamp", Constants.WsBaseFaults.Namespace))
                 {
                     this.timestamp = reader.ReadElementContentAsDateTime();
                 }
-                else if (reader.IsStartElement("Originator", Constants.WsBaseFaultsNamespace))
+                else if (reader.IsStartElement("Originator", Constants.WsBaseFaults.Namespace))
                 {
                     var epa = reader.ReadOuterXml();
                     using (var stringReader = new StringReader(epa))
@@ -310,16 +310,16 @@ namespace CommonContracts.WsBaseFaults
                         }
                     }
                 }
-                else if (reader.IsStartElement("ErrorCode", Constants.WsBaseFaultsNamespace))
+                else if (reader.IsStartElement("ErrorCode", Constants.WsBaseFaults.Namespace))
                 {
                     this.errorCode = this.CreateErrorCode(reader);
                 }
-                else if (reader.IsStartElement("Description", Constants.WsBaseFaultsNamespace))
+                else if (reader.IsStartElement("Description", Constants.WsBaseFaults.Namespace))
                 {
                     var description = new Description(reader);
                     this.descriptions.Add(description);
                 }
-                else if (reader.IsStartElement("FaultCause", Constants.WsBaseFaultsNamespace))
+                else if (reader.IsStartElement("FaultCause", Constants.WsBaseFaults.Namespace))
                 {
                     if (reader.IsEmptyElement) continue;
 
@@ -393,12 +393,12 @@ namespace CommonContracts.WsBaseFaults
         {
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
 
-            if (reader.IsStartElement("BaseFault", Constants.WsBaseFaultsNamespace) == false)
+            if (reader.IsStartElement("BaseFault", Constants.WsBaseFaults.Namespace) == false)
             {
                 throw new XmlException("Invalid Element, it must be 'BaseFault'");
             }
 
-            reader.ReadStartElement("BaseFault", Constants.WsBaseFaultsNamespace);
+            reader.ReadStartElement("BaseFault", Constants.WsBaseFaults.Namespace);
         }
 
         /// <summary>
@@ -438,10 +438,10 @@ namespace CommonContracts.WsBaseFaults
         {
             Contract.Requires<ArgumentNullException>(writer != null, "writer");
 
-            var prefix = writer.LookupPrefix(Constants.WsBaseFaultsNamespace);
+            var prefix = writer.LookupPrefix(Constants.WsBaseFaults.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wsbf";
 
-            writer.WriteStartElement(prefix, "BaseFault", Constants.WsBaseFaultsNamespace);
+            writer.WriteStartElement(prefix, "BaseFault", Constants.WsBaseFaults.Namespace);
         }
 
         /// <summary>
@@ -484,21 +484,21 @@ namespace CommonContracts.WsBaseFaults
 
             this.WriteStartElement(writer);
 
-            var prefix = writer.LookupPrefix(Constants.WsBaseFaultsNamespace);
+            var prefix = writer.LookupPrefix(Constants.WsBaseFaults.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wsbf";
 
-            writer.WriteStartElement(prefix, "Timestamp", Constants.WsBaseFaultsNamespace);
+            writer.WriteStartElement(prefix, "Timestamp", Constants.WsBaseFaults.Namespace);
             writer.WriteValue(this.Timestamp);
             writer.WriteEndElement();
 
             if (this.Originator != null)
             {
-                var wsaPrefix = writer.LookupPrefix(Constants.WsAddressingNamespace);
+                var wsaPrefix = writer.LookupPrefix(Constants.WsAddressing.Namespace);
                 if (String.IsNullOrEmpty(wsaPrefix)) wsaPrefix = "wsa";
 
-                writer.WriteStartElement(prefix, "Originator", Constants.WsBaseFaultsNamespace);
-                writer.WriteAttributeString("xmlns", wsaPrefix, null, Constants.WsAddressingNamespace);
-                writer.WriteAttributeString("xsi", "type", Constants.XmlSchemaTypeNamespace, Constants.WsAddressingNamespace + ":EndpointReference");
+                writer.WriteStartElement(prefix, "Originator", Constants.WsBaseFaults.Namespace);
+                writer.WriteAttributeString("xmlns", wsaPrefix, null, Constants.WsAddressing.Namespace);
+                writer.WriteAttributeString("xsi", "type", Constants.XmlSchemaInfo.Namespace, Constants.WsAddressing.Namespace + ":EndpointReference");
 
                 ((IXmlSerializable)this.Originator).WriteXml(writer);
                 writer.WriteEndElement();
@@ -516,7 +516,7 @@ namespace CommonContracts.WsBaseFaults
 
             if (this.FaultCause != null)
             {
-                writer.WriteStartElement(prefix, "FaultCause", Constants.WsBaseFaultsNamespace);
+                writer.WriteStartElement(prefix, "FaultCause", Constants.WsBaseFaults.Namespace);
                 ((IXmlSerializable) this.FaultCause).WriteXml(writer);
                 writer.WriteEndElement();
             }
@@ -549,7 +549,7 @@ namespace CommonContracts.WsBaseFaults
                 xs.Add(schema);
             }
 
-            return new XmlQualifiedName("BaseFaultType", Constants.WsBaseFaultsNamespace);
+            return new XmlQualifiedName("BaseFaultType", Constants.WsBaseFaults.Namespace);
         }
 
         #endregion

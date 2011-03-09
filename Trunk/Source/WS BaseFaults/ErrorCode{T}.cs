@@ -61,7 +61,7 @@ namespace CommonContracts.WsBaseFaults
     /// An extension of <see cref="ErrorCode{T}"/> that allows additional elements to be added to the content of the "http://docs.oasis-open.org/wsrf/bf-2:BaseFaultType/ErrorCode" element.
     /// </summary>
     /// <typeparam name="T">The type representing the internal content of <see cref="ErrorCode{T}"/>.</typeparam>
-    [XmlRoot("ErrorCode", Namespace = Constants.WsBaseFaultsNamespace)]
+    [XmlRoot("ErrorCode", Namespace = Constants.WsBaseFaults.Namespace)]
     public class ErrorCode<T> : ErrorCode where T : IXmlSerializable, new()
     {
         #region Fields

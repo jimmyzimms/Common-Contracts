@@ -61,7 +61,7 @@ namespace CommonContracts.WsBaseFaults
     /// <summary>
     /// Represents the "http://docs.oasis-open.org/wsrf/bf-2:BaseFaultType/ErrorCode" element.
     /// </summary>
-    [XmlRoot("ErrorCode", Namespace = Constants.WsBaseFaultsNamespace)]
+    [XmlRoot("ErrorCode", Namespace = Constants.WsBaseFaults.Namespace)]
     public class ErrorCode : IXmlSerializable
     {
         #region Fields
@@ -158,7 +158,7 @@ namespace CommonContracts.WsBaseFaults
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
             Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, "reader");
 
-            if (!reader.IsStartElement("ErrorCode", Constants.WsBaseFaultsNamespace))
+            if (!reader.IsStartElement("ErrorCode", Constants.WsBaseFaults.Namespace))
             {
                 throw new XmlException("Invalid Element, it must be 'ErrorCode'");
             }
@@ -197,10 +197,10 @@ namespace CommonContracts.WsBaseFaults
         {
             Contract.Requires<ArgumentNullException>(writer != null, "writer");
 
-            var prefix = writer.LookupPrefix(Constants.WsBaseFaultsNamespace);
+            var prefix = writer.LookupPrefix(Constants.WsBaseFaults.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wsbf";
 
-            writer.WriteStartElement(prefix, "ErrorCode", Constants.WsBaseFaultsNamespace);
+            writer.WriteStartElement(prefix, "ErrorCode", Constants.WsBaseFaults.Namespace);
             writer.WriteAttributeString("dialect", this.Dialect.ToString());
 
             this.ProcessAdditionalElements(writer);

@@ -68,7 +68,7 @@ namespace CommonContracts.WsBaseFaults
     /// This type can be used whenever you have untyped <see cref="Message"/> based service client proxies and need to represent a unknown (or any derivation thereof)
     /// of a WS-BaseFaults compliant fault. While not a firm requirement, this class is generally used by service clients.
     /// </remarks>
-    [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaultsNamespace, DataType = Constants.WsBaseFaultsNamespace + ":BaseFaultType")]
+    [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaults.Namespace, DataType = Constants.WsBaseFaults.Namespace + ":BaseFaultType")]
     [XmlSchemaProvider("AcquireSchema")]
     public class UnknownBaseFault : BaseFaultFull
     {
@@ -115,14 +115,14 @@ namespace CommonContracts.WsBaseFaults
         {
             this.namespaceUri = reader.NamespaceURI;
             this.localName = reader.LocalName;
-            var typeAttribute = reader.GetAttribute("type", Constants.XmlSchemaTypeNamespace);
+            var typeAttribute = reader.GetAttribute("type", Constants.XmlSchemaInfo.Namespace);
             this.xmlType = typeAttribute ?? String.Empty;
 
             if (reader.HasAttributes)
             {
                 while (reader.MoveToNextAttribute())
                 {
-                    if (reader.NamespaceURI == "http://www.w3.org/2000/xmlns/" || reader.NamespaceURI == Constants.XmlSchemaTypeNamespace) continue;
+                    if (reader.NamespaceURI == "http://www.w3.org/2000/xmlns/" || reader.NamespaceURI == Constants.XmlSchemaInfo.Namespace) continue;
 
                     var attribute = new XAttribute(XName.Get(reader.LocalName, reader.NamespaceURI), reader.Value);
                     this.additionalAttributes.Add(attribute);
