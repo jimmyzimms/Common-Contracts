@@ -62,7 +62,7 @@ namespace CommonContracts.WsBaseFaults
     /// <summary>
     /// Represents the "http://docs.oasis-open.org/wsrf/bf-2:BaseFaultType/Description" element.
     /// </summary>
-    [XmlRoot("Description", Namespace = Constants.WsBaseFaultsNamespace)]
+    [XmlRoot("Description", Namespace = Constants.WsBaseFaults.Namespace)]
     public class Description : IXmlSerializable
     {
         #region Fields
@@ -150,7 +150,7 @@ namespace CommonContracts.WsBaseFaults
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
             Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, "reader");
 
-            if (!reader.IsStartElement("Description", Constants.WsBaseFaultsNamespace))
+            if (!reader.IsStartElement("Description", Constants.WsBaseFaults.Namespace))
             {
                 throw new XmlException("Invalid Element, it must be 'Description'");
             }
@@ -165,10 +165,10 @@ namespace CommonContracts.WsBaseFaults
         {
             if (writer == null) throw new ArgumentNullException("writer");
 
-            var prefix = writer.LookupPrefix(Constants.WsBaseFaultsNamespace);
+            var prefix = writer.LookupPrefix(Constants.WsBaseFaults.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wsbf";
 
-            writer.WriteStartElement(prefix, "Description", Constants.WsBaseFaultsNamespace);
+            writer.WriteStartElement(prefix, "Description", Constants.WsBaseFaults.Namespace);
             if (this.Language != null)
             {
                 writer.WriteAttributeString("xml", "lang", "http://www.w3.org/XML/1998/namespace", this.Language.Name);

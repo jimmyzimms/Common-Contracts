@@ -65,7 +65,7 @@ namespace CommonContracts.WsBaseFaults
     /// with the appropriate name and namespace value for your custom fault type.
     /// </para>
     /// Inheritors should only use <see cref="DataMemberAttribute.Order"/> values greater than 4.</remarks>
-    [DataContract(IsReference = false, Name = "BaseFault", Namespace = Constants.WsBaseFaultsNamespace)]
+    [DataContract(IsReference = false, Name = "BaseFault", Namespace = Constants.WsBaseFaults.Namespace)]
     public abstract class BaseFault : IExtensibleDataObject
     {
         #region Fields

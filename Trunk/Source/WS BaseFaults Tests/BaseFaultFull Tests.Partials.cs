@@ -64,7 +64,7 @@ namespace CommonContracts.WsBaseFaults.Tests
         /// Required for the <see cref="Deserialize"/> test.
         /// Required for the <see cref="NestedFaultsShouldSerialize"/> test.
         /// </summary>
-        [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaultsNamespace, DataType = Constants.WsBaseFaultsNamespace + ":BaseFaultType")]
+        [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaults.Namespace, DataType = Constants.WsBaseFaults.Namespace + ":BaseFaultType")]
         public sealed class TestFault : BaseFaultFull
         {
             public TestFault() { }

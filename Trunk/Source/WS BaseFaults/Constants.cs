@@ -59,23 +59,41 @@ namespace CommonContracts.WsBaseFaults
     public static class Constants
     {
         /// <summary>
-        /// Holds the soap action for the base SOAP Fault message action.
+        /// Provides compile time constants for the WS-Addressing spec.
         /// </summary>
-        public const String WsAddressingBaseFaultAction = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault/";
+        public static class WsAddressing
+        {
+            /// <summary>
+            /// Holds the soap action for the base SOAP Fault message action.
+            /// </summary>
+            public const String BaseFaultAction = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault/";
+
+            /// <summary>
+            /// Holds the namespace for the WS-Addressing types.
+            /// </summary>
+            internal const String Namespace = "http://www.w3.org/2005/08/addressing";
+        }
 
         /// <summary>
-        /// Holds the namespace for the WS-BaseFaults types.
+        /// Provides compile time constants for the XSI types.
         /// </summary>
-        public const String WsBaseFaultsNamespace = "http://docs.oasis-open.org/wsrf/bf-2";
+        internal static class XmlSchemaInfo
+        {
+            /// <summary>
+            /// Holds the namespace for the XSI types.
+            /// </summary>
+            internal const String Namespace = "http://www.w3.org/2001/XMLSchema-instance";
+        }
 
         /// <summary>
-        /// Holds the namespace for the WS-Addressing types.
+        /// Provides compile time constants for the WS-BaseFaults spec.
         /// </summary>
-        internal const String WsAddressingNamespace = "http://www.w3.org/2005/08/addressing";
-
-        /// <summary>
-        /// Holds the namespace for the XSI types.
-        /// </summary>
-        internal const String XmlSchemaTypeNamespace = "http://www.w3.org/2001/XMLSchema-instance";
+        public static class WsBaseFaults
+        {
+            /// <summary>
+            /// Holds the namespace for the WS-BaseFaults types.
+            /// </summary>
+            public const String Namespace = "http://docs.oasis-open.org/wsrf/bf-2";
+        }
     }
 }
