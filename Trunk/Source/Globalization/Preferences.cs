@@ -72,7 +72,7 @@ namespace CommonContracts.Globalization
     /// </summary>
     [XmlSchemaProvider("AcquireSchema")]
     [DebuggerDisplay("Content = '{Content.Count}'")]
-    [XmlRoot("preferences", Namespace = "http://www.w3.org/2005/09/ws-i18n")]
+    [XmlRoot("preferences", Namespace = Constants.Namespace)]
     public sealed class Preferences : IXmlSerializable
     {
         #region Fields
@@ -129,7 +129,7 @@ namespace CommonContracts.Globalization
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            if (reader.IsStartElement("preferences", "http://www.w3.org/2005/09/ws-i18n") == false)
+            if (reader.IsStartElement("preferences", Constants.Namespace) == false)
             {
                 throw new XmlException("Invalid Element, it must be 'preferences'");
             }
