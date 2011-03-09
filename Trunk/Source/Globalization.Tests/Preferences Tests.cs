@@ -52,6 +52,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using System.Xml.Serialization;
 using CommonContracts.Globalization;
 using NUnit.Framework;
@@ -64,6 +65,7 @@ namespace Globalization.Tests
         [Test()]
         public void ConstructorShouldCreateExpectedDefaults()
         {
+            Preferences.AcquireSchema(new XmlSchemaSet());
             var preferences = new Preferences();
             Assert.That(preferences.Content, Is.Empty);
         }
@@ -81,7 +83,7 @@ namespace Globalization.Tests
                 xml = XElement.Load(stream);
             }
 
-            var areEqual = XNode.DeepEquals(xml, XElement.Parse("<Preferences xmlns='http://www.w3.org/2005/09/ws-i18n' />"));
+            var areEqual = XNode.DeepEquals(xml, XElement.Parse("<preferences xmlns='http://www.w3.org/2005/09/ws-i18n' />"));
             Assert.IsTrue(areEqual);
 
             using (var stream = new MemoryStream())
@@ -93,7 +95,7 @@ namespace Globalization.Tests
                 xml = XElement.Load(stream);
             }
 
-            areEqual = XNode.DeepEquals(xml, XElement.Parse("<Preferences xmlns='http://www.w3.org/2005/09/ws-i18n'><test xmlns=''/></Preferences>"));
+            areEqual = XNode.DeepEquals(xml, XElement.Parse("<preferences xmlns='http://www.w3.org/2005/09/ws-i18n'><test xmlns=''/></preferences>"));
             Assert.IsTrue(areEqual);
 
             using (var stream = new MemoryStream())
@@ -106,7 +108,7 @@ namespace Globalization.Tests
                 xml = XElement.Load(stream);
             }
 
-            areEqual = XNode.DeepEquals(xml, XElement.Parse("<Preferences xmlns='http://www.w3.org/2005/09/ws-i18n'><test xmlns=''/><other xmlns='urn:foo'/></Preferences>"));
+            areEqual = XNode.DeepEquals(xml, XElement.Parse("<preferences xmlns='http://www.w3.org/2005/09/ws-i18n'><test xmlns=''/><other xmlns='urn:foo'/></preferences>"));
             Assert.IsTrue(areEqual);
         }
 
@@ -115,17 +117,17 @@ namespace Globalization.Tests
         {
             var serializer = new XmlSerializer(typeof (Preferences));
 
-            var xml = XElement.Parse("<Preferences xmlns='http://www.w3.org/2005/09/ws-i18n' />");
+            var xml = XElement.Parse("<preferences xmlns='http://www.w3.org/2005/09/ws-i18n' />");
             var preferences = serializer.Deserialize(xml.CreateReader()) as Preferences;
             Assert.That(preferences.Content, Is.Empty);
 
-            xml = XElement.Parse("<Preferences xmlns='http://www.w3.org/2005/09/ws-i18n'><test xmlns=''/></Preferences>");
+            xml = XElement.Parse("<preferences xmlns='http://www.w3.org/2005/09/ws-i18n'><test xmlns=''/></preferences>");
             preferences = serializer.Deserialize(xml.CreateReader()) as Preferences;
             Assert.That(preferences.Content.Count, Is.EqualTo(1));
             var areEqual = XNode.DeepEquals(preferences.Content.First(), XElement.Parse("<test xmlns=''/>"));
             Assert.IsTrue(areEqual);
 
-            xml = XElement.Parse("<Preferences xmlns='http://www.w3.org/2005/09/ws-i18n'><test xmlns=''/><other xmlns='urn:foo'/></Preferences>");
+            xml = XElement.Parse("<preferences xmlns='http://www.w3.org/2005/09/ws-i18n'><test xmlns=''/><other xmlns='urn:foo'/></preferences>");
             preferences = serializer.Deserialize(xml.CreateReader()) as Preferences;
             Assert.That(preferences.Content.Count, Is.EqualTo(2));
             areEqual = XNode.DeepEquals(preferences.Content.First(), XElement.Parse("<test xmlns=''/>"));

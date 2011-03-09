@@ -49,9 +49,13 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -66,8 +70,9 @@ namespace CommonContracts.Globalization
     /// or conversion to validate the supplied XML content. It is not intended that this type will perform any
     /// validation on read or written XML.
     /// </summary>
+    [XmlSchemaProvider("AcquireSchema")]
     [DebuggerDisplay("Content = '{Content.Count}'")]
-    [XmlRoot("Preferences", Namespace = "http://www.w3.org/2005/09/ws-i18n")]
+    [XmlRoot("preferences", Namespace = "http://www.w3.org/2005/09/ws-i18n")]
     public sealed class Preferences : IXmlSerializable
     {
         #region Fields
@@ -90,6 +95,31 @@ namespace CommonContracts.Globalization
 
         #endregion
 
+        #region Schema
+
+        /// <summary>
+        /// Adds an <see cref="XmlSchema"/> instance for this type to the supplied <see cref="XmlSchemaSet"/>.
+        /// </summary>
+        /// <param name="xs">The <see cref="XmlSchemaSet"/> to add an <see cref="XmlSchema"/> to.</param>
+        /// <returns>An <see cref="XmlQualifiedName"/> for the current object.</returns>
+        public static XmlSchemaType AcquireSchema(XmlSchemaSet xs)
+        {
+            Contract.Requires<ArgumentNullException>(xs != null, "xs");
+
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CommonContracts.Globalization.ws-i18n Schema.xsd"))
+            {
+                Debug.Assert(stream != null, "Resource Stream 'CommonContracts.Globalization.ws-i18n Schema.xsd' was not able to be opened");
+
+                var schema = XmlSchema.Read(stream, null);
+                var type = schema.Items.OfType<XmlSchemaElement>().First(element => element.Name == "preferences");
+                xs.Add(schema);
+
+                return type.SchemaType;
+            }
+        }
+
+        #endregion
+
         #region IXmlSerializable Members
 
         XmlSchema IXmlSerializable.GetSchema()
@@ -99,9 +129,9 @@ namespace CommonContracts.Globalization
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            if (reader.IsStartElement("Preferences", "http://www.w3.org/2005/09/ws-i18n") == false)
+            if (reader.IsStartElement("preferences", "http://www.w3.org/2005/09/ws-i18n") == false)
             {
-                throw new XmlException("Invalid Element, it must be 'Preferences'");
+                throw new XmlException("Invalid Element, it must be 'preferences'");
             }
 
             var xml = XElement.Parse(reader.ReadOuterXml());
