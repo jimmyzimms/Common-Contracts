@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    W3C XML Schema defined in the Web Services Internationalization specification
+    http://www.w3.org/TR/ws-i18n
+Copyright 2007 World Wide Web Consortium,
+   (Massachusetts Institute of Technology, European Research Consortium for
+   Informatics and Mathematics, Keio University). All Rights Reserved. This
+   work is distributed under the W3C ® (B Software License [1] in the hope that
+   it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+   warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+   [1] http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
+
+   $Id: ws-i18n.xsd,v 1.1 2008/04/11 04:20:58 fsasaki Exp $
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://www.w3.org/2005/09/ws-i18n"
+ targetNamespace="http://www.w3.org/2005/09/ws-i18n" blockDefault="#all"
+ elementFormDefault="qualified" finalDefault=""
+ attributeFormDefault="unqualified">
+ <xs:element name="preferences">
+  <xs:complexType>
+   <xs:choice maxOccurs="unbounded" minOccurs="0">
+    <xs:any processContents="lax" namespace="##other"/>
+   </xs:choice>
+   <xs:anyAttribute namespace="##any" processContents="lax"/>
+  </xs:complexType>
+ </xs:element>
+ <xs:element name="locale" type="xs:NMTOKEN"/>
+ <xs:element name="tz" type="xs:NMTOKEN"/>
+ <xs:element name="international">
+  <xs:complexType>
+   <xs:sequence>
+    <xs:element ref="tns:locale" minOccurs="1" maxOccurs="1"/>
+    <xs:element ref="tns:tz" minOccurs="0" maxOccurs="1"/>
+    <xs:element ref="tns:preferences" minOccurs="0" maxOccurs="1"/>
+   </xs:sequence>
+   <xs:anyAttribute namespace="##other" processContents="lax"/>
+  </xs:complexType>
+ </xs:element>
+</xs:schema>
