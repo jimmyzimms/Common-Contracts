@@ -50,9 +50,10 @@
 #endregion
 
 using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using System.Xml.Linq;
 
 namespace CommonContracts.Globalization
 {
@@ -65,6 +66,7 @@ namespace CommonContracts.Globalization
     /// implement the minimum level of WS-Internationalization specification. Simply use this type in your <see cref="MessageContractAttribute"/>
     /// WCF messages (usually as a supplied <see cref="MessageHeaderAttribute">SOAP Message Header</see>).</para>
     /// </remarks>
+    [DebuggerDisplay("Locale = '{Locale}', Timezone = '{Timezone}', Preferences.Count = '{Preferences.Content.Count}'")]
     [DataContract(Name = "International", Namespace = "http://www.w3.org/2005/09/ws-i18n")]
     public class International
     {
@@ -72,7 +74,38 @@ namespace CommonContracts.Globalization
         
         private String locale;
         private String timeZone;
-        private XElement[] preferences;
+        private Preferences preferences = new Preferences();
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="International"/> class.
+        /// </summary>
+        public International()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="International"/> class.
+        /// </summary>
+        /// <param name="cultureInfo">The <see cref="CultureInfo"/> that should be used to represent the <see cref="Locale"/> value.</param>
+        public International(CultureInfo cultureInfo)
+        {
+            cultureInfo = cultureInfo ?? CultureInfo.CurrentUICulture;
+
+            this.locale = cultureInfo.IetfLanguageTag;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="International"/> class.
+        /// </summary>
+        /// <param name="timeZone">The value that should be used to represent the <see cref="Timezone"/> value.</param>
+        public International(String timeZone)
+        {
+            this.timeZone = timeZone;
+        }
 
         #endregion
 
@@ -93,9 +126,9 @@ namespace CommonContracts.Globalization
         /// </remarks>
         /// <value>The value that defines the locale. The value will default to the string '$default'.</value>
         [DataMember(Name = "Locale", Order = 1)]
-        public String Locale
+        public virtual String Locale
         {
-            get { return this.locale; }
+            get { return this.locale ?? "$default"; }
             set
             {
                 value = (value ?? "$default").Trim();
@@ -111,11 +144,12 @@ namespace CommonContracts.Globalization
         /// of the element MUST be either RFC 822-formatted zone offset (see http://www.ietf.org/rfc/rfc822.txt) or an
         /// Olson ID (see http://www.twinsun.com/tz/tz-link.htm) from the 'olsonid' database. Note that RFC 822 zone offsets
         /// are not complete time zone identifiers and Olson identifiers are preferred. It is implementation-defined
-        /// whether an RFC 822-formatted zone offset or an OLson ID is given, and how a choice between these two kinds
+        /// whether an RFC 822-formatted zone offset or an Oson ID is given, and how a choice between these two kinds
         /// of values is indicated.
         /// </remarks>
-        [DataMember(Name = "TZ", Order = 2)]
-        public String Timezone
+        /// <value></value>
+        [DataMember(Name = "TZ", Order = 2, IsRequired = false)]
+        public virtual String Timezone
         {
             get { return this.timeZone; }
             set
@@ -133,16 +167,17 @@ namespace CommonContracts.Globalization
         /// Support for the i18n:preferences element is OPTIONAL and specific behavior in relation to any particular preference
         /// is implementation dependent. Implementations of this specification are not required to recognize, support, or acknowledge
         /// the i18n:preferences element information item or any of its sub-elements. Services MUST NOT require a i18n:preferences
-        /// element information item be sent in order to operate correctly.
+        /// element information item be sent in order to operate correctly. When serializing, this element will always be present
+        /// in the output stream though it may contain no elements.
         /// </remarks>
         /// <value>The information, if any, that defines the locale preferences. This value will not be null but may be empty.</value>
-        [DataMember(Name = "Preferences", Order = 3)]
-        public XElement[] Preferences
+        [DataMember(Name = "Preferences", Order = 3, IsRequired = false)]
+        public virtual Preferences Preferences
         {
             get { return this.preferences; }
             set
             {
-                value = value ?? new XElement[0];
+                value = value ?? new Preferences();
 
                 this.preferences = value;
             }
