@@ -61,7 +61,7 @@ namespace CommonContracts.Globalization
     /// A data contract used to represent the WS-I18N specification (see http://www.w3.org/TR/ws-i18n/ for more information).
     /// </summary>
     /// <remarks>
-    /// <para>When used in example documentation in or XSD, this type should try to be QName referenced as "i18n:International".</para>
+    /// <para>When used in example documentation in or XSD, this type should try to be QName referenced as "i18n:international".</para>
     /// <para>This type accelerates contract development of <seealso cref="DataContractSerializer"/> based globalization features that
     /// implement the minimum level of WS-Internationalization specification. Simply use this type in your <see cref="MessageContractAttribute"/>
     /// WCF messages (usually as a supplied <see cref="MessageHeaderAttribute">SOAP Message Header</see>).</para>
