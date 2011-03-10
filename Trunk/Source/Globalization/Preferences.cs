@@ -64,7 +64,7 @@ using System.Xml.Serialization;
 namespace CommonContracts.Globalization
 {
     /// <summary>
-    /// A data contract used for untyped and unbounded extension of the i18n:International/i18n:preferences
+    /// A data contract used for untyped and unbounded extension of the i18n:international/i18n:preferences
     /// element. Since this element represents an xs:any type in XML, the presence of any preferences are
     /// handled as raw XML. The suggested use it to provide a strongly typed class that implements type coersion
     /// or conversion to validate the supplied XML content. It is not intended that this type will perform any
