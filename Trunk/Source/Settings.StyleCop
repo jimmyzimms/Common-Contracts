@@ -2,6 +2,11 @@
   <Analyzers>
     <Analyzer AnalyzerId="Microsoft.StyleCop.CSharp.DocumentationRules">
       <Rules>
+       <Rule Name="UsingDirectivesMustBePlacedWithinNamespace">
+        <RuleSettings>
+         <BooleanProperty Name="Enabled">False</BooleanProperty>
+        </RuleSettings>
+       </Rule>
         <Rule Name="PropertyDocumentationMustHaveValue">
           <RuleSettings>
             <BooleanProperty Name="Enabled">True</BooleanProperty>
