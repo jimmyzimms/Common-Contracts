@@ -86,6 +86,13 @@
     <DocumentationFile>bin\Release\CommonContracts.Globalization.XML</DocumentationFile>
     <CodeAnalysisRuleSet>..\CA Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -101,7 +108,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="GlobalizationClientAttribute.cs" />
     <Compile Include="GlobalizationClientMessageInspector.cs" />
-    <Compile Include="InternationalBasic.cs" />
+    <Compile Include="International.cs" />
     <Compile Include="Preferences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
