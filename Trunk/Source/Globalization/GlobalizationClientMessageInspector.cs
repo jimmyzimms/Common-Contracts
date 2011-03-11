@@ -143,7 +143,7 @@ namespace CommonContracts.Globalization
 
             if (!String.IsNullOrWhiteSpace(this.Timezone)) international.Timezone = this.Timezone;
 
-            var header = MessageHeader.CreateHeader("international", Constants.Namespace, international);
+            var header = MessageHeader.CreateHeader(this.HeaderName.LocalName, this.HeaderName.NamespaceName, international);
             request.Headers.Add(header);
 
             return null;
