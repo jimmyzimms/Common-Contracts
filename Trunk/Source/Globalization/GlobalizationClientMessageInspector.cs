@@ -50,6 +50,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -73,6 +74,7 @@ namespace CommonContracts.Globalization
     {
         #region Fields
 
+        [SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "XName is an immutable type.")]
         public static readonly XName Default = XName.Get("international", Constants.Namespace);
         private XName headerName = Default;
 
@@ -96,13 +98,13 @@ namespace CommonContracts.Globalization
 
         /// <summary>
         /// Gets or sets the value that should be leveraged to automatically create the
-        /// <see cref="International.Timezone"/> header element value for.
+        /// <see cref="International.TimeZone"/> header element value for.
         /// </summary>
         /// <value>
-        /// The value that should be leveraged to automatically create the <see cref="International.Timezone"/> 
+        /// The value that should be leveraged to automatically create the <see cref="International.TimeZone"/> 
         /// header element value for. This value may be null.
         /// </value>
-        public virtual String Timezone
+        public virtual String TimeZone
         {
             get; set;
         }
@@ -139,9 +141,11 @@ namespace CommonContracts.Globalization
         /// </returns>
         public Object BeforeSendRequest(ref Message request, IClientChannel channel)
         {
+            if (request == null) throw new ArgumentNullException("request");
+
             var international = new International(this.Locale);
 
-            if (!String.IsNullOrWhiteSpace(this.Timezone)) international.Timezone = this.Timezone;
+            if (!String.IsNullOrWhiteSpace(this.TimeZone)) international.TimeZone = this.TimeZone;
 
             var header = MessageHeader.CreateHeader(this.HeaderName.LocalName, this.HeaderName.NamespaceName, international);
             request.Headers.Add(header);

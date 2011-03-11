@@ -67,7 +67,7 @@ namespace Globalization.Tests
             var target = new International();
             Assert.That(target.Locale, Is.EqualTo("$default"));
             Assert.That(target.Preferences, Is.Not.Null);
-            Assert.That(target.Timezone, Is.Null);
+            Assert.That(target.TimeZone, Is.Null);
         }
 
         [Test()]
@@ -137,25 +137,25 @@ namespace Globalization.Tests
             var target = serializer.ReadObject(xml.CreateReader()) as International;
             Assert.That(target.Locale, Is.EqualTo("$default"));
             Assert.That(target.Preferences, Is.Not.Null);
-            Assert.That(target.Timezone, Is.Empty);
+            Assert.That(target.TimeZone, Is.Empty);
 
             xml = XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>en-US</locale><tz i:nil='true' /><preferences /></international>");
             target = serializer.ReadObject(xml.CreateReader()) as International;
             Assert.That(target.Locale, Is.EqualTo("en-US"));
             Assert.That(target.Preferences, Is.Not.Null);
-            Assert.That(target.Timezone, Is.Empty);
+            Assert.That(target.TimeZone, Is.Empty);
 
             xml = XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>$default</locale><tz i:nil='true' /><preferences><test xmlns='' /></preferences></international>");
             target = serializer.ReadObject(xml.CreateReader()) as International;
             Assert.That(target.Locale, Is.EqualTo("$default"));
             Assert.That(target.Preferences, Is.Not.Null);
-            Assert.That(target.Timezone, Is.Empty);
+            Assert.That(target.TimeZone, Is.Empty);
 
             xml = XElement.Parse("<international xmlns='http://www.w3.org/2005/09/ws-i18n' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><locale>$default</locale><tz>Europe/Andorra</tz><preferences /></international>");
             target = serializer.ReadObject(xml.CreateReader()) as International;
             Assert.That(target.Locale, Is.EqualTo("$default"));
             Assert.That(target.Preferences, Is.Not.Null);
-            Assert.That(target.Timezone, Is.EqualTo("Europe/Andorra"));
+            Assert.That(target.TimeZone, Is.EqualTo("Europe/Andorra"));
         }
     }
 }
