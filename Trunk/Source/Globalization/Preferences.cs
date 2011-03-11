@@ -53,6 +53,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
@@ -102,6 +103,8 @@ namespace CommonContracts.Globalization
         /// </summary>
         /// <param name="xs">The <see cref="XmlSchemaSet"/> to add an <see cref="XmlSchema"/> to.</param>
         /// <returns>An <see cref="XmlQualifiedName"/> for the current object.</returns>
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         public static XmlSchemaType AcquireSchema(XmlSchemaSet xs)
         {
             Contract.Requires<ArgumentNullException>(xs != null, "xs");
@@ -129,6 +132,9 @@ namespace CommonContracts.Globalization
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
+            if (reader == null) throw new ArgumentNullException("reader");
+            if (reader.ReadState != ReadState.Interactive) throw new ArgumentException("The supplied Xmlreader must be in ReadState == Interactive", "reader");
+
             if (reader.IsStartElement("preferences", Constants.Namespace) == false)
             {
                 throw new XmlException("Invalid Element, it must be 'preferences'");
@@ -144,6 +150,8 @@ namespace CommonContracts.Globalization
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
+            if (writer == null) throw new ArgumentNullException("writer");
+
             foreach (var element in this.Content)
             {
                 element.WriteTo(writer);

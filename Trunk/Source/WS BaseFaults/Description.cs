@@ -78,6 +78,7 @@ namespace CommonContracts.WsBaseFaults
         /// </summary>
         /// <param name="reader">The <see cref="XmlReader"/> to create an instance from.</param>
         [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         public Description(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
@@ -91,6 +92,7 @@ namespace CommonContracts.WsBaseFaults
         /// </summary>
         /// <param name="value">The <see cref="Value"/> property value.</param>
         [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
+        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
         public Description(String value)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(value), "value");
@@ -143,12 +145,10 @@ namespace CommonContracts.WsBaseFaults
             return null;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null, "reader");
-            Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, "reader");
+            if (reader == null) throw new ArgumentNullException("reader");
+            if (reader.ReadState != ReadState.Interactive) throw new ArgumentException("The supplied Xmlreader must be in ReadState == Interactive", "reader");
 
             if (!reader.IsStartElement("Description", Constants.WsBaseFaults.Namespace))
             {

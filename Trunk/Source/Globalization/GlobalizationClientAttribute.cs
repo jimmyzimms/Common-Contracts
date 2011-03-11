@@ -50,6 +50,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.ServiceModel.Channels;
@@ -70,7 +71,7 @@ namespace CommonContracts.Globalization
     {
         #region Fields
         
-        private readonly Boolean useCurrentCulture;
+        private readonly Boolean useCurrentUICulture;
         private String cultureInfo;
         private String name;
 
@@ -81,10 +82,10 @@ namespace CommonContracts.Globalization
         /// <summary>
         /// Initializes a new instance of the <see cref="GlobalizationClientAttribute"/> class.
         /// </summary>
-        /// <param name="userCurrentCulture">Indicates if the current <see cref="System.Globalization.CultureInfo.CurrentUICulture"/> at the time of the service call should be automatically used.</param>
-        public GlobalizationClientAttribute(Boolean userCurrentCulture)
+        /// <param name="useCurrentUICulture">Indicates if the current <see cref="System.Globalization.CultureInfo.CurrentUICulture"/> at the time of the service call should be automatically used.</param>
+        public GlobalizationClientAttribute(Boolean useCurrentUICulture)
         {
-            this.useCurrentCulture = userCurrentCulture;
+            this.useCurrentUICulture = useCurrentUICulture;
         }
 
         #endregion
@@ -95,6 +96,7 @@ namespace CommonContracts.Globalization
         /// Gets or sets the local name portion of the QName that should be used with the header element. This value may be null.
         /// </summary>
         /// <value>The local name portion of the QName that should be used with the header element. This value may be null.</value>
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         public String Name
         {
             get
@@ -124,10 +126,10 @@ namespace CommonContracts.Globalization
         public String Namespace { get; set; }
 
         /// <summary>
-        /// Gets or sets the timezone information that should be used in the "i18n:timezone" element.
+        /// Gets or sets the time zone information that should be used in the "i18n:tz" element.
         /// </summary>
-        /// <value>The timezone information that should be used in the "i18n:timezone" element.</value>
-        public String Timezone
+        /// <value>The time zone information that should be used in the "i18n:tz" element.</value>
+        public String TimeZone
         {
             get; set;
         }
@@ -145,14 +147,15 @@ namespace CommonContracts.Globalization
         }
 
         /// <summary>
-        /// Gets or sets the value that should be used for a current culture. This value cannot be set if <see cref="UseCurrentCulture"/> is true.
+        /// Gets or sets the value that should be used for a current culture. This value cannot be set if <see cref="UseCurrentUICulture"/> is true.
         /// </summary>
         /// <value>The value that should be used for a current culture.</value>
+        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         public String CultureInfo 
         {
             get
             {
-                if (this.UseCurrentCulture)
+                if (this.UseCurrentUICulture)
                 {
                     return System.Globalization.CultureInfo.CurrentUICulture.IetfLanguageTag;
                 }
@@ -160,7 +163,7 @@ namespace CommonContracts.Globalization
             }
             set
             {
-                Contract.Requires<InvalidOperationException>(!this.UseCurrentCulture, "You cannot support both automatic UI culture use and explcitly setting this value");
+                Contract.Requires<InvalidOperationException>(!this.UseCurrentUICulture, "You cannot support both automatic UI culture use and explicitly setting this value");
 
                 this.cultureInfo = value;
             }
@@ -170,9 +173,9 @@ namespace CommonContracts.Globalization
         /// Indicates whether the current UI culture should be automatically used when making a service request.
         /// </summary>
         /// <value>True if the current UI culture should be automatically used when making a service request; otherwise false.</value>
-        public Boolean UseCurrentCulture
+        public Boolean UseCurrentUICulture
         {
-            get { return this.useCurrentCulture; }
+            get { return this.useCurrentUICulture; }
         }
 
         #endregion
@@ -201,6 +204,8 @@ namespace CommonContracts.Globalization
         /// <param name="operationDescription">The operation being examined. Use for examination only. If the operation description is modified, the results are undefined.</param><param name="clientOperation">The run-time object that exposes customization properties for the operation described by <paramref name="operationDescription"/>.</param>
         public void ApplyClientBehavior(OperationDescription operationDescription, ClientOperation clientOperation)
         {
+            if (clientOperation == null) throw new ArgumentNullException("clientOperation");
+
             if (clientOperation.Parent.MessageInspectors.OfType<GlobalizationClientMessageInspector>().Any()) return;
 
             var inspector = new GlobalizationClientMessageInspector();
@@ -214,9 +219,9 @@ namespace CommonContracts.Globalization
                 inspector.HeaderName = this.QName;
             }
 
-            if (!String.IsNullOrWhiteSpace(this.Timezone))
+            if (!String.IsNullOrWhiteSpace(this.TimeZone))
             {
-                inspector.Timezone = this.Timezone;
+                inspector.TimeZone = this.TimeZone;
             }
 
             clientOperation.Parent.MessageInspectors.Add(inspector);

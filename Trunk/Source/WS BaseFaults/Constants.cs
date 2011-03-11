@@ -50,6 +50,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CommonContracts.WsBaseFaults
 {
@@ -88,6 +89,8 @@ namespace CommonContracts.WsBaseFaults
         /// <summary>
         /// Provides compile time constants for the WS-BaseFaults spec.
         /// </summary>
+        [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This is a fluent API and therefore makes sense to be organized this way.")]
+        [SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces", Justification = "This is a fluent API representing a set of OASIS specs wherein this name is appropriate for use.")]
         public static class WsBaseFaults
         {
             /// <summary>

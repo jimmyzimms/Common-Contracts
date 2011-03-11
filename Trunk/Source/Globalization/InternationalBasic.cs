@@ -66,7 +66,7 @@ namespace CommonContracts.Globalization
     /// implement the minimum level of WS-Internationalization specification. Simply use this type in your <see cref="MessageContractAttribute"/>
     /// WCF messages (usually as a supplied <see cref="MessageHeaderAttribute">SOAP Message Header</see>).</para>
     /// </remarks>
-    [DebuggerDisplay("Locale = '{Locale}', Timezone = '{Timezone}', Preferences.Count = '{Preferences.Content.Count}'")]
+    [DebuggerDisplay("Locale = '{Locale}', TimeZone = '{TimeZone}', Preferences.Count = '{Preferences.Content.Count}'")]
     [DataContract(Name = "international", Namespace = Constants.Namespace)]
     public class International
     {
@@ -101,7 +101,7 @@ namespace CommonContracts.Globalization
         /// <summary>
         /// Initializes a new instance of the <see cref="International"/> class.
         /// </summary>
-        /// <param name="timeZone">The value that should be used to represent the <see cref="Timezone"/> value.</param>
+        /// <param name="timeZone">The value that should be used to represent the <see cref="TimeZone"/> value.</param>
         public International(String timeZone)
         {
             this.timeZone = timeZone;
@@ -146,10 +146,15 @@ namespace CommonContracts.Globalization
         /// are not complete time zone identifiers and Olson identifiers are preferred. It is implementation-defined
         /// whether an RFC 822-formatted zone offset or an Oson ID is given, and how a choice between these two kinds
         /// of values is indicated.
+        /// 
+        /// <note type='information'>While the specification explicitly defines what time zone format values are to be
+        /// allowed this is not actually recomended to be be enforced as the contract specifies string values and defines
+        /// the requried type to be documented as "implementation-defined". Therefore any specification that both client
+        /// and server agree on can and should be leveraged.</note>
         /// </remarks>
         /// <value></value>
         [DataMember(Name = "tz", Order = 2, IsRequired = false)]
-        public virtual String Timezone
+        public virtual String TimeZone
         {
             get { return this.timeZone; }
             set

@@ -151,12 +151,10 @@ namespace CommonContracts.WsBaseFaults
             return null;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Justification = "This is the parameter name of the code and globalization is not needed.")]
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null, "reader");
-            Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, "reader");
+            if (reader == null) throw new ArgumentNullException("reader");
+            if (reader.ReadState != ReadState.Interactive) throw new ArgumentException("The supplied Xmlreader must be in ReadState == Interactive", "reader");
 
             if (!reader.IsStartElement("ErrorCode", Constants.WsBaseFaults.Namespace))
             {
@@ -191,11 +189,9 @@ namespace CommonContracts.WsBaseFaults
         {
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters", Justification = "This is the parameter name of the code and globalization is not needed.")]
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            Contract.Requires<ArgumentNullException>(writer != null, "writer");
+            if (writer == null) throw new ArgumentNullException("writer");
 
             var prefix = writer.LookupPrefix(Constants.WsBaseFaults.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wsbf";

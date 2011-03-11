@@ -476,11 +476,9 @@ namespace CommonContracts.WsBaseFaults
             Contract.Requires<ArgumentNullException>(writer != null, "writer");
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:ValidateArgumentsOfPublicMethods", Justification = "This is validated via Code Contracts")]
-        [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "This is a parameter name used in Code Contracts")]
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            Contract.Requires<ArgumentNullException>(writer != null, "writer");
+            if (writer == null) throw new ArgumentNullException("writer");
 
             this.WriteStartElement(writer);
 
