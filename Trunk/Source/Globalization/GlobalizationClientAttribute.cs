@@ -60,7 +60,9 @@ using System.Xml.Linq;
 namespace CommonContracts.Globalization
 {
     /// <summary>
-    /// 
+    /// An <see cref="IOperationBehavior"/> that can be placed on any operation contract method to
+    /// introduce a <see cref="GlobalizationClientMessageInspector"/> on the channel. Simply add
+    /// to the operation to automatically add support for ws-i18n outgoing headers.
     /// </summary>
     [Serializable()]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
@@ -101,9 +103,9 @@ namespace CommonContracts.Globalization
             }
             set
             {
-                Contract.Ensures(String.IsNullOrEmpty(this.name) && this.name == this.Namespace);
+                Contract.Ensures(String.IsNullOrEmpty(this.name) ? String.IsNullOrEmpty(this.Namespace) : true, "If Name is null the Namespace value must be as well");
 
-                if (!String.IsNullOrWhiteSpace(value))
+                if (String.IsNullOrWhiteSpace(value))
                 {
                     this.name = String.Empty;
                     this.Namespace = String.Empty;
@@ -138,7 +140,7 @@ namespace CommonContracts.Globalization
                 {
                     return null;
                 }
-                return XName.Get(this.Name, this.Namespace);
+                return XName.Get(this.Name, this.Namespace ?? String.Empty);
             }
         }
 
@@ -217,7 +219,7 @@ namespace CommonContracts.Globalization
                 inspector.Timezone = this.Timezone;
             }
 
-            clientOperation.Parent.MessageInspectors.Add(new GlobalizationClientMessageInspector());
+            clientOperation.Parent.MessageInspectors.Add(inspector);
         }
 
         /// <summary>
