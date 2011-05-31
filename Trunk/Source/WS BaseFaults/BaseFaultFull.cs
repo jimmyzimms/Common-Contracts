@@ -392,6 +392,7 @@ namespace CommonContracts.WsBaseFaults
         protected virtual void ReadStartElement(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null, "reader");
+            Debug.Assert(reader != null);
 
             if (reader.IsStartElement("BaseFault", Constants.WsBaseFaults.Namespace) == false)
             {
@@ -418,7 +419,7 @@ namespace CommonContracts.WsBaseFaults
         #endregion
 
         #region Serialization
-        
+
         /// <summary>
         /// Extension point for writing the start element. Since WS-BaseFaults supports extending the BaseFault element
         /// or the BaseFault type, support for both approaches is required. This method provides a hook to allow customization
@@ -437,6 +438,7 @@ namespace CommonContracts.WsBaseFaults
         protected virtual void WriteStartElement(XmlWriter writer)
         {
             Contract.Requires<ArgumentNullException>(writer != null, "writer");
+            Debug.Assert(writer != null);
 
             var prefix = writer.LookupPrefix(Constants.WsBaseFaults.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wsbf";
@@ -461,6 +463,7 @@ namespace CommonContracts.WsBaseFaults
         protected virtual void WriteEndElement(XmlWriter writer)
         {
             Contract.Requires<ArgumentNullException>(writer != null, "writer");
+            Debug.Assert(writer != null);
 
             writer.WriteEndElement();
         }
@@ -515,7 +518,7 @@ namespace CommonContracts.WsBaseFaults
             if (this.FaultCause != null)
             {
                 writer.WriteStartElement(prefix, "FaultCause", Constants.WsBaseFaults.Namespace);
-                ((IXmlSerializable) this.FaultCause).WriteXml(writer);
+                ((IXmlSerializable)this.FaultCause).WriteXml(writer);
                 writer.WriteEndElement();
             }
 
@@ -538,6 +541,7 @@ namespace CommonContracts.WsBaseFaults
         public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
         {
             Contract.Requires<ArgumentNullException>(xs != null, "xs");
+            Debug.Assert(xs != null);
 
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CommonContracts.WsBaseFaults.Ws-BaseFaults Schema.xsd"))
             {
