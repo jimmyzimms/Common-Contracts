@@ -69,7 +69,6 @@
     <Compile Include="BaseFault Tests.cs" />
     <Compile Include="BaseFaultFull Tests.cs" />
     <Compile Include="BaseFaultFull Tests.Partials.cs" />
-    <Compile Include="BaseFault{T} Tests.cs" />
     <Compile Include="Description Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnknownBaseFault Tests.cs" />

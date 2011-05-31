@@ -396,7 +396,7 @@ namespace CommonContracts.WsBaseFaults
 
             if (reader.IsStartElement("BaseFault", Constants.WsBaseFaults.Namespace) == false)
             {
-                throw new XmlException("Invalid Element, it must be 'BaseFault'");
+                throw new XmlException("Invalid Element, it must be '" + Constants.WsBaseFaults.Namespace + ":BaseFault'");
             }
 
             reader.ReadStartElement("BaseFault", Constants.WsBaseFaults.Namespace);
@@ -517,12 +517,28 @@ namespace CommonContracts.WsBaseFaults
 
             if (this.FaultCause != null)
             {
-                writer.WriteStartElement(prefix, "FaultCause", Constants.WsBaseFaults.Namespace);
-                ((IXmlSerializable)this.FaultCause).WriteXml(writer);
-                writer.WriteEndElement();
+                this.WriteFaultCause(prefix, writer);
             }
 
             this.WriteEndElement(writer);
+        }
+
+        private void WriteFaultCause(String prefix, XmlWriter writer)
+        {
+            writer.WriteStartElement(prefix, "FaultCause", Constants.WsBaseFaults.Namespace);
+
+            var attribute = this.GetType().GetCustomAttributes(typeof(XmlRootAttribute), true).OfType<XmlRootAttribute>().FirstOrDefault();
+            if (attribute != null)
+            {
+                var prefix1 = writer.LookupPrefix(attribute.Namespace);
+                writer.WriteStartElement(prefix1, attribute.ElementName, attribute.Namespace);
+            }
+            ((IXmlSerializable)this.FaultCause).WriteXml(writer);
+            if (attribute != null)
+            {
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
         }
 
         #endregion

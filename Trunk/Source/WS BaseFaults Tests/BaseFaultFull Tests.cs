@@ -275,13 +275,8 @@ namespace CommonContracts.WsBaseFaults.Tests
         {
             var now = new DateTime(2001, 1, 2, 3, 4, 5, DateTimeKind.Utc);
 
-            var mock = new Mock<BaseFaultFull>();
-            mock.CallBase = true;
-            mock.SetupGet(item => item.Timestamp).Returns(now);
-            var innerFault = mock.Object;
-
-            var target = new TestFault(now) { FaultCause = innerFault };
-            var serializer = new XmlSerializer(typeof(BaseFaultFull));
+            var target = new TestFault(now) { FaultCause = new TestFault(now.AddYears(1)) };
+            var serializer = new XmlSerializer(typeof(TestFault));
 
             XElement xml;
 
@@ -293,7 +288,7 @@ namespace CommonContracts.WsBaseFaults.Tests
                 xml = XElement.Load(stream);
             }
 
-            var areEqual = XNode.DeepEquals(XElement.Parse("<wsbf:BaseFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:FaultCause><wsbf:BaseFault><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp></wsbf:BaseFault></wsbf:FaultCause></wsbf:BaseFault>"), xml.FirstNode);
+            var areEqual = XNode.DeepEquals(XElement.Parse("<TestFault xmlns='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:FaultCause xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:TestFault><wsbf:Timestamp>2002-01-02T03:04:05Z</wsbf:Timestamp></wsbf:TestFault></wsbf:FaultCause></TestFault>"), xml);
             Assert.IsTrue(areEqual);
         }
 
@@ -302,7 +297,7 @@ namespace CommonContracts.WsBaseFaults.Tests
         [Category("Functional Tests")]
         public void Deserialize()
         {
-            const String xml = "<wsbf:BaseFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:Originator xmlns:wsa='http://www.w3.org/2005/08/addressing' xsi:type='http://www.w3.org/2005/08/addressing:EndpointReference' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><wsa:Address>http://someuri/</wsa:Address></wsbf:Originator><wsbf:ErrorCode dialect='http://foo/'/><wsbf:Description>some desc</wsbf:Description></wsbf:BaseFault>";
+            const String xml = "<wsbf:TestFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:Originator xmlns:wsa='http://www.w3.org/2005/08/addressing' xsi:type='http://www.w3.org/2005/08/addressing:EndpointReference' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'><wsa:Address>http://someuri/</wsa:Address></wsbf:Originator><wsbf:ErrorCode dialect='http://foo/'/><wsbf:Description>some desc</wsbf:Description></wsbf:TestFault>";
 
             var reader = new XmlTextReader(new StringReader(xml));
 
@@ -317,33 +312,21 @@ namespace CommonContracts.WsBaseFaults.Tests
         }
 
         [Test()]
-        [Description("Specifically showing the use case for nested faults")]
+        [Description("Confirms that we use the UnknownBaseFault type by default when deserializing FaultCause elements")]
         [Category("Functional Tests")]
-        public void NestedFaultsShouldDeserialize()
+        public void NestedFaultsShouldDeserializeAsUnknownBaseFault()
         {
             var now = new DateTime(2001, 1, 2, 3, 4, 5, DateTimeKind.Utc);
 
-            const String xml = "<wsbf:BaseFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:FaultCause><wsbf:BaseFault><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp></wsbf:BaseFault></wsbf:FaultCause></wsbf:BaseFault>";
+            const String xml = "<wsbf:TestFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:FaultCause><wsbf:BaseFault><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp></wsbf:BaseFault></wsbf:FaultCause></wsbf:TestFault>";
             var reader = new XmlTextReader(new StringReader(xml));
             var serializer = new XmlSerializer(typeof(TestFault));
             var target = (BaseFaultFull)serializer.Deserialize(reader);
 
+            Assert.That(target.FaultCause, Is.TypeOf<UnknownBaseFault>());
             Assert.That(target, Is.Not.Null);
             Assert.That(target.FaultCause, Is.Not.Null);
             Assert.That(target.FaultCause.Timestamp, Is.EqualTo(now));
-            Assert.That(target.FaultCause, Is.TypeOf<UnknownBaseFault>());
-        }
-
-        [Test()]
-        [Description("Confirms that we use the UnknownBaseFault type by default when deserializing FaultCause elements")]
-        [Category("Functional Tests")]
-        public void DeserializedNestedFaultsShouldDeserializeAsUnknownBaseFault()
-        {
-            const String xml = "<wsbf:BaseFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:FaultCause><wsbf:BaseFault><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp></wsbf:BaseFault></wsbf:FaultCause></wsbf:BaseFault>";
-            var reader = new XmlTextReader(new StringReader(xml));
-            var serializer = new XmlSerializer(typeof(TestFault));
-            var target = (BaseFaultFull)serializer.Deserialize(reader);
-
             Assert.That(target.FaultCause, Is.TypeOf<UnknownBaseFault>());
         }
 
