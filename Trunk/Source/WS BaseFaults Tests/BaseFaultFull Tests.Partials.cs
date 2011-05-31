@@ -52,6 +52,7 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace CommonContracts.WsBaseFaults.Tests
@@ -64,7 +65,7 @@ namespace CommonContracts.WsBaseFaults.Tests
         /// Required for the <see cref="Deserialize"/> test.
         /// Required for the <see cref="NestedFaultsShouldSerialize"/> test.
         /// </summary>
-        [XmlRoot("BaseFault", Namespace = Constants.WsBaseFaults.Namespace, DataType = Constants.WsBaseFaults.Namespace + ":BaseFaultType")]
+        [XmlRoot("TestFault", Namespace = Constants.WsBaseFaults.Namespace, DataType = Constants.WsBaseFaults.Namespace + ":BaseFaultType")]
         public sealed class TestFault : BaseFaultFull
         {
             public TestFault() { }
@@ -92,6 +93,24 @@ namespace CommonContracts.WsBaseFaults.Tests
             public TestFault(DateTime utc, EndpointAddress originator, ErrorCode errorCode, IEnumerable<Description> descriptions)
                 : base(utc, originator, errorCode, descriptions)
             {
+            }
+
+            protected override void WriteStartElement(XmlWriter writer)
+            {
+            }
+
+            protected override void WriteEndElement(XmlWriter writer)
+            {
+            }
+
+            protected override void ReadStartElement(XmlReader reader)
+            {
+                if (reader.IsStartElement("TestFault", Constants.WsBaseFaults.Namespace) == false)
+                {
+                    throw new XmlException("Invalid Element, it must be '" + Constants.WsBaseFaults.Namespace + ":TestFault'");
+                }
+
+                reader.ReadStartElement("TestFault", Constants.WsBaseFaults.Namespace);
             }
         }
     }

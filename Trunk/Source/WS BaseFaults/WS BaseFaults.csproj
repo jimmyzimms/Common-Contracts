@@ -109,7 +109,6 @@
   <ItemGroup>
     <Compile Include="BaseFault.cs" />
     <Compile Include="BaseFaultFull.cs" />
-    <Compile Include="BaseFault{T}.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Description.cs" />
     <Compile Include="ErrorCode.cs" />
