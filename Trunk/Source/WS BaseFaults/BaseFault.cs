@@ -71,7 +71,6 @@ namespace CommonContracts.WsBaseFaults
         #region Fields
         
         private DateTime timestamp;
-        private BaseFault faultCause;
 
         #endregion
 
@@ -83,14 +82,6 @@ namespace CommonContracts.WsBaseFaults
         protected BaseFault() : this(DateTime.UtcNow) { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BaseFault"/> class with the current <see cref="DateTime.UtcNow"/> value and the supplied <paramref name="faultCause"/>.
-        /// </summary>
-        /// <param name="faultCause">The optional cause of this fault.</param>
-        protected BaseFault(BaseFault faultCause) : this(faultCause, DateTime.UtcNow)
-        {
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="BaseFault"/> class with the supplied <paramref name="utc"/> value.
         /// </summary>
         /// <remarks>If the supplied date is not in UTC, the value will be coerced.</remarks>
@@ -99,17 +90,6 @@ namespace CommonContracts.WsBaseFaults
         {
             if (utc.Kind != DateTimeKind.Utc) utc = utc.ToUniversalTime();
             this.timestamp = utc;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseFault"/> class with the supplied <paramref name="utc"/> and <paramref name="faultCause"/> values.
-        /// </summary>
-        /// <remarks>If the supplied date is not in UTC, the value will be coerced.</remarks>
-        /// <param name="utc">The <see cref="Timestamp"/> value.</param>
-        /// <param name="faultCause">The optional cause of this fault.</param>
-        protected BaseFault(BaseFault faultCause, DateTime utc) : this(utc)
-        {
-            this.faultCause = faultCause;
         }
 
         #endregion
@@ -138,26 +118,6 @@ namespace CommonContracts.WsBaseFaults
             {
                 if (value.Kind != DateTimeKind.Utc) value = value.ToUniversalTime();
                 this.timestamp = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the cause of this fault.
-        /// </summary>
-        /// <remarks>
-        /// If being used on the client side for supporting nested faults, you should subclass this type to represent
-        /// the top level fault and indicate the set of possible FaultCause types via the <see cref="KnownTypeAttribute"/>.
-        /// </remarks>
-        /// <value>The cause of this fault.</value>
-        /// <exception cref="ArgumentException">The supplied value is the same reference as the current <see cref="BaseFault"/>.</exception>
-        [DataMember(EmitDefaultValue = false, IsRequired = false, Name = "FaultCause", Order = 4)]
-        public virtual BaseFault FaultCause
-        {
-            get { return this.faultCause; }
-            set
-            {
-                if (ReferenceEquals(this, value)) throw new ArgumentException("You cannot nest a BaseFault with the same reference as itself as this would cause a cirular reference in the FaultCause chain.", "value");
-                this.faultCause = value;
             }
         }
 
