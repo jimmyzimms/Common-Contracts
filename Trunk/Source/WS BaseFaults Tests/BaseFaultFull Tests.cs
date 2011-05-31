@@ -280,7 +280,7 @@ namespace CommonContracts.WsBaseFaults.Tests
             mock.SetupGet(item => item.Timestamp).Returns(now);
             var innerFault = mock.Object;
 
-            var target = new TestFault(now) {FaultCause = innerFault};
+            var target = new TestFault(now) { FaultCause = innerFault };
             var serializer = new XmlSerializer(typeof(BaseFaultFull));
 
             XElement xml;
@@ -292,7 +292,7 @@ namespace CommonContracts.WsBaseFaults.Tests
 
                 xml = XElement.Load(stream);
             }
-            
+
             var areEqual = XNode.DeepEquals(XElement.Parse("<wsbf:BaseFault xmlns:wsbf='http://docs.oasis-open.org/wsrf/bf-2'><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp><wsbf:FaultCause><wsbf:BaseFault><wsbf:Timestamp>2001-01-02T03:04:05Z</wsbf:Timestamp></wsbf:BaseFault></wsbf:FaultCause></wsbf:BaseFault>"), xml.FirstNode);
             Assert.IsTrue(areEqual);
         }

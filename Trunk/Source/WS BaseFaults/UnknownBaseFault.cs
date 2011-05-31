@@ -73,7 +73,7 @@ namespace CommonContracts.WsBaseFaults
     public class UnknownBaseFault : BaseFaultFull
     {
         #region Fields
-        
+
         private String namespaceUri;
         private String localName;
         private String xmlType;
@@ -83,7 +83,7 @@ namespace CommonContracts.WsBaseFaults
         #endregion
 
         #region Constructor
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UnknownBaseFault"/> class from the supplied <paramref name="reader"/>.
         /// </summary>
@@ -101,7 +101,7 @@ namespace CommonContracts.WsBaseFaults
         #endregion
 
         #region Overrides
-        
+
         /// <summary>
         /// Extension point for reading the start element for an unknown <see cref="BaseFaultFull"/> type.
         /// </summary>
@@ -144,7 +144,7 @@ namespace CommonContracts.WsBaseFaults
         #endregion
 
         #region Properties
-        
+
         /// <summary>
         /// Gets the xsi:type value, if any, for the fault.
         /// </summary>
