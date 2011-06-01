@@ -205,6 +205,7 @@ namespace CommonContracts.WsBaseFaults.Tests
         }
 
         [Test()]
+        [Description("Confirms that Description instances can be added/removed")]
         public void CanAddRemoveDescriptionItems()
         {
             var description = new Description("some desc");
@@ -226,6 +227,7 @@ namespace CommonContracts.WsBaseFaults.Tests
         }
 
         [Test()]
+        [Description("Confirms that nulls cannot be added to the Description collection")]
         public void CantAddNullDescription()
         {
             var mock = new Mock<BaseFaultFull>();
@@ -245,7 +247,6 @@ namespace CommonContracts.WsBaseFaults.Tests
             var description = new Description("some desc");
             var errorCode = new ErrorCode(new Uri("http://foo"));
             var now = new DateTime(2001, 1, 2, 3, 4, 5, DateTimeKind.Utc);
-            //var faultCause = (new Mock<BaseFaultFull>()).Object;
 
             var mock = new Mock<BaseFaultFull>(now, endpoint, errorCode, new[] { description });
             mock.CallBase = true;
