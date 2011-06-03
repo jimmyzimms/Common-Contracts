@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="SlaViolationFault"
+    targetNamespace="urn:common-contracts/basefaults/extensions"
+    elementFormDefault="qualified"
+    xmlns="urn:common-contracts/basefaults/extensions"
+    xmlns:ext="urn:common-contracts/basefaults/extensions"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+
+
+
+</xs:schema>
