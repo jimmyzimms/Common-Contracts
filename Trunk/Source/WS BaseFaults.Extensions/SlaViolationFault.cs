@@ -98,7 +98,7 @@ namespace CommonContracts.WsBaseFaults.Extensions
         /// <returns>The appropriate <see cref="MessageFault"/> for the supplied <see cref="SlaViolationFault"/>.</returns>
         public static MessageFault CreateStandardFault(SlaViolationFault fault)
         {
-            var faultCode = FaultCode.CreateSenderFaultCode(Constants.Faults.ServiceUnavailableFault.FaultCode, Constants.Namespace);
+            var faultCode = FaultCode.CreateSenderFaultCode(Constants.Faults.SlaViolationFault.FaultCode, Constants.Namespace);
             var faultReason = new FaultReason("The recieved request to the service is unable to be processed in time or has encountered an issue regarding the scope of the request made by the caller.");
 
             return MessageFault.CreateFault(faultCode, faultReason, fault);

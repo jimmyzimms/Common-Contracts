@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Dispatcher;
@@ -47,7 +48,7 @@ namespace CommonContracts.WsBaseFaults.Extensions
             else if (error is TimeoutException)
             {
                 var slaFault = new SlaViolationFault();
-                slaFault.Descriptions.Add(new Description(error.Message));
+                slaFault.Descriptions.Add(new Description(error.Message, CultureInfo.CurrentCulture));
                 fault = Message.CreateMessage(version, SlaViolationFault.CreateStandardFault(slaFault), Constants.Faults.SlaViolationFault.Action);
             }
             else if (error is FaultException)

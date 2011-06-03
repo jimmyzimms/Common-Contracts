@@ -62,7 +62,7 @@ namespace CommonContracts.WsBaseFaults.Extensions
     /// Let's face it. Bugs and critical runtime errors happen. Mapping unhandeled (or impossible to handle) runtime exceptions
     /// to a common fault be used to support this common operational requirement in a standardized manner.
     /// </remarks>
-    [DataContract(Name = "ServiceUnavailableFault", Namespace = Constants.Namespace)]
+    [DataContract(Name = "ServiceUnavailable", Namespace = Constants.Namespace)]
     public class ServiceUnavailableFault : BaseFault
     {
         #region Methods
