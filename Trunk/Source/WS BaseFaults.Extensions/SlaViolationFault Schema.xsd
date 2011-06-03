@@ -5,8 +5,15 @@
     xmlns="urn:common-contracts/basefaults/extensions"
     xmlns:ext="urn:common-contracts/basefaults/extensions"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:wsrf-bf="http://docs.oasis-open.org/wsrf/bf-2"
 >
+<xs:import namespace="http://docs.oasis-open.org/wsrf/bf-2"/>
 
-
+ <xs:element name="SLAViolation" type="ext:SLAViolationType"/>
+ <xs:complexType name="SLAViolationType">
+  <xs:complexContent>
+   <xs:extension base="wsrf-bf:BaseFaultType"/>
+  </xs:complexContent>
+ </xs:complexType>
 
 </xs:schema>
