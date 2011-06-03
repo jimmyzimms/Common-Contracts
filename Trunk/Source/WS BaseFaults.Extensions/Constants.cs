@@ -56,65 +56,65 @@ namespace CommonContracts.WsBaseFaults.Extensions
     /// <summary>
     /// Provides compile time constants for the library.
     /// </summary>
-    internal static class Constants
+    public static class Constants
     {
         /// <summary>
         /// Used to hold the namespace that extension faults should use. Contains the string 'urn:common-contracts/basefaults/extensions'.
         /// </summary>
-        internal const String Namespace = "urn:common-contracts/basefaults/extensions";
+        public const String Namespace = "urn:common-contracts/basefaults/extensions";
 
         /// <summary>
         /// Provides compile time constants used for base faults.
         /// </summary>
-        internal static class Faults
+        public static class Faults
         {
 
             /// <summary>
             /// Provides compile time constants for the <see cref="Extensions.MessageValidationFault"/> type.
             /// </summary>
-            internal static class MessageValidationFault
+            public static class MessageValidationFault
             {
                 /// <summary>
                 /// Holds the name of the fault code to be used with the <see cref="Extensions.MessageValidationFault"/> message.
                 /// </summary>
-                internal const String FaultCode = "MessageValidation";
+                public const String FaultCode = "MessageValidation";
 
                 /// <summary>
                 /// Holds the soap action that should be used in any soap operation that returns a <see cref="Extensions.MessageValidationFault"/> message.
                 /// </summary>
-                internal const String Action = Namespace + "/messagevalidationfault";
+                public const String Action = Namespace + "/messagevalidationfault";
             }
 
             /// <summary>
             /// Provides compile time constants for the <see cref="Extensions.SlaViolationFault"/> type.
             /// </summary>
-            internal static class SlaViolationFault
+            public static class SlaViolationFault
             {
                 /// <summary>
                 /// Holds the name of the fault code to be used with the <see cref="Extensions.SlaViolationFault"/> message.
                 /// </summary>
-                internal const String FaultCode = "SLAViolation";
+                public const String FaultCode = "SLAViolation";
 
                 /// <summary>
                 /// Holds the soap action that should be used in any soap operation that returns a <see cref="Extensions.SlaViolationFault"/> message.
                 /// </summary>
-                internal const String Action = Namespace + "/slaviolationfault";
+                public const String Action = Namespace + "/slaviolationfault";
             }
 
             /// <summary>
             /// Provides compile time constants for the <see cref="Extensions.ServiceUnavailableFault"/> type.
             /// </summary>
-            internal static class ServiceUnavailableFault
+            public static class ServiceUnavailableFault
             {
                 /// <summary>
                 /// Holds the name of the fault code to be used with the <see cref="Extensions.ServiceUnavailableFault"/> message.
                 /// </summary>
-                internal const String FaultCode = "ServiceUnavailable";
+                public const String FaultCode = "ServiceUnavailable";
 
                 /// <summary>
                 /// Holds the soap action that should be used in any soap operation that returns a <see cref="Extensions.ServiceUnavailableFault"/> message.
                 /// </summary>
-                internal const String Action = Namespace + "/serviceunavailablefault";
+                public const String Action = Namespace + "/serviceunavailablefault";
             }
         }
     }

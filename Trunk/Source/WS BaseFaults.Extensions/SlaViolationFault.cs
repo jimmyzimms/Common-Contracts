@@ -130,7 +130,7 @@ namespace CommonContracts.WsBaseFaults.Extensions
                 xs.Add(schema);    
             }
 
-            return new XmlQualifiedName("SlaViolation", Constants.Namespace);
+            return new XmlQualifiedName("SLAViolationType", Constants.Namespace);
         }
 
         #endregion
