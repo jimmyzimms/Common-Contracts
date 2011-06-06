@@ -31,9 +31,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Globalization.Tests", "Glob
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS BaseFaults.Extensions", "WS BaseFaults.Extensions\WS BaseFaults.Extensions.csproj", "{50B22C05-5DE9-4563-B3D2-25DFACA01595}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS Notification", "WS Notification\WS Notification.csproj", "{2349BD5C-23E6-45D5-A870-21C32D69A1F0}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs14
 		SccLocalPath0 = .
@@ -58,6 +60,9 @@ Global
 		SccProjectUniqueName7 = WS\u0020BaseFaults.Extensions\\WS\u0020BaseFaults.Extensions.csproj
 		SccProjectName7 = WS\u0020BaseFaults.Extensions
 		SccLocalPath7 = WS\u0020BaseFaults.Extensions
+		SccProjectUniqueName8 = WS\u0020Notification\\WS\u0020Notification.csproj
+		SccProjectName8 = WS\u0020Notification
+		SccLocalPath8 = WS\u0020Notification
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Common Contracts.vsmdi
@@ -141,6 +146,16 @@ Global
 		{50B22C05-5DE9-4563-B3D2-25DFACA01595}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{50B22C05-5DE9-4563-B3D2-25DFACA01595}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{50B22C05-5DE9-4563-B3D2-25DFACA01595}.Release|x86.ActiveCfg = Release|Any CPU
+		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
