@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+ <metadata>
+  <id>Common Contracts WS-Eventing</id>
+  <version>$version$</version>
+  <authors>$author$</authors>
+  <owners>$author$</owners>
+  <licenseUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/License.txt</licenseUrl>
+  <projectUrl>http://commoncontracts.codeplex.com/</projectUrl>
+  <iconUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/Logo.png</iconUrl>
+  <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  <description>The v1 release of the WS-Eventing specification WCF serialization library.</description>
+  <tags>OASIS WS-Eventing WCF Serialization .Net SOAP Services SOA Globalization</tags>1
+  <language>en-US</language>
+ </metadata>
+ <dependencies/>
+ <files src=".bin\CommonContracts.WsEventing.dll" />
+ <files src=".bin\CommonContracts.WsEventing.XML" />
+ <files src=".bin\CodeContracts\CommonContracts.WsEventing.Contracts.dll" />
+</package>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+ <metadata>
+  <id>Common Contracts WS-IL8N</id>
+  <version>$version$</version>
+  <authors>$author$</authors>
+  <owners>$author$</owners>
+  <licenseUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/License.txt</licenseUrl>
+  <projectUrl>http://commoncontracts.codeplex.com/</projectUrl>
+  <iconUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/Logo.png</iconUrl>
+  <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  <description>The v1 release of ws-i18n specification WCF serialization library.</description>
+  <tags>OASIS WS-IL8N WCF Serialization .Net SOAP Services SOA Globalization</tags>
+  <language>en-US</language>
+ </metadata>
+ <dependencies/>
+ <files src=".bin\CommonContracts.Globalization.dll" />
+ <files src=".bin\CommonContracts.Globalization.XML" />
+ <files src=".bin\CodeContracts\CommonContracts.Globalization.Contracts.dll" />
+</package>
