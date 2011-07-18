@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+ <metadata>
+  <id>Common Contracts Standard Faults Library</id>
+  <version>$version$</version>
+  <authors>$author$</authors>
+  <owners>$author$</owners>
+  <licenseUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/License.txt</licenseUrl>
+  <projectUrl>http://commoncontracts.codeplex.com/</projectUrl>
+  <iconUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/Logo.png</iconUrl>
+  <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  <description>Extension of the Common Contracts implementation of BaseFaults 1.2 for defining commonly used and needed fault contracts in WCF services.</description>
+  <tags>OASIS WS-ResourceFramework BaseFaults WCF Serialization .Net SOAP Services SOA Globalization</tags>
+  <language>en-US</language>
+ </metadata>
+ <dependencies>
+  <dependency id="Common Contracts WS-BaseFaults" version="1.0.0.0" />
+ </dependencies>
+ <files src=".bin\CommonContracts.WsBaseFaults.Extensions.dll" />
+ <files src=".bin\CommonContracts.WsBaseFaults.Extensions.XML" />
+ <files src=".bin\CodeContracts\CommonContracts.WsBaseFaults.Extensions.Contracts.dll" />
+</package>

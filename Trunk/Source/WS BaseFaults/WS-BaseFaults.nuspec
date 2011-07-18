@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package>
+ <metadata>
+  <id>Common Contracts WS-BaseFaults</id>
+  <version>$version$</version>
+  <authors>$author$</authors>
+  <owners>$author$</owners>
+  <licenseUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/License.txt</licenseUrl>
+  <projectUrl>http://commoncontracts.codeplex.com/</projectUrl>
+  <iconUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/Logo.png</iconUrl>
+  <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  <description>The v1 release of the WS-ResourceFramework BaseFaults 1.2 specification WCF serialization library.</description>
+  <tags>OASIS WS-ResourceFramework BaseFaults WCF Serialization .Net SOAP Services SOA Globalization</tags>
+  <language>en-US</language>
+ </metadata>
+ <dependencies/>
+ <files src=".bin\CommonContracts.WsBaseFaults.dll" />
+ <files src=".bin\CommonContracts.WsBaseFaults.XML" />
+ <files src=".bin\CodeContracts\CommonContracts.WsBaseFaults.Contracts.dll" />
+</package>
