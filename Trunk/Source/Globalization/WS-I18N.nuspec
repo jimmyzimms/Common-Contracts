@@ -1,20 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <package>
  <metadata>
-  <id>Common Contracts WS-IL8N</id>
-  <version>$version$</version>
-  <authors>$author$</authors>
-  <owners>$author$</owners>
+  <id>CommonContracts-Globalization</id>
+  <version>1.0.4087.18466</version>
+  <authors>Jimmy Zimmerman</authors>
+  <owners>Jimmy Zimmerman</owners>
   <licenseUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/License.txt</licenseUrl>
-  <projectUrl>http://commoncontracts.codeplex.com/</projectUrl>
+  <projectUrl><![CDATA[http://commoncontracts.codeplex.com/wikipage?title=ws-i18n%20Getting%20Started&referringTitle=Documentation]]></projectUrl>
   <iconUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/Logo.png</iconUrl>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
-  <description>The v1 release of ws-i18n specification WCF serialization library.</description>
+  <description>The v1 release of ws-il8n specification WCF serialization library. This package facilitates use by services and clients of the common OSASIS ws-il8n XML structures for supporting globalization on services (both SOAP and REST). The library is based on the Data Contract Serializer.</description>
+  <summary>A feature complete implementation of the OASIS ws-il8n specification.</summary>
   <tags>OASIS WS-IL8N WCF Serialization .Net SOAP Services SOA Globalization</tags>
   <language>en-US</language>
+  <frameworkAssemblies>
+   <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net40"/>
+  </frameworkAssemblies>
  </metadata>
- <dependencies/>
- <files src=".bin\CommonContracts.Globalization.dll" />
- <files src=".bin\CommonContracts.Globalization.XML" />
- <files src=".bin\CodeContracts\CommonContracts.Globalization.Contracts.dll" />
+ <files>
+  <file src="bin\Release\CommonContracts.Globalization.dll" target="lib\net40" />
+  <file src="bin\Release\CommonContracts.Globalization.XML" target="lib\net40" />
+  <file src="bin\Release\CodeContracts\CommonContracts.Globalization.Contracts.dll" target="lib\net40\Contracts" />
+ </files>
 </package>

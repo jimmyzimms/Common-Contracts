@@ -1,20 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <package>
  <metadata>
-  <id>Common Contracts WS-BaseFaults</id>
-  <version>$version$</version>
-  <authors>$author$</authors>
-  <owners>$author$</owners>
+  <id>CommonContracts-WSBaseFaults</id>
+  <version>1.0.4171.25265</version>
+  <authors>Jimmy Zimmerman</authors>
+  <owners>Jimmy Zimmerman</owners>
   <licenseUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/License.txt</licenseUrl>
-  <projectUrl>http://commoncontracts.codeplex.com/</projectUrl>
+  <projectUrl><![CDATA[http://commoncontracts.codeplex.com/wikipage?title=wsrf-bf%20Getting%20Started&referringTitle=Documentation]]></projectUrl>
   <iconUrl>https://commoncontracts.svn.codeplex.com/svn/Trunk/Source/Logo.png</iconUrl>
   <requireLicenseAcceptance>true</requireLicenseAcceptance>
-  <description>The v1 release of the WS-ResourceFramework BaseFaults 1.2 specification WCF serialization library.</description>
+  <description>The v1 release of the WS-ResourceFramework BaseFaults 1.2 specification WCF serialization library. Facilitates use of common structures for standardized fault management for SOAP services. The library supports both XmlSerializer and Data Contract Serializer variations.</description>
+  <summary>A feature complete implementation of the OASIS Resource Framework BaseFaults 1.2 specification.</summary>
   <tags>OASIS WS-ResourceFramework BaseFaults WCF Serialization .Net SOAP Services SOA Globalization</tags>
   <language>en-US</language>
+  <frameworkAssemblies>
+   <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net40"/>
+   <frameworkAssembly assemblyName="System.Xml" targetFramework="net40"/>
+  </frameworkAssemblies>
  </metadata>
- <dependencies/>
- <files src=".bin\CommonContracts.WsBaseFaults.dll" />
- <files src=".bin\CommonContracts.WsBaseFaults.XML" />
- <files src=".bin\CodeContracts\CommonContracts.WsBaseFaults.Contracts.dll" />
+ <files>
+  <file src="bin\Release\CommonContracts.WsBaseFaults.dll" target="lib\net40" />
+  <file src="bin\Release\CommonContracts.WsBaseFaults.XML" target="lib\net40" />
+  <file src="bin\Release\CodeContracts\CommonContracts.WsBaseFaults.Contracts.dll" target="lib\net40\Contracts" />
+ </files>
 </package>
