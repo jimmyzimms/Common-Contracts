@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <package>
  <metadata>
-  <id>Common Contracts WS-Eventing</id>
+  <id>CommonContracts-WSEventing</id>
   <version>$version$</version>
   <authors>$author$</authors>
   <owners>$author$</owners>
@@ -13,8 +13,9 @@
   <tags>OASIS WS-Eventing WCF Serialization .Net SOAP Services SOA Globalization</tags>1
   <language>en-US</language>
  </metadata>
- <dependencies/>
- <files src=".bin\CommonContracts.WsEventing.dll" />
- <files src=".bin\CommonContracts.WsEventing.XML" />
- <files src=".bin\CodeContracts\CommonContracts.WsEventing.Contracts.dll" />
+ <files>
+  <file src=".bin\CommonContracts.WsEventing.dll" />
+  <file src=".bin\CommonContracts.WsEventing.XML" />
+  <file src=".bin\CodeContracts\CommonContracts.WsEventing.Contracts.dll" />
+ </files>
 </package>

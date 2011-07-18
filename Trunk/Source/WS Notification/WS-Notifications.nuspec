@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <package>
  <metadata>
-  <id>Common Contracts WS-Notifications</id>
+  <id>CommonContracts-WSNotifications</id>
   <version>$version$</version>
   <authors>$author$</authors>
   <owners>$author$</owners>
@@ -13,8 +13,9 @@
   <tags>OASIS WS-Notification WS-BaseNotification WS-BrokeredNotification WS-Topics WCF Serialization .Net SOAP Services SOA Globalization</tags>1
   <language>en-US</language>
  </metadata>
- <dependencies/>
- <files src=".bin\CommonContracts.WsNotification.dll" />
- <files src=".bin\CommonContracts.WsNotification.XML" />
- <files src=".bin\CodeContracts\CommonContracts.WsNotification.Contracts.dll" />
+ <files>
+  <file src=".bin\CommonContracts.WsNotification.dll" />
+  <file src=".bin\CommonContracts.WsNotification.XML" />
+  <file src=".bin\CodeContracts\CommonContracts.WsNotification.Contracts.dll" />
+ </files>
 </package>
