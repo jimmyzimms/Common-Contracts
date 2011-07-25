@@ -99,6 +99,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionNotSupportedFault.cs" />
     <Compile Include="CommonFaultsHandler.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="MessageValidationFault.cs" />
