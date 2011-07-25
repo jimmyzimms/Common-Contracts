@@ -21,6 +21,11 @@ namespace CommonContracts.WsBaseFaults.Extensions
     /// <item><term><see cref="TimeoutException"/></term><description><see cref="SlaViolationFault"/></description></item>
     /// <item><term><see cref="FaultException"/></term><description>Unchanged. Will be returned to the client as is.</description></item>
     /// <item><term>Any other <see cref="Exception"/></term><description><see cref="ServiceUnavailableFault"/></description></item>
+    /// <note type="warning">
+    /// It is by design that this handler will not map any exceptions to the <see cref="ActionNotSupportedFault"/> type.
+    /// Any WSDL portType implementation that does not support all SOAP actions should be implemented as to throw a
+    /// <see cref="FaultException{ActionNotSupportedFault}"/> explicitly.
+    /// </note>
     /// </list>
     /// </remarks>
     public class CommonFaultsHandler : IErrorHandler

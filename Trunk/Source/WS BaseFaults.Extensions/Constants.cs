@@ -116,6 +116,22 @@ namespace CommonContracts.WsBaseFaults.Extensions
                 /// </summary>
                 public const String Action = Namespace + "/serviceunavailablefault";
             }
+
+            /// <summary>
+            /// Provides compile time constants for the <see cref="Extensions.ActionNotSupportedFault"/> type.
+            /// </summary>
+            public static class ActionNotSupportedFault
+            {
+                /// <summary>
+                /// Holds the name of the fault code to be used with the <see cref="Extensions.ActionNotSupportedFault"/> message.
+                /// </summary>
+                public const String FaultCode = "ActionNotSupportedFault";
+
+                /// <summary>
+                /// Holds the soap action that should be used in any soap operation that returns a <see cref="Extensions.ActionNotSupportedFault"/> message.
+                /// </summary>
+                public const String Action = Namespace + "/actionnotsupportedfault";
+            }
         }
     }
 }
