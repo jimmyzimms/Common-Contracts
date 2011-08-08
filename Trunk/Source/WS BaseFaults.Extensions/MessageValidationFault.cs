@@ -129,14 +129,34 @@ namespace CommonContracts.WsBaseFaults.Extensions
         #region Methods
 
         /// <summary>
+        /// Factory used to create the expected <see cref="FaultReason"/> to be used when returning this fault type.
+        /// </summary>
+        /// <returns>The default <see cref="FaultReason"/> to be used with the <see cref="MessageValidationFault"/> type.</returns>
+        public static FaultReason CreateStandardReason()
+        {
+            var faultReason = new FaultReason("Message validation failed");
+            return faultReason;
+        }
+
+        /// <summary>
+        /// Factory used to create the expected <see cref="FaultCode"/> to be used when returning this fault type.
+        /// </summary>
+        /// <returns>The default <see cref="FaultCode"/> to be used with the <see cref="MessageValidationFault"/> type.</returns>
+        public static FaultCode CreateStandardCode()
+        {
+            var faultCode = FaultCode.CreateSenderFaultCode(Constants.Faults.MessageValidationFault.FaultCode, Constants.Namespace);
+            return faultCode;
+        }
+
+        /// <summary>
         /// Factory used to create the expected <see cref="MessageFault"/> to be used when returning this fault type.
         /// </summary>
         /// <param name="fault">The <see cref="MessageValidationFault"/> to create a <see cref="MessageFault"/> from.</param>
         /// <returns>The appropriate <see cref="MessageFault"/> for the supplied <see cref="MessageValidationFault"/>.</returns>
         public static MessageFault CreateStandardFault(MessageValidationFault fault)
         {
-            var faultCode = FaultCode.CreateSenderFaultCode(Constants.Faults.MessageValidationFault.FaultCode, Constants.Namespace);
-            var faultReason = new FaultReason("Message validation failed");
+            var faultCode = CreateStandardCode();
+            var faultReason = CreateStandardReason();
 
             return MessageFault.CreateFault(faultCode, faultReason, fault);
         }
