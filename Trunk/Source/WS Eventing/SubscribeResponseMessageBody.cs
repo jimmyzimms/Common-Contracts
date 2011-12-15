@@ -76,27 +76,43 @@ namespace CommonContracts.WsEventing
 
         #region Properties
 
-        public SubscriptionManager SubscriptionManager
+        /// <summary>
+        /// Gets or sets the <see cref="SubscriptionManager"/> to be used by the event sink to manage the created subscription.
+        /// </summary>
+        /// <value>The <see cref="SubscriptionManager"/> to be used by the event sink to manage the created subscription.</value>
+        public virtual SubscriptionManager SubscriptionManager
         {
-            get { return manager; }
-            set { manager = value; }
+            get { return this.manager; }
+            protected set { this.manager = value; }
         }
 
-        public Expires Expires
+        /// <summary>
+        /// Gets or sets the <see cref="Expires"/> used by the event sink to determine when the created subscription will expire.
+        /// </summary>
+        /// <value>The <see cref="Expires"/> used by the event sink to determine when the created subscription will expire.</value>
+        public virtual Expires Expires
         {
-            get { return expires; }
-            set { expires = value; }
+            get { return this.expires; }
+            protected set { this.expires = value; }
         }
 
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeResponseMessageBody"/> class with the default values. This constructor should only be used for deserialization.
+        /// </summary>
         [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public SubscribeResponseMessageBody()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeResponseMessageBody"/> class with the supplied values.
+        /// </summary>
+        /// <param name="subscriptionManager">The <see cref="WsEventing.SubscriptionManager"/> instance to return.</param>
+        /// <param name="expires">The <see cref="WsEventing.Expires"/> instance to return.</param>
         public SubscribeResponseMessageBody(SubscriptionManager subscriptionManager, Expires expires)
         {
             Contract.Requires<ArgumentNullException>(subscriptionManager != null, "subscriptionManager");
@@ -104,6 +120,17 @@ namespace CommonContracts.WsEventing
 
             this.manager = subscriptionManager;
             this.expires = expires;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeResponseMessageBody"/> class from the supplied <paramref name="reader"/>.
+        /// </summary>
+        /// <param name="reader">The <see cref="XmlReader"/> to construct an instance of the <see cref="SubscribeResponseMessageBody"/> class from.</param>
+        public SubscribeResponseMessageBody(XmlReader reader)
+        {
+            Contract.Requires<ArgumentNullException>(reader != null, "reader");
+
+            ((IXmlSerializable)this).ReadXml(reader);
         }
 
         #endregion

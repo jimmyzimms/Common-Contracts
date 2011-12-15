@@ -55,6 +55,9 @@ using System.ServiceModel;
 
 namespace CommonContracts.WsEventing
 {
+    /// <summary>
+    /// The response message for the <see cref="IEventSource.Subscribe"/> operation.
+    /// </summary>
     [MessageContract(IsWrapped = false)]
     public class SubscribeResponseMessage
     {
@@ -66,6 +69,11 @@ namespace CommonContracts.WsEventing
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the <see cref="SubscribeResponseMessageBody"/> content to be used in the
+        /// response SOAP message.
+        /// </summary>
+        /// <value>The <see cref="SubscribeRequestMessageBody"/> content contained in the received SOAP message.</value>
         [MessageBodyMember(Name = "SubscribeResponse", Namespace = Constants.WsEventing.Namespace, Order = 0)]
         public virtual SubscribeResponseMessageBody Body
         {
@@ -82,13 +90,21 @@ namespace CommonContracts.WsEventing
 
         #region Constructors
 
-        [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
-        public SubscribeResponseMessage()
+        /// <summary>
+        /// Constructor supplied for complete implementation overrides.
+        /// </summary>
+        protected SubscribeResponseMessage()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeResponseMessage"/> class with the supplied content.
+        /// </summary>
+        /// <param name="body">The <see cref="SubscribeResponseMessageBody"/> this repsonse message will return to the subscriber.</param>
         public SubscribeResponseMessage(SubscribeResponseMessageBody body)
         {
+            Contract.Requires<ArgumentNullException>(body != null, "body");
+
             this.body = body;
         }
 

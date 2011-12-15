@@ -97,11 +97,23 @@ namespace CommonContracts.WsEventing
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscriptionManager"/> class with the default values. This constructor should only be used for deserialization.
+        /// </summary>
         [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public SubscriptionManager()
         {
         }
         
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscriptionManager"/> class from the supplied <see cref="Uri"/> address.
+        /// </summary>
+        /// <remarks>
+        /// This overload is best used with simple scenarios where the client only needs to understand an address to communicate with the
+        /// event source (such as when the event source is self managing and therefore leverages the same binding) or when the binding is
+        /// well known / communicated out of band to clients.
+        /// </remarks>
+        /// <param name="address">The endpoint address of the subscription manager used by the event sink to manage subscriptions for this event source.</param>
         public SubscriptionManager(Uri address)
         {
             Contract.Requires(address != null, "address");
@@ -128,7 +140,7 @@ namespace CommonContracts.WsEventing
         
         public SubscriptionManager(EndpointAddress address)
         {
-            
+            Contract.Requires(address != null, "address");
         }
 
         public SubscriptionManager(XmlReader reader)
