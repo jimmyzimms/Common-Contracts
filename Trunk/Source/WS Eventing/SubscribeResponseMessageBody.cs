@@ -89,11 +89,21 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Gets or sets the <see cref="Expires"/> used by the event sink to determine when the created subscription will expire.
         /// </summary>
-        /// <value>The <see cref="Expires"/> used by the event sink to determine when the created subscription will expire.</value>
+        /// <remarks>
+        /// <para>
+        /// If this value is null, the subscription will not expire. That is, the subscription has an indefinite lifetime. It may be
+        /// terminated by the subscriber using an <see cref="ISubscriptionManager.Unsubscribe"/> request, or it may be terminated by
+        /// the event source at any time for reasons such as connection termination, resource constraints, or system shut-down.
+        /// </para>
+        /// <para>
+        /// There is no requirement that this value have any correlation to the requested expiration.
+        /// </para>
+        /// </remarks>
+        /// <value>The <see cref="Expires"/> used by the event sink to determine when the created subscription will expire or a null value.</value>
         public virtual Expires Expires
         {
             get { return this.expires; }
-            protected set { this.expires = value; }
+            set { this.expires = value; }
         }
 
         #endregion
@@ -112,25 +122,13 @@ namespace CommonContracts.WsEventing
         /// Initializes a new instance of the <see cref="SubscribeResponseMessageBody"/> class with the supplied values.
         /// </summary>
         /// <param name="subscriptionManager">The <see cref="WsEventing.SubscriptionManager"/> instance to return.</param>
-        /// <param name="expires">The <see cref="WsEventing.Expires"/> instance to return.</param>
+        /// <param name="expires">The <see cref="WsEventing.Expires"/> instance to return to the client. This value is optional.</param>
         public SubscribeResponseMessageBody(SubscriptionManager subscriptionManager, Expires expires)
         {
             Contract.Requires<ArgumentNullException>(subscriptionManager != null, "subscriptionManager");
-            Contract.Requires<ArgumentNullException>(expires != null, "expires");
 
             this.manager = subscriptionManager;
             this.expires = expires;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubscribeResponseMessageBody"/> class from the supplied <paramref name="reader"/>.
-        /// </summary>
-        /// <param name="reader">The <see cref="XmlReader"/> to construct an instance of the <see cref="SubscribeResponseMessageBody"/> class from.</param>
-        public SubscribeResponseMessageBody(XmlReader reader)
-        {
-            Contract.Requires<ArgumentNullException>(reader != null, "reader");
-
-            ((IXmlSerializable)this).ReadXml(reader);
         }
 
         #endregion
