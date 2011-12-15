@@ -87,8 +87,9 @@ namespace CommonContracts.WsEventing
         /// Gets or sets the <see cref="EndpointAddressAugust2004"/> that a notification should be sent to if a subscription is terminated. This value may be null.
         /// </summary>
         /// <remarks>
-        /// A subscriber can indicated where to send a <see cref="SubscriptionEndMessage"/> if the subscription is terminated unexpectedly. The default behavior is not to send this message.
-        /// An event source is not required to respect this parameter if it is supplied.
+        /// A subscriber can indicated where to send a <see cref="SubscriptionEndMessage"/> if the subscription is terminated unexpectedly. The default behavior is
+        /// not to send this message. An event source is not required to respect this parameter if it is supplied. It is assumed that binding configuration is well
+        /// known or documented / agreed upon through another mechanism. This contract performs no validation of endpoint addresses.
         /// </remarks>
         /// <value>The <see cref="EndpointAddressAugust2004"/> that a notification should be sent to if a subscription is terminated.</value>
         public virtual EndpointAddressAugust2004 EndTo
