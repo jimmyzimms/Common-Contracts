@@ -145,6 +145,26 @@ namespace CommonContracts.WsEventing
 
         #endregion
 
+        #region Factory Methods
+
+        /// <summary>
+        /// Factory method used to create an <see cref="Identifier"/> instance from the supplied endpoint address.
+        /// </summary>
+        /// <param name="epa">The <see cref="EndpointAddress"/> to attempt to locate and create an <see cref="Identifier"/> instance from the address headers collection.</param>
+        /// <returns>If <paramref name="epa"/> contains an identifier value, the created instance; otherwise null.</returns>
+        /// <exception cref="XmlException">The identifier xml is invalid to the defined schema.</exception>
+        public static Identifier CreateFrom(EndpointAddress epa)
+        {
+            Contract.Requires<ArgumentNullException>(epa != null, "epa");
+
+            var header = epa.Headers.FindHeader("Identifier", Constants.WsEventing.Namespace);
+            if (header == null) return null;
+
+            return new Identifier(header.GetAddressHeaderReader());
+        }
+
+        #endregion
+
         #region IXmlSerializable Members
 
         XmlSchema IXmlSerializable.GetSchema()

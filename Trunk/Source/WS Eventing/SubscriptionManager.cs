@@ -78,6 +78,10 @@ namespace CommonContracts.WsEventing
 
         #region Properties
         
+        /// <summary>
+        /// Gets the <see cref="EndpointAddressAugust2004"/> for the subscription manager endpoint.
+        /// </summary>
+        /// <value>The <see cref="EndpointAddressAugust2004"/> for the subscription manager endpoint.</value>
         public virtual EndpointAddressAugust2004 EndpointAddress
         {
             get
@@ -88,9 +92,13 @@ namespace CommonContracts.WsEventing
             }
         }
         
-        public Identifier Identifier
+        /// <summary>
+        /// Gets the <see cref="WsEventing.Identifier"/>, if any, from the <see cref="EndpointAddress"/> value.
+        /// </summary>
+        /// <value>The <see cref="WsEventing.Identifier"/>, if any, from the <see cref="EndpointAddress"/> value.</value>
+        public virtual Identifier Identifier
         {
-            get { return new Identifier(this.EndpointAddress.ToEndpointAddress()); }
+            get { return Identifier.CreateFrom(this.EndpointAddress.ToEndpointAddress()); }
         }
         
         #endregion
@@ -110,8 +118,8 @@ namespace CommonContracts.WsEventing
         /// </summary>
         /// <remarks>
         /// This overload is best used with simple scenarios where the client only needs to understand an address to communicate with the
-        /// event source (such as when the event source is self managing and therefore leverages the same binding) or when the binding is
-        /// well known / communicated out of band to clients.
+        /// event source (such as when the event source is self managing and therefore leverages the same binding used to subscribe) or
+        /// when the binding is well known / communicated out of band to clients.
         /// </remarks>
         /// <param name="address">The endpoint address of the subscription manager used by the event sink to manage subscriptions for this event source.</param>
         public SubscriptionManager(Uri address)
@@ -121,14 +129,33 @@ namespace CommonContracts.WsEventing
             this.epa = EndpointAddressAugust2004.FromEndpointAddress(new EndpointAddress(address));
         }
 
-        public SubscriptionManager(Uri address, Identifier id)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscriptionManager"/> class from the supplied <paramref name="address"/> and <paramref name="id"/>.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used in similar fashion to <see cref="SubscriptionManager(Uri)">this constructor</see> with the addition of the
+        /// <see cref="WsEventing.Identifier"/> as part of the WSA reference parameters in the created EPA. Usually this is used to support
+        /// additional client or source specific identifiers leveraged in the implementation of the subscription manager (such as a primary key
+        /// in a database uniquely identifying the subscription instance).
+        /// </remarks>
+        /// <param name="address">The endpoint address of the subscription manager used by the event sink to manage subscriptions for this event source.</param>
+        /// <param name="id">The <see cref="WsEventing.Identifier"/> that is contained as part of the WSA reference parameters in the created EPA.</param>
+        public SubscriptionManager(Uri address, Identifier id) : this(address, new[] { AddressHeader.CreateAddressHeader(id)})
         {
             Contract.Requires(address != null, "address");
             Contract.Requires(id != null, "id");
-
-            this.epa = EndpointAddressAugust2004.FromEndpointAddress(new EndpointAddress(address, new [] { id.AddressHeader }));
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscriptionManager"/> class from the supplied <paramref name="address"/> and <paramref name="id"/>.
+        /// </summary>
+        /// <remarks>
+        /// This overload is used in similar fashion to <see cref="SubscriptionManager(Uri, WsEventing.Identifier)">this constructor</see> with the
+        /// variation of supplying a full set of WSA reference parameters in the created EPA. This can be used to perform the direct creation or
+        /// manipulation of the EPA (including the presence of an <see cref="WsEventing.Identifier"/> element).
+        /// </remarks>
+        /// <param name="address">The endpoint address of the subscription manager used by the event sink to manage subscriptions for this event source.</param>
+        /// <param name="headers">A collection of <see cref="AddressHeader">headers</see> that re contained as part of the WSA reference parameters in the created EPA.</param>
         public SubscriptionManager(Uri address, IEnumerable<AddressHeader> headers)
         {
             Contract.Requires(address != null, "address");
@@ -138,16 +165,28 @@ namespace CommonContracts.WsEventing
             this.epa = EndpointAddressAugust2004.FromEndpointAddress( new EndpointAddress(address, headers.ToArray()));
         }
         
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscriptionManager"/> class from the supplied and fully initialized <see cref="System.ServiceModel.EndpointAddress"/>.
+        /// </summary>
+        /// <param name="address">The EPA used to address the subscription management for event source.</param>
         public SubscriptionManager(EndpointAddress address)
         {
             Contract.Requires(address != null, "address");
+
+            this.epa = EndpointAddressAugust2004.FromEndpointAddress(address);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscriptionManager"/> class from the supplied <paramref name="reader"/>.
+        /// </summary>
+        /// <param name="reader">An <see cref="XmlReader"/> to create an instance of the <see cref="SubscriptionManager"/> class from.</param>
         public SubscriptionManager(XmlReader reader)
         {
+            Contract.Requires<ArgumentNullException>(reader != null, "reader");
+
             ((IXmlSerializable)this).ReadXml(reader);
         }
-        
+
         #endregion
 
         #region IXmlSerializable Members

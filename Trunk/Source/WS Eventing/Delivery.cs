@@ -106,6 +106,10 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Gets or sets the <see cref="EndpointAddressAugust2004"/> reference describing the endpoint used to send messages to a subscriber.
         /// </summary>
+        /// <remarks>
+        /// It is assumed that binding configuration is well known or documented / agreed upon through another mechanism. This contract performs 
+        /// no validation of endpoint addresses.
+        /// </remarks>
         /// <value>The <see cref="EndpointAddressAugust2004"/> reference describing the endpoint used to send messages to a subscriber.</value>
         public virtual EndpointAddressAugust2004 NotifyTo
         {
@@ -127,8 +131,9 @@ namespace CommonContracts.WsEventing
         /// Gets any additional information specified by a subscriber that should be included in each notification.
         /// </summary>
         /// <remarks>
-        /// A typical implentation pattern is where the event sink lists an element proprietary to the source that identifies the subscription. This extension is
-        /// custom to an event source and should be communicated / documented out of band.
+        /// A typical implentation pattern is where the event sink lists an element proprietary to the sink that is used to categorize the event
+        /// in a fashion meaningful to the subscriber/sink. Extensions are normally communicated to the sink as SOAP headers (though not restricted
+        /// as such). The event source is not required to support or honor any extension facilities.
         /// </remarks>
         /// <value>The additional information containing any additional information specified by a subscriber that should be included in each notification.</value>
         public virtual IList<XElement> Extensions
@@ -237,7 +242,6 @@ namespace CommonContracts.WsEventing
             foreach (var header in this.additionalElements)
             {
                 header.WriteTo(writer);
-                //header.WriteAddressHeader(writer);
             }
             
             writer.WriteEndElement();
