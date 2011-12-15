@@ -84,7 +84,7 @@ namespace CommonContracts.WsEventing
 
     /// <summary>
     /// An extended version of the <see cref="IEventSource"/> interface adding the
-    /// callback contract defintion (<see cref="IEventSourceCallback"/>) to the WSDL.
+    /// callback contract definition (<see cref="IEventSourceCallback"/>) to the WSDL.
     /// </summary>
     /// <remarks>
     /// This variation is usually leveraged by services that run non-persistent subscriptions

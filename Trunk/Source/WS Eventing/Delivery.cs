@@ -51,12 +51,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
@@ -73,7 +75,7 @@ namespace CommonContracts.WsEventing
 
         private Uri mode;
         private EndpointAddressAugust2004 notifyTo;
-        private HeaderCollection additionalElements;
+        private Collection<XElement> additionalElements;
 
         #endregion
 
@@ -122,19 +124,19 @@ namespace CommonContracts.WsEventing
         }
 
         /// <summary>
-        /// Gets the <see cref="HeaderCollection"/> containing any additional information specified by a subscriber that should be included in each notification.
+        /// Gets any additional information specified by a subscriber that should be included in each notification.
         /// </summary>
         /// <remarks>
-        /// A typical implentation pattern is where the event sink lists a wsa:ReferenceProperties element that identifies the subscription. This extension is
+        /// A typical implentation pattern is where the event sink lists an element proprietary to the source that identifies the subscription. This extension is
         /// custom to an event source and should be communicated / documented out of band.
         /// </remarks>
-        /// <value>The <see cref="HeaderCollection"/> containing any additional information specified by a subscriber that should be included in each notification.</value>
-        public virtual HeaderCollection Extensions
+        /// <value>The additional information containing any additional information specified by a subscriber that should be included in each notification.</value>
+        public virtual IList<XElement> Extensions
         {
             get
             {
                 Contract.Ensures(Contract.Result<IList<AddressHeader>>() != null);
-                Contract.Ensures(Contract.ForAll(Contract.Result<IList<AddressHeader>>(), item => item != null));
+                //Contract.Ensures(Contract.ForAll(Contract.Result<IList<AddressHeader>>(), item => item != null));
 
                 return this.additionalElements;
             }
@@ -164,7 +166,7 @@ namespace CommonContracts.WsEventing
 
             this.mode = mode;
             this.notifyTo = EndpointAddressAugust2004.FromEndpointAddress(notifyTo);
-            this.additionalElements = new HeaderCollection();
+            this.additionalElements = new Collection<XElement>();
         }
 
         /// <summary>
@@ -207,9 +209,8 @@ namespace CommonContracts.WsEventing
 
             while (reader.NodeType != XmlNodeType.EndElement)
             {
-                AddressHeader ah = AddressHeader.CreateAddressHeader(reader.Name, reader.NamespaceURI, reader.ReadElementContentAsObject());
-                this.additionalElements.Add(ah);
-                reader.MoveToContent();
+                var additionalElement = XElement.Parse(reader.ReadOuterXml());
+                this.additionalElements.Add(additionalElement);
             }
 
             reader.ReadEndElement();
@@ -235,7 +236,8 @@ namespace CommonContracts.WsEventing
 
             foreach (var header in this.additionalElements)
             {
-                header.WriteAddressHeader(writer);
+                header.WriteTo(writer);
+                //header.WriteAddressHeader(writer);
             }
             
             writer.WriteEndElement();

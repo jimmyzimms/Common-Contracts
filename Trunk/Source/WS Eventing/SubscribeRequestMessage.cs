@@ -60,23 +60,40 @@ namespace CommonContracts.WsEventing
     [MessageContract(IsWrapped = false)]
     public class SubscribeRequestMessage
     {
-        #region Properties
+        #region Fields
 
-        [MessageHeader(Name = "SubscriptionTopic", Namespace = Constants.WsEventing.Extension.ExtensionNamespace)]
-        private String topic;
+        private Uri topic;
+
+        #endregion
+        
+        #region Properties
 
         /// <summary>
         /// Gets or sets the optional <see cref="Uri"/> for the subscription topic.
         /// </summary>
+        /// <remarks>
+        /// This property represents a proprietary extension to the protocol. It is helpful
+        /// in a wide range of eventing scenarios and so is defined by default in this
+        /// message contract type. To alter (or remove it) simply subclass and override the
+        /// property and redefine the header or omitting the <see cref="MessageHeaderAttribute"/>
+        /// for removal.
+        /// </remarks>
         /// <value>The optional <see cref="Uri"/> for the subscription topic.</value>
+        [MessageHeader(Name = "SubscriptionTopic", Namespace = Constants.WsEventing.Extension.ExtensionNamespace)]
         public virtual Uri SubscriptionTopic
         {
-            get { return new Uri(this.topic); }
-            set { this.topic = value.ToString(); }
+            get { return this.topic; }
+            set { this.topic = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="SubscribeRequestMessageBody"/> content contained in the
+        /// received SOAP message.
+        /// </summary>
+        /// <remarks>This type does not enforce validation of the structure.</remarks>
+        /// <value>The <see cref="SubscribeRequestMessageBody"/> content contained in the received SOAP message.</value>
         [MessageBodyMember(Name = "Subscribe", Namespace = Constants.WsEventing.Namespace, Order = 0)]
-        public SubscribeRequestMessageBody Body
+        public virtual SubscribeRequestMessageBody Body
         {
             get;
             set;

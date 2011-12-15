@@ -53,7 +53,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
 using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -84,11 +83,11 @@ namespace CommonContracts.WsEventing.Tests
         public void CanAddRemoveExtensionElements()
         {
             var delivery = new Delivery(new Uri(Constants.WsEventing.DeliverModes.Wrapped), new EndpointAddress("http://someaddress"));
-            delivery.Extensions.Add(AddressHeader.CreateAddressHeader("name", "namespace", "value"));
+            delivery.Extensions.Add(XElement.Parse("<name xmlns='namespace'>value</name>"));
             Assert.That(delivery.Extensions.Count, Is.EqualTo(1));
-            Assert.That(delivery.Extensions.First().Name, Is.EqualTo("name"));
-            Assert.That(delivery.Extensions.First().Namespace, Is.EqualTo("namespace"));
-            Assert.That(delivery.Extensions.First().GetValue<String>(), Is.EqualTo("value"));
+            Assert.That(delivery.Extensions.First().Name.LocalName, Is.EqualTo("name"));
+            Assert.That(delivery.Extensions.First().Name.NamespaceName, Is.EqualTo("namespace"));
+            Assert.That(delivery.Extensions.First().Value, Is.EqualTo("value"));
 
             delivery.Extensions.RemoveAt(0);
             Assert.That(delivery.Extensions, Is.Empty);
@@ -162,7 +161,7 @@ namespace CommonContracts.WsEventing.Tests
             Assert.IsTrue(areEqual);
 
             // Now we'll confirm that the custom headers are created
-            delivery.Extensions.Add(AddressHeader.CreateAddressHeader("testElement", "urn:unittests", "value"));
+            delivery.Extensions.Add(XElement.Parse("<testElement xmlns='urn:unittests'>value</testElement>"));
             XElement withHeaders;
             using (var stream = new MemoryStream())
             {
@@ -199,7 +198,7 @@ namespace CommonContracts.WsEventing.Tests
 
             xml = XElement.Parse("<wse:Delivery xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>");
             delivery = (Delivery)serializer.Deserialize(xml.CreateReader());
-            Assert.That(delivery.Extensions.Select(header => header.Namespace + ":" + header.Name).ToList(), Is.EquivalentTo(new[] { "urn:unittests:testElement" }));
+            Assert.That(delivery.Extensions.Select(header => header.Name.NamespaceName + ":" + header.Name.LocalName).ToList(), Is.EquivalentTo(new[] { "urn:unittests:testElement" }));
 
             xml = XElement.Parse("<wse:Delivery wse:Mode='http://schemas.xmlsoap.org/ws/2004/08/eventing/DeliveryModes/Wrap' xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo><testElement xmlns='urn:unittests'>value</testElement></wse:Delivery>");
             delivery = (Delivery)serializer.Deserialize(xml.CreateReader());
