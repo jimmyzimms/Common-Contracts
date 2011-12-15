@@ -53,10 +53,28 @@ using System.ServiceModel;
 
 namespace CommonContracts.WsEventing
 {
+    /// <summary>
+    /// Represents the WSDL portType contract used in the WS-Eventing specification.
+    /// </summary>
+    /// <remarks>
+    /// This version of the contract is used to model the basic subscription API. It lacks any
+    /// concept of callback clients and channels in the produced runtime WSDL. It is considered
+    /// to be the "default" interface for use in the protocol. It will not define any callback
+    /// interface that should be leveraged for event sinks (it is considered that this would be
+    /// documented and constructed out of band for event sources/sinks). This interface is most
+    /// useful as the management subscription API for persistent subscriptions for long running
+    /// services (or services that maintain external state).
+    /// </remarks>
     [ServiceContract(Name = "EventSource", Namespace = Constants.WsEventing.Namespace)]
     [XmlSerializerFormat(Style = OperationFormatStyle.Document)]
     public interface IEventSource
     {
+        /// <summary>
+        /// The base subscription operation for the WS-Eventing protocol. This operation will create the
+        /// subscription (or fault if not valid or accepted) and return the details to the event sink.
+        /// </summary>
+        /// <param name="request">The <see cref="SubscribeRequestMessage">request message</see> containing the subscription request details.</param>
+        /// <returns>The <see cref="SubscribeResponseMessage">SubscribeResponseMessage</see> containing the subscription details.</returns>
         [OperationContract(Action = Constants.WsEventing.Actions.Subscribe, ReplyAction = Constants.WsEventing.Actions.SubscribeReply)]
         [FaultContract(typeof(SupportedDeliveryModeFault), Name = "SupportedDeliveryModeFault")]
         [FaultContract(typeof(SupportedDialectFault), Name = "SupportedDialectFault")]
@@ -64,6 +82,15 @@ namespace CommonContracts.WsEventing
         SubscribeResponseMessage Subscribe(SubscribeRequestMessage request);
     }
 
+    /// <summary>
+    /// An extended version of the <see cref="IEventSource"/> interface adding the
+    /// callback contract defintion (<see cref="IEventSourceCallback"/>) to the WSDL.
+    /// </summary>
+    /// <remarks>
+    /// This variation is usually leveraged by services that run non-persistent subscriptions
+    /// (such as in Peer to Peer solutions) or that will perform the manual steps required with
+    /// WCF to create and manage callbacks without sessions and have invested in raw duplex tech.
+    /// </remarks>
     [ServiceContract(Name = "EventSource", Namespace = Constants.WsEventing.Namespace, CallbackContract = typeof(IEventSourceCallback))]
     [XmlSerializerFormat(Style = OperationFormatStyle.Document)]
     public interface IEventSourceWithCallback : IEventSource
