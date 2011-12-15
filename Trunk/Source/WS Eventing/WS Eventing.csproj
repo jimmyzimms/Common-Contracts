@@ -107,7 +107,6 @@
     <Compile Include="GetStatusRequestMessageBody.cs" />
     <Compile Include="GetStatusResponseMessage.cs" />
     <Compile Include="GetStatusResponseMessageBody.cs" />
-    <Compile Include="HeaderCollection.cs" />
     <Compile Include="Identifier.cs" />
     <Compile Include="IEventSource.cs" />
     <Compile Include="IEventSourceCallback.cs" />
