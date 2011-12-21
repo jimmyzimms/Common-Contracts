@@ -128,7 +128,6 @@
     <Compile Include="SupportedDialectFault.cs" />
     <Compile Include="UnsubscribeRequestMessage.cs" />
     <Compile Include="UnsubscribeRequestMessageBody.cs" />
-    <Compile Include="UnsubscribeResponseMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DeliveryType.xsd">

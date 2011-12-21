@@ -53,20 +53,39 @@ using System.ServiceModel;
 
 namespace CommonContracts.WsEventing
 {
+    /// <summary>
+    /// Represents the WSDL portType contract used in the WS-Eventing subscription management specification.
+    /// </summary>
     [ServiceContract(Name = "SubscriptionManager", Namespace = Constants.WsEventing.Namespace)]
     [XmlSerializerFormat(Style = OperationFormatStyle.Document)]
     public interface ISubscriptionManager
     {
+        /// <summary>
+        /// Operation to get the status of a subscription. The subscriber sends a request to the subscription manager
+        /// and if the subscription is valid and has not expired the status will be returned.
+        /// </summary>
+        /// <param name="request">The <see cref="GetStatusRequestMessage">request message</see> containing the subscription status request details.</param>
+        /// <returns>The <see cref="GetStatusResponseMessage">GetStatusResponseMessage</see> containing the subscription status details.</returns>
         [OperationContract(Action = Constants.WsEventing.Actions.GetStatus, ReplyAction = Constants.WsEventing.Actions.GetStatusReply)]
         [TransactionFlow(TransactionFlowOption.Allowed)]
         GetStatusResponseMessage GetStatus(GetStatusRequestMessage request);
 
+        /// <summary>
+        /// Operation to update the expiration for a subscription. The subscriber sends a request to the subscription manager
+        /// and if the subscription manager accepts a request to renew a subscription the new expiration details will be returned.
+        /// </summary>
+        /// <param name="request">The <see cref="RenewRequestMessage">request message</see> containing the renewal request details.</param>
+        /// <returns>The <see cref="RenewResponseMessage">RenewResponseMessage</see> containing the new subscription expiration details.</returns>
         [OperationContract(Action = Constants.WsEventing.Actions.Renew, ReplyAction = Constants.WsEventing.Actions.RenewReply)]
         [TransactionFlow(TransactionFlowOption.Allowed)]
         RenewResponseMessage Renew(RenewRequestMessage request);
 
+        /// <summary>
+        /// Operation to unsubscribe an event sink for an existing subscription.
+        /// </summary>
+        /// <param name="request">The <see cref="UnsubscribeRequestMessage">request message</see> containing the unsubscription request details.</param>
         [OperationContract(Action = Constants.WsEventing.Actions.Unsubscribe, ReplyAction = Constants.WsEventing.Actions.UnsubscribeReply)]
         [TransactionFlow(TransactionFlowOption.Allowed)]
-        UnsubscribeResponseMessage Unsubscribe(UnsubscribeRequestMessage request);
+        void Unsubscribe(UnsubscribeRequestMessage request);
     }
 }
