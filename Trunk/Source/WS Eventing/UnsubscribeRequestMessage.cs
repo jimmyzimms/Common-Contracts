@@ -90,12 +90,7 @@ namespace CommonContracts.WsEventing
         public virtual Identifier Identifier
         {
             get { return this.identifier; }
-            set
-            {
-                Contract.Requires<ArgumentNullException>(value != null, "Identifier");
-
-                this.identifier = value;
-            }
+            set { this.identifier = value; }
         }
 
         [MessageBodyMember(Name = "Unsubscribe", Namespace = Constants.WsEventing.Namespace, Order = 0)]
