@@ -55,6 +55,9 @@ using System.ServiceModel;
 
 namespace CommonContracts.WsEventing
 {
+    /// <summary>
+    /// The request message for the <see cref="ISubscriptionManager.Renew"/> operation.
+    /// </summary>
     [MessageContract(IsWrapped = false)]
     public class RenewRequestMessage
     {
