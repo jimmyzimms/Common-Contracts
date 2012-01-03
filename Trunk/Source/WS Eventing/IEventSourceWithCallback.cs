@@ -1,4 +1,4 @@
-Ôªø#region Legal
+#region Legal
 
 // Jimmy Zimmerman
 // Team Mongoose
@@ -28,7 +28,7 @@
 //
 // You may not translate this EULA or any part of the components into Ancient Sumerian.
 //
-// THESE COMPONENTS ARE PROVIDED ‚ÄúAS-IS‚Äù WITHOUT WARRANTY OF ANY KIND. ANY USE OF THE COMPONENTS
+// THESE COMPONENTS ARE PROVIDED ìAS-ISî WITHOUT WARRANTY OF ANY KIND. ANY USE OF THE COMPONENTS
 // CONTAINED IS AT YOUR OWN RISK. TEAM MONGOOSE DISCLAIM ALL WARRANTIES, EITHER
 // EXPRESS OR IMPLIED, WITH RESPECT TO THE ACCURRACY AND CORRECTNESS OF THE COMPONENTS CONTAINED
 // HEREIN. TEAM MONGOOSE DOES NOT WARRANT THAT THE COMPONENTS ARE FLAWLESS.
@@ -49,67 +49,22 @@
 
 #endregion
 
-using System;
-using System.Diagnostics.Contracts;
 using System.ServiceModel;
 
 namespace CommonContracts.WsEventing
 {
     /// <summary>
-    /// The request message for the <see cref="IEventSourceCallback.SubscriptionEnd"/> operation.
+    /// An extended version of the <see cref="IEventSource"/> interface adding the
+    /// callback contract definition (<see cref="IEventSourceCallback"/>) to the WSDL.
     /// </summary>
-    /// <remarks>This message is used when a subscription manager wishes to notify a subscriber that a subscription has ended.</remarks>
-    [MessageContract(IsWrapped = false)]
-    public class SubscriptionEndMessage
+    /// <remarks>
+    /// This variation is usually leveraged by services that run non-persistent subscriptions
+    /// (such as in Peer to Peer solutions) or that will perform the manual steps required with
+    /// WCF to create and manage callbacks without sessions and have invested in raw duplex tech.
+    /// </remarks>
+    [ServiceContract(Name = "EventSource", Namespace = Constants.WsEventing.Namespace, CallbackContract = typeof(IEventSourceCallback))]
+    [XmlSerializerFormat(Style = OperationFormatStyle.Document)]
+    public interface IEventSourceWithCallback : IEventSource
     {
-        #region Fields
-        
-        private SubscriptionEndMessageBody body;
-
-        #endregion
-
-        #region Constructors
-        
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubscriptionEndMessage"/> class.
-        /// </summary>
-        public SubscriptionEndMessage()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SubscriptionEndMessage"/> class with the supplied <paramref name="body"/> details.
-        /// </summary>
-        /// <param name="body">A <see cref="SubscriptionEndMessageBody"/> containing the details as to why the subscription is ended.</param>
-        public SubscriptionEndMessage(SubscriptionEndMessageBody body)
-        {
-            Contract.Requires<ArgumentNullException>(body != null, "body");
-
-            this.body = body;
-        }
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the <see cref="SubscriptionEndMessageBody"/> content contained in the
-        /// sent SOAP message.
-        /// </summary>
-        /// <remarks>This type does not enforce validation of the structure.</remarks>
-        /// <value>The <see cref="SubscriptionEndMessageBody"/> content contained in the sent SOAP message.</value>
-        [MessageBodyMember(Name = "SubscriptionEnd", Namespace = Constants.WsEventing.Namespace, Order = 0)]
-        public virtual SubscriptionEndMessageBody Body
-        {
-            get { return this.body; }
-            set
-            {
-                Contract.Requires<ArgumentNullException>(value != null, "Body");
-
-                this.body = value;
-            }
-        }
-
-        #endregion
     }
 }

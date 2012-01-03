@@ -77,7 +77,7 @@ namespace CommonContracts.WsEventing
         /// <param name="body">The <see cref="GetStatusResponseMessageBody"/> containing the content of the response message.</param>
         public GetStatusResponseMessage(GetStatusResponseMessageBody body)
         {
-            Contract.Requires<ArgumentNullException>(body == null, "body");
+            Contract.Requires<ArgumentNullException>(body != null, "body");
 
             this.body = body;
         }
@@ -99,10 +99,15 @@ namespace CommonContracts.WsEventing
         [MessageBodyMember(Name = "GetStatusResponse", Namespace = Constants.WsEventing.Namespace, Order = 0)]
         public virtual GetStatusResponseMessageBody Body
         {
-            get { return this.body; }
+            get
+            {
+                Contract.Ensures(Contract.Result<GetStatusResponseMessageBody>() != null);
+
+                return this.body;
+            }
             set
             {
-                Contract.Requires<ArgumentNullException>(value == null, "Body");
+                Contract.Requires<ArgumentNullException>(value != null, "Body");
 
                 this.body = value;
             }

@@ -85,7 +85,8 @@ namespace CommonContracts.WsEventing
         /// Gets or sets a <see cref="Uri"/> indicating the delivery mode to be used for notification messages sent in relation to a subscription.
         /// </summary>
         /// <remarks>
-        /// The implied value is <see cref="Constants.WsEventing.DeliverModes.Push"/>, which indicates that Push Mode delivery should be used.
+        /// The implied value is <see cref="Constants.WsEventing.DeliverModes.Push"/>, which indicates that Push Mode delivery should be used. This
+        /// value will be expanded automatically if a delivery mode is not specfied in the request.
         /// </remarks>
         /// <value>The delivery mode to be used for notification messages sent in relation to a subscription.</value>
         public virtual Uri DeliveryMode

@@ -62,6 +62,13 @@ namespace CommonContracts.WsEventing
     /// <summary>
     /// Represents the "http://schemas.xmlsoap.org/ws/2004/08/eventing:Identifier" element.
     /// </summary>
+    /// <remarks>
+    /// In some cases, it is convenient for all EPRs issued by a single event source to address a
+    /// single Web service and use a reference parameter to distinguish among the active subscriptions.
+    /// For convenience in this common situation, this specification defines a global element,
+    /// wsa:Identifier of type xs:anyURI, that MAY be used as a distinguishing reference parameter
+    /// if desired by the event source. 
+    /// </remarks>
     [XmlSchemaProvider("AcquireSchema")]
     [XmlRoot(DataType = "http://www.w3.org/2001/XMLSchema:anyURI", ElementName = "Identifier", Namespace = Constants.WsEventing.Namespace)]
     public class Identifier : IXmlSerializable
@@ -175,7 +182,6 @@ namespace CommonContracts.WsEventing
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
-            //Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, String.Format(null, "The supplied XmlReader must be in the 'Interactive' state. The current state is '{0}'", reader.ReadState));
 
             if (reader.IsStartElement("Identifier", Constants.WsEventing.Namespace) == false)
             {

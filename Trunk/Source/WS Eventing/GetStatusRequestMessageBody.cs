@@ -62,7 +62,10 @@ namespace CommonContracts.WsEventing
     /// <summary>
     /// Represents the "http://schemas.xmlsoap.org/ws/2004/08/eventing:GetStatusType" type.
     /// </summary>
-    /// <remarks>While the contract allows open-ended extensibility, this type ignores any additional xml content that is supplied in a request.</remarks>
+    /// <remarks>
+    /// While the contract allows open-ended extensibility, this type ignores any additional xml content that is supplied in a request.
+    /// To support additional content simply subclass and re-implement the <see cref="IXmlSerializable.ReadXml"/> method.
+    /// </remarks>
     [XmlSchemaProvider("AcquireSchema")]
     [XmlRoot(DataType = Constants.WsEventing.Namespace + ":GetStatusType", ElementName = "GetStatus", Namespace = Constants.WsEventing.Namespace)]
     public class GetStatusRequestMessageBody : IXmlSerializable
@@ -77,7 +80,6 @@ namespace CommonContracts.WsEventing
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
             Contract.Requires<ArgumentNullException>(reader != null);
-            //Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, String.Format(null, "The supplied XmlReader must be in the 'Interactive' state. The current state is '{0}'", reader.ReadState));
 
             if (reader.IsStartElement("GetStatus", Constants.WsEventing.Namespace) == false)
             {

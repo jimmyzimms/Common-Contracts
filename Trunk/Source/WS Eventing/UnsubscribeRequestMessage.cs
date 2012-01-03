@@ -70,12 +70,33 @@ namespace CommonContracts.WsEventing
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnsubscribeRequestMessage"/> class.
+        /// </summary>
+        /// <remarks>This constructor will not initialize an <see cref="Identifier"/> for the request.</remarks>
         public UnsubscribeRequestMessage()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnsubscribeRequestMessage"/> class with the supplied body value.
+        /// </summary>
+        /// <param name="body">The body content of the unsubscribe request.</param>
+        public UnsubscribeRequestMessage(UnsubscribeRequestMessageBody body)
+        {
+            Contract.Requires<ArgumentNullException>(body != null, "body");
+
+            this.body = body;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnsubscribeRequestMessage"/> class with the supplied values.
+        /// </summary>
+        /// <param name="id">The <see cref="WsEventing.Identifier"/> value.</param>
+        /// <param name="body">The body content of the unsubscribe request.</param>
         public UnsubscribeRequestMessage(Identifier id, UnsubscribeRequestMessageBody body)
         {
+            Contract.Requires<ArgumentNullException>(id != null, "id");
             Contract.Requires<ArgumentNullException>(body != null, "body");
 
             this.identifier = id;
@@ -86,6 +107,10 @@ namespace CommonContracts.WsEventing
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the optional <see cref="WsEventing.Identifier"/> value used as an event subscription identifier.
+        /// </summary>
+        /// <value>The optional <see cref="WsEventing.Identifier"/> value used as an event subscription identifier.</value>
         [MessageHeader]//(Name = WSEventing.ElementNames.Identifier, Namespace = WSEventing.NamespaceUri)]
         public virtual Identifier Identifier
         {
@@ -93,16 +118,17 @@ namespace CommonContracts.WsEventing
             set { this.identifier = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="UnsubscribeRequestMessageBody"/> content contained in the
+        /// received SOAP message.
+        /// </summary>
+        /// <remarks>This type does not enforce validation of the structure.</remarks>
+        /// <value>The <see cref="UnsubscribeRequestMessageBody"/> content contained in the received SOAP message.</value>
         [MessageBodyMember(Name = "Unsubscribe", Namespace = Constants.WsEventing.Namespace, Order = 0)]
         public virtual UnsubscribeRequestMessageBody Body
         {
             get { return this.body; }
-            set
-            {
-                Contract.Requires<ArgumentNullException>(value != null, "Body");
-
-                this.body = value;
-            }
+            set { this.body = value; }
         }
 
         #endregion
