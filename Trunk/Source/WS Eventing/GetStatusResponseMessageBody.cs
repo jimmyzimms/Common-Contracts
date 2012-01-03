@@ -78,7 +78,7 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Initializes a new instance of the <see cref="GetStatusResponseMessageBody"/> indicating that a subscription is not found.
         /// </summary>
-        /// <remarks>This constructor is used if the subscription is not value or has expired.</remarks>
+        /// <remarks>This constructor is used if the subscription has no value or has expired.</remarks>
         public GetStatusResponseMessageBody()
         {
         }

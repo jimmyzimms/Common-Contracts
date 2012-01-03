@@ -81,19 +81,4 @@ namespace CommonContracts.WsEventing
         [TransactionFlow(TransactionFlowOption.Allowed)]
         SubscribeResponseMessage Subscribe(SubscribeRequestMessage request);
     }
-
-    /// <summary>
-    /// An extended version of the <see cref="IEventSource"/> interface adding the
-    /// callback contract definition (<see cref="IEventSourceCallback"/>) to the WSDL.
-    /// </summary>
-    /// <remarks>
-    /// This variation is usually leveraged by services that run non-persistent subscriptions
-    /// (such as in Peer to Peer solutions) or that will perform the manual steps required with
-    /// WCF to create and manage callbacks without sessions and have invested in raw duplex tech.
-    /// </remarks>
-    [ServiceContract(Name = "EventSource", Namespace = Constants.WsEventing.Namespace, CallbackContract = typeof(IEventSourceCallback))]
-    [XmlSerializerFormat(Style = OperationFormatStyle.Document)]
-    public interface IEventSourceWithCallback : IEventSource
-    {
-    }
 }

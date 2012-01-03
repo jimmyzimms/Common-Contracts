@@ -53,9 +53,23 @@ using System.ServiceModel;
 
 namespace CommonContracts.WsEventing
 {
+    /// <summary>
+    /// A contract expected to be implemented by subscription clients that wish to be notified by
+    /// subscription managers when a subscription is ended, canceled, expired, or otherwise terminated.
+    /// </summary>
+    /// <remarks>
+    /// Often this contract is leveraged by implementations that leverage the WCF intrinsic duplex
+    /// channel suport for expiration notifications. Most often used in conjunction with the
+    /// <see cref="IEventSourceWithCallback"/> contract in this scenario. Regardless, it is able to
+    /// be used to communicate subscription ends manually by a source.
+    /// </remarks>
     [ServiceContract(Name = "EventSource", Namespace = Constants.WsEventing.Namespace)]
     public interface IEventSourceCallback
     {
+        /// <summary>
+        /// Operation to notify an event sink that a subscription has ended.
+        /// </summary>
+        /// <param name="request">The message content describing the details of the ended subscription.</param>
         [OperationContract(IsOneWay = true, Action = Constants.WsEventing.Actions.SubscriptionEnd)]
         [XmlSerializerFormat(SupportFaults = true)]
         void SubscriptionEnd(SubscriptionEndMessage request);

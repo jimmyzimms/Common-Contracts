@@ -73,10 +73,21 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Initializes a new instance of the <see cref="GetStatusRequestMessage"/> with the default values. This constructor should only be used for deserialization.
         /// </summary>
+        /// <remarks>This constructor will not initialize the <see cref="Identifier"/> value.</remarks>
         [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public GetStatusRequestMessage()
         {
-            this.identifier = new Identifier();
+            this.body = new GetStatusRequestMessageBody();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStatusRequestMessage"/> with the supplied <paramref name="id"/> value.
+        /// </summary>
+        /// <remarks>This constructor will initialize the <see cref="Body"/> value to the default <see cref="GetStatusRequestMessageBody"/> instance.</remarks>
+        /// <param name="id">The identifier for the subscription request.</param>
+        public GetStatusRequestMessage(Identifier id) : this(id, new GetStatusRequestMessageBody())
+        {
+            Contract.Requires<ArgumentNullException>(id != null, "id");
         }
 
         /// <summary>
@@ -87,6 +98,7 @@ namespace CommonContracts.WsEventing
         public GetStatusRequestMessage(Identifier id, GetStatusRequestMessageBody body)
         {
             Contract.Requires<ArgumentNullException>(id != null, "id");
+            Contract.Requires<ArgumentNullException>(body != null, "body");
 
             this.identifier = id;
             this.body = body;
@@ -101,7 +113,7 @@ namespace CommonContracts.WsEventing
         /// </summary>
         /// <value>The <see cref="Identifier"/> value for the subscription request.</value>
         [MessageHeader(Name ="Identifier", Namespace = Constants.WsEventing.Namespace)]
-        public Identifier Identifier
+        public virtual Identifier Identifier
         {
             get { return this.identifier; }
             set { this.identifier = value; }
@@ -112,9 +124,14 @@ namespace CommonContracts.WsEventing
         /// </summary>
         /// <value>The <see cref="GetStatusRequestMessageBody"/> content for the subscription request.</value>
         [MessageBodyMember(Name = "GetStatus", Namespace = Constants.WsEventing.Namespace, Order = 0)]
-        public GetStatusRequestMessageBody Body
+        public virtual GetStatusRequestMessageBody Body
         {
-            get { return this.body; }
+            get
+            {
+                Contract.Ensures(Contract.Result<GetStatusRequestMessageBody>() != null);
+
+                return this.body;
+            }
             set
             {
                 Contract.Requires<ArgumentNullException>(value != null, "Body");

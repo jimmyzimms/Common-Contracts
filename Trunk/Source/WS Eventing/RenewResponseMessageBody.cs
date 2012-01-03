@@ -75,6 +75,20 @@ namespace CommonContracts.WsEventing
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the <see cref="Expires"/> used by the event sink to determine when the renewed subscription will expire.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// If this value is null, the subscription will not expire. That is, the subscription has an indefinite lifetime. It may be
+        /// terminated by the subscriber using an <see cref="ISubscriptionManager.Unsubscribe"/> request, or it may be terminated by
+        /// the event source at any time for reasons such as connection termination, resource constraints, or system shut-down.
+        /// </para>
+        /// <para>
+        /// There is no requirement that this value have any correlation to the requested expiration.
+        /// </para>
+        /// </remarks>
+        /// <value>The <see cref="Expires"/> used by the event sink to determine when the created subscription will expire or a null value.</value>
         public virtual Expires Expires
         {
             get { return this.expires; }
@@ -90,11 +104,19 @@ namespace CommonContracts.WsEventing
 
         #region Constructors
         
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenewResponseMessageBody"/> class.
+        /// </summary>
+        /// <remarks>This constructor will not initialize any values.</remarks>
         [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public RenewResponseMessageBody()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenewResponseMessageBody"/> class with the supplied <see cref="WsEventing.Expires">expiration date</see>.
+        /// </summary>
+        /// <param name="expires">The <see cref="WsEventing.Expires"/> indicating the new expiration date.</param>
         public RenewResponseMessageBody(Expires expires)
         {
             Contract.Requires<ArgumentNullException>(expires != null, "expires");

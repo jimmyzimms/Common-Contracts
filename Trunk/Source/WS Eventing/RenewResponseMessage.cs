@@ -55,6 +55,9 @@ using System.ServiceModel;
 
 namespace CommonContracts.WsEventing
 {
+    /// <summary>
+    /// The response message for the <see cref="ISubscriptionManager.Renew"/> operation.
+    /// </summary>
     [MessageContract(IsWrapped = false)]
     public class RenewResponseMessage
     {
@@ -66,11 +69,22 @@ namespace CommonContracts.WsEventing
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenewResponseMessage"/> class.
+        /// </summary>
+        /// <remarks>
+        /// This constructor performs no initialization of values and in general should not be used
+        /// by subscription manager implementations.
+        /// </remarks>
         [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public RenewResponseMessage()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenewResponseMessage"/> with the supplied <paramref name="body"/> value.
+        /// </summary>
+        /// <param name="body">The <see cref="RenewResponseMessageBody"/> containing the details of the new subscription expiration.</param>
         public RenewResponseMessage(RenewResponseMessageBody body)
         {
             Contract.Requires<ArgumentNullException>(body != null, "body");
@@ -82,6 +96,10 @@ namespace CommonContracts.WsEventing
 
         #region Properties
         
+        /// <summary>
+        /// Gets or sets the <see cref="RenewResponseMessageBody"/> instance containing the details of the new subscription expiration.
+        /// </summary>
+        /// <value>The <see cref="RenewResponseMessageBody"/> instance containing the details of the new subscription expiration.</value>
         [MessageBodyMember(Name = "RenewResponse", Namespace = Constants.WsEventing.Namespace, Order = 0)]
         public virtual RenewResponseMessageBody Body
         {

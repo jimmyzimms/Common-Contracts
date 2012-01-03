@@ -75,26 +75,53 @@ namespace CommonContracts.WsEventing
 
         #region Properties
 
+        /// <summary>
+        /// Gets or sets the requested <see cref="Expires"/> time for the new subscription expiration. This value may be null.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// The event source defines the actual expiration and is not constrained to use a time less or greater
+        /// than the requested expiration. The expiration time may be a specific time or a duration value.
+        /// If the requested expiration is a duration, then the implied start of that duration is the time when 
+        /// the subscription manager starts processing the Renew request. Both specific times and durations are
+        /// interpreted based on the event source's clock.
+        /// </para>
+        /// <para>
+        /// If this value is null, then the request is for a subscription that will not expire. That is, the subscriber
+        /// is requesting the event source to renew a subscription with an indefinite lifetime. If the event source
+        /// grants such a subscription, it may be terminated by the subscriber using an <see cref="UnsubscribeRequestMessage"/>, 
+        /// or it may be terminated by the event source at any time for reasons such as connection termination, resource
+        /// constraints, or system shut-down.
+        /// </para>
+        /// <para>
+        /// If the subscription manager chooses not to renew this subscription, the request MUST fail, and the subscription 
+        /// manager MAY generate a wse:UnableToRenew fault indicating that the renewal was not accepted.
+        /// </para>
+        /// </remarks>
+        /// <value>The requested <see cref="Expires"/> time for the subscription.</value>
         public virtual Expires Expires
         {
             get { return this.expires; }
-            set
-            {
-                Contract.Requires<ArgumentNullException>(value != null, "Expires");
-
-                this.expires = value;
-            }
+            set { this.expires = value; }
         }
 
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenewRequestMessageBody"/> class.
+        /// </summary>
+        /// <remarks>This constructor will not initialize the <see cref="Expires"/> value.</remarks>
         [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public RenewRequestMessageBody()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenewRequestMessageBody"/> class with the indicated <see cref="WsEventing.Expires">expiration</see>.
+        /// </summary>
+        /// <param name="expires">The <see cref="WsEventing.Expires"/> value containing the details of the requested new expiration for the subscription.</param>
         public RenewRequestMessageBody(Expires expires)
         {
             Contract.Requires<ArgumentNullException>(expires != null, "expires");
