@@ -49,39 +49,85 @@
 
 #endregion
 
+using System.Diagnostics.Contracts;
 using System.ServiceModel;
-using CommonContracts.WsEventing.Faults;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
-namespace CommonContracts.WsEventing
+namespace CommonContracts.WsEventing.Faults
 {
     /// <summary>
-    /// Represents the WSDL portType contract used in the WS-Eventing specification.
+    /// Fault contract used when an Event Source is unable to process the request for any reason.
     /// </summary>
     /// <remarks>
-    /// This version of the contract is used to model the basic subscription API. It lacks any
-    /// concept of callback clients and channels in the produced runtime WSDL. It is considered
-    /// to be the "default" interface for use in the protocol. It will not define any callback
-    /// interface that should be leveraged for event sinks (it is considered that this would be
-    /// documented and constructed out of band for event sources/sinks). This interface is most
-    /// useful as the management subscription API for persistent subscriptions for long running
-    /// services (or services that maintain external state).
+    /// If a request message does not comply with the protocol contract in any way, the request MUST fail
+    /// and the event source or subscription manager MAY generate this fault indicating that the request is 
+    /// invalid. Usually this is for malformed requests (such as XML Schema Validation failure).
     /// </remarks>
-    [ServiceContract(Name = "EventSource", Namespace = Constants.WsEventing.Namespace)]
-    [XmlSerializerFormat(Style = OperationFormatStyle.Document)]
-    public interface IEventSource
+    public sealed class InvalidMessageFault : IXmlSerializable
     {
+        #region Fields
+
+        private readonly static InvalidMessageFault Instance = new InvalidMessageFault();
+
+        #endregion
+
+        #region Properties
+
         /// <summary>
-        /// The base subscription operation for the WS-Eventing protocol. This operation will create the
-        /// subscription (or fault if not valid or accepted) and return the details to the event sink.
+        /// Gets the default singleton instance that should be used when returning this fault.
         /// </summary>
-        /// <param name="request">The <see cref="SubscribeRequestMessage">request message</see> containing the subscription request details.</param>
-        /// <returns>The <see cref="SubscribeResponseMessage">SubscribeResponseMessage</see> containing the subscription details.</returns>
-        [OperationContract(Action = Constants.WsEventing.Actions.Subscribe, ReplyAction = Constants.WsEventing.Actions.SubscribeReply)]
-        [FaultContract(typeof(SupportedDeliveryModeFault), Name = "SupportedDeliveryModeFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
-        [FaultContract(typeof(SupportedDialectFault), Name = "SupportedDialectFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
-        [FaultContract(typeof(InvalidExpirationTimeFault), Name = "InvalidExpirationTimeFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
-        [FaultContract(typeof(InvalidMessageFault), Name = "InvalidMessageFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
-        [TransactionFlow(TransactionFlowOption.Allowed)]
-        SubscribeResponseMessage Subscribe(SubscribeRequestMessage request);
+        /// <value>The default <seealso cref="InvalidMessageFault"/> instance.</value>
+        public static InvalidMessageFault Default
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<InvalidMessageFault>() != null);
+
+                return Instance;
+            }
+        }
+
+        #endregion
+
+        #region IXmlSerializable Members
+
+        XmlSchema IXmlSerializable.GetSchema()
+        {
+            return null;
+        }
+
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+        }
+
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+        }
+
+        #endregion
+
+        #region Factory Methods
+
+        /// <summary>
+        /// Creates the apporiate standard <see cref="FaultReason"/> that should be used for the <see cref="InvalidMessageFault"/>.
+        /// </summary>
+        /// <returns>The standard <see cref="FaultReason"/>.</returns>
+        public static FaultReason CreateFaultReason()
+        {
+            return new FaultReason("The message is not valid and cannot be processed.");
+        }
+
+        /// <summary>
+        /// Creates the apporiate standard <see cref="FaultCode"/> that should be used for the <see cref="InvalidMessageFault"/>.
+        /// </summary>
+        /// <returns>The standard <see cref="FaultCode"/>.</returns>
+        public static FaultCode CreateFaultCode()
+        {
+            return FaultCode.CreateSenderFaultCode("InvalidMessage", Constants.WsEventing.Namespace);
+        }
+
+        #endregion
     }
 }
