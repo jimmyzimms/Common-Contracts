@@ -125,8 +125,8 @@
     <Compile Include="SubscriptionEndMessage.cs" />
     <Compile Include="SubscriptionEndMessageBody.cs" />
     <Compile Include="SubscriptionManager.cs" />
-    <Compile Include="SupportedDeliveryModeFault.cs" />
-    <Compile Include="SupportedDialectFault.cs" />
+    <Compile Include="Faults\SupportedDeliveryModeFault.cs" />
+    <Compile Include="Faults\SupportedDialectFault.cs" />
     <Compile Include="UnsubscribeRequestMessage.cs" />
     <Compile Include="UnsubscribeRequestMessageBody.cs" />
   </ItemGroup>

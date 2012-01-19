@@ -50,6 +50,7 @@
 #endregion
 
 using System.ServiceModel;
+using CommonContracts.WsEventing.Faults;
 
 namespace CommonContracts.WsEventing
 {
