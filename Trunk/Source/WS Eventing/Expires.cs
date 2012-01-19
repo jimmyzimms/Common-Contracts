@@ -77,6 +77,11 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Gets or sets the <see cref="DateTime"/> that the subscription is requested to end.
         /// </summary>
+        /// <remarks>
+        /// This type will always deserialize the recieved value into a <see cref="DateTime"/> 
+        /// value based on the current machine clock and coerced into <see cref="XmlDateTimeSerializationMode">UTC</see>
+        /// regardless if the original value was a timespan.
+        /// </remarks>
         /// <value>The <see cref="DateTime"/> that the subscription is requested to end.</value>
         public virtual DateTime Value
         {
