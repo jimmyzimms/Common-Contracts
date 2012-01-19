@@ -52,19 +52,32 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace CommonContracts.WsEventing
+namespace CommonContracts.WsEventing.Faults
 {
-    [XmlSchemaProvider(null, IsAny = true)]
+    /// <summary>
+    /// Fault contract used when a <see cref="Delivery.DeliveryMode"/> value is not supported in an Event Source.
+    /// </summary>
+    /// <remarks>
+    /// This fault is sent when a <see cref="SubscribeRequestMessage"/> specifies a delivery mode that is not supported 
+    /// by the event source. Optionally, this the returned fault may contain a list of supported delivery mode URIs.
+    /// The supported modes MAY be omiited when it there is other documentation or information that should be evident
+    /// to the caller making the subscription (such as an Event Source that is documented to only support Push mode).
+    /// </remarks>
+    [XmlSchemaProvider("AcquireSchema")]
+    [XmlRoot(ElementName = "SupportedDeliveryMode", Namespace = Constants.WsEventing.Namespace)]
     public class SupportedDeliveryModeFault : IXmlSerializable
     {
         #region Fields
         
+        private readonly static SupportedDeliveryModeFault Instance = new SupportedDeliveryModeFault();
+
         private IList<String> modes;
 
         #endregion
@@ -83,11 +96,11 @@ namespace CommonContracts.WsEventing
         /// Initializes a new instance of the <see cref="SupportedDeliveryModeFault"/> class.
         /// </summary>
         /// <param name="modes">The sequence of supported modes.</param>
-        public SupportedDeliveryModeFault(IEnumerable<String> modes)
+        public SupportedDeliveryModeFault(params String[] modes)
         {
             Contract.Requires<ArgumentNullException>(modes != null, "modes");
-            Contract.Requires<ArgumentNullException>(Contract.ForAll(modes, item => !String.IsNullOrWhiteSpace(item)), "modes");
 
+            modes = modes.Where(item => !String.IsNullOrWhiteSpace(item)).ToArray();
             this.modes = modes.ToList();
         }
 
@@ -111,6 +124,25 @@ namespace CommonContracts.WsEventing
             }
         }
 
+        /// <summary>
+        /// Gets the default <see cref="SupportedDeliveryModeFault"/> singleton instance that can
+        /// be used in any fault situation.
+        /// </summary>
+        /// <remarks>
+        /// Use this property value to return an empty fault detail to a client. It is most beneficial
+        /// when the service only supports a well known and documented set of delivery modes.
+        /// </remarks>
+        /// <value>The default <see cref="SupportedDeliveryModeFault"/> instance.</value>
+        public static SupportedDeliveryModeFault Default
+        {
+            get
+            {
+                Contract.Ensures(Contract.Result<SupportedDeliveryModeFault>() != null);
+
+                return Instance;
+            }
+        }
+
         #endregion
 
         #region IXmlSerializable Members
@@ -122,13 +154,14 @@ namespace CommonContracts.WsEventing
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            reader.ReadStartElement("SupportedDeliveryMode", Constants.WsEventing.Namespace);
-            while (reader.NodeType != XmlNodeType.EndElement)
+            if (!(reader.LocalName == "SupportedDeliveryMode" && reader.NamespaceURI == Constants.WsEventing.Namespace)) return;
+
+            do
             {
-                this.Modes.Add(reader.ReadContentAsString());
-                reader.MoveToContent();
+                var mode = reader.ReadElementContentAsString();
+                if (!String.IsNullOrWhiteSpace(mode)) this.Modes.Add(mode);
             }
-            reader.ReadEndElement();
+            while (reader.LocalName == "SupportedDeliveryMode" && reader.NamespaceURI == Constants.WsEventing.Namespace);
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
@@ -136,15 +169,14 @@ namespace CommonContracts.WsEventing
             var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wse";
 
-            writer.WriteStartElement(prefix, "SupportedDeliveryMode", Constants.WsEventing.Namespace);
-            if (this.Modes != null && this.Modes.Any())
+            if (!this.Modes.Any()) return;
+
+            foreach (var mode in this.Modes)
             {
-                foreach (var mode in this.Modes)
-                {
-                    writer.WriteElementString("Mode", mode);
-                }
+                writer.WriteStartElement(prefix, "SupportedDeliveryMode", Constants.WsEventing.Namespace);
+                writer.WriteValue(mode);
+                writer.WriteEndElement();
             }
-            writer.WriteEndElement();
         }
 
         #endregion
@@ -167,6 +199,26 @@ namespace CommonContracts.WsEventing
         public static FaultCode CreateFaultCode()
         {
             return FaultCode.CreateSenderFaultCode("DeliveryModeRequestedUnvailable", Constants.WsEventing.Namespace);
+        }
+
+        #endregion
+
+        #region Schema
+
+        /// <summary>
+        /// Adds an <see cref="XmlSchema"/> instance for this type to the supplied <see cref="XmlSchemaSet"/>.
+        /// </summary>
+        /// <param name="xs">The <see cref="XmlSchemaSet"/> to add an <see cref="XmlSchema"/> to.</param>
+        /// <returns>An <see cref="XmlQualifiedName"/> for the current object.</returns>
+        public static XmlSchemaType AcquireSchema(XmlSchemaSet xs)
+        {
+            if (xs == null) throw new ArgumentNullException("xs");
+
+            var schema = XmlSchema.Read(new StringReader(@"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='http://schemas.xmlsoap.org/ws/2004/08/eventing'><xs:element name='SupportedDeliveryMode' type='xs:anyURI'/></xs:schema>"), null);
+            xs.Add(schema);
+            var type = schema.Items.OfType<XmlSchemaElement>().First(element => element.Name == "SupportedDeliveryMode");
+
+            return type.SchemaType;
         }
 
         #endregion

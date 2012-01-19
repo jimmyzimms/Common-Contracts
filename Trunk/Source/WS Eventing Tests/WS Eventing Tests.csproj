@@ -61,6 +61,8 @@
   <ItemGroup>
     <Compile Include="Delivery Tests.cs" />
     <Compile Include="Expires Tests.cs" />
+    <Compile Include="Faults\SupportedDialectFault Tests.cs" />
+    <Compile Include="Faults\SupportedDeliveryModeFault Tests.cs" />
     <Compile Include="GetStatusRequestMessageBody Tests.cs" />
     <Compile Include="Identifier Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
