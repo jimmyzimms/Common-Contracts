@@ -103,6 +103,11 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Delivery.cs" />
     <Compile Include="Expires.cs" />
+    <Compile Include="Faults\InvalidMessageFault.cs" />
+    <Compile Include="Faults\UnableToRenewFault.cs" />
+    <Compile Include="Faults\EventSourceUnableToProcess.cs" />
+    <Compile Include="Faults\FilteringNotSupportedFault.cs" />
+    <Compile Include="Faults\InvalidExpirationTimeFault.cs" />
     <Compile Include="GetStatusRequestMessage.cs" />
     <Compile Include="GetStatusRequestMessageBody.cs" />
     <Compile Include="GetStatusResponseMessage.cs" />

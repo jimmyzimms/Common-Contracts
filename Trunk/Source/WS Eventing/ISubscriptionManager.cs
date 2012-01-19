@@ -50,6 +50,7 @@
 #endregion
 
 using System.ServiceModel;
+using CommonContracts.WsEventing.Faults;
 
 namespace CommonContracts.WsEventing
 {
@@ -67,6 +68,7 @@ namespace CommonContracts.WsEventing
         /// <param name="request">The <see cref="GetStatusRequestMessage">request message</see> containing the subscription status request details.</param>
         /// <returns>The <see cref="GetStatusResponseMessage">GetStatusResponseMessage</see> containing the subscription status details.</returns>
         [OperationContract(Action = Constants.WsEventing.Actions.GetStatus, ReplyAction = Constants.WsEventing.Actions.GetStatusReply)]
+        [FaultContract(typeof(InvalidMessageFault), Name = "InvalidMessageFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
         [TransactionFlow(TransactionFlowOption.Allowed)]
         GetStatusResponseMessage GetStatus(GetStatusRequestMessage request);
 
@@ -77,6 +79,8 @@ namespace CommonContracts.WsEventing
         /// <param name="request">The <see cref="RenewRequestMessage">request message</see> containing the renewal request details.</param>
         /// <returns>The <see cref="RenewResponseMessage">RenewResponseMessage</see> containing the new subscription expiration details.</returns>
         [OperationContract(Action = Constants.WsEventing.Actions.Renew, ReplyAction = Constants.WsEventing.Actions.RenewReply)]
+        [FaultContract(typeof(InvalidExpirationTimeFault), Name = "InvalidExpirationTimeFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
+        [FaultContract(typeof(InvalidMessageFault), Name = "InvalidMessageFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
         [TransactionFlow(TransactionFlowOption.Allowed)]
         RenewResponseMessage Renew(RenewRequestMessage request);
 
@@ -85,6 +89,7 @@ namespace CommonContracts.WsEventing
         /// </summary>
         /// <param name="request">The <see cref="UnsubscribeRequestMessage">request message</see> containing the unsubscription request details.</param>
         [OperationContract(Action = Constants.WsEventing.Actions.Unsubscribe, ReplyAction = Constants.WsEventing.Actions.UnsubscribeReply)]
+        [FaultContract(typeof(InvalidMessageFault), Name = "InvalidMessageFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
         [TransactionFlow(TransactionFlowOption.Allowed)]
         void Unsubscribe(UnsubscribeRequestMessage request);
     }
