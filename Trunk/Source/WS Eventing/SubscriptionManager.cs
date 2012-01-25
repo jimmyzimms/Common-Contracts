@@ -222,7 +222,7 @@ namespace CommonContracts.WsEventing
         /// <returns>An <see cref="XmlQualifiedName"/> for the current object.</returns>
         public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
         {
-            Contract.Requires<ArgumentNullException>(xs != null, "xs");
+            if (xs == null) throw new ArgumentNullException("xs");
 
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CommonContracts.WsEventing.WsAddressing.xsd"))
             {
