@@ -132,6 +132,7 @@
     <Compile Include="SubscriptionManager.cs" />
     <Compile Include="Faults\SupportedDeliveryModeFault.cs" />
     <Compile Include="Faults\SupportedDialectFault.cs" />
+    <Compile Include="SubscriptionTopic.cs" />
     <Compile Include="UnsubscribeRequestMessage.cs" />
     <Compile Include="UnsubscribeRequestMessageBody.cs" />
   </ItemGroup>
@@ -148,9 +149,9 @@
     <EmbeddedResource Include="GetStatusResponse.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Renew.xsd">
+    <EmbeddedResource Include="Renew.xsd">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <EmbeddedResource Include="RenewResponse.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -158,9 +159,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Settings.StyleCop" />
-    <None Include="SubscribeResponse.xsd">
+    <EmbeddedResource Include="SubscribeResponse.xsd">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <EmbeddedResource Include="SubscriptionEnd.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>

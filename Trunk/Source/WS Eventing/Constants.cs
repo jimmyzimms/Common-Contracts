@@ -101,7 +101,7 @@ namespace CommonContracts.WsEventing
             public static class Extension
             {
                 /// <summary>
-                /// Provides the namespace value for the <see cref="IWsEventing"/> API extensions.
+                /// Provides the namespace value for the <see cref="IEventSource"/> API extensions.
                 /// </summary>
                 public const String ExtensionNamespace = Namespace + "/extensions";
             }
