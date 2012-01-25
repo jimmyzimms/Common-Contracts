@@ -132,8 +132,7 @@ namespace CommonContracts.WsEventing
         /// <param name="reader">The <see cref="T:System.Xml.XmlReader"/> stream from which the object is deserialized. </param>
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
-            //Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, String.Format(null, "The supplied XmlReader must be in the 'Interactive' state. The current state is '{0}'", reader.ReadState));
+            if (reader == null) throw new ArgumentNullException("reader");
 
             if (reader.IsStartElement("SubscriptionEnd", Constants.WsEventing.Namespace) == false)
             {

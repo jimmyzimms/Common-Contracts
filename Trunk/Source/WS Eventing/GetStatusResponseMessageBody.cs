@@ -121,7 +121,7 @@ namespace CommonContracts.WsEventing
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (reader == null) throw new ArgumentNullException("reader");
 
             reader.ReadStartElement("GetStatusResponse", Constants.WsEventing.Namespace);
 

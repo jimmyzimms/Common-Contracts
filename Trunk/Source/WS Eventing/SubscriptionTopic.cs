@@ -51,8 +51,6 @@
 
 using System;
 using System.Diagnostics.Contracts;
-using System.IO;
-using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -142,17 +140,11 @@ namespace CommonContracts.WsEventing
         /// </summary>
         /// <param name="xs">The <see cref="XmlSchemaSet"/> to add an <see cref="XmlSchema"/> to.</param>
         /// <returns>An <see cref="XmlQualifiedName"/> for the current object.</returns>
-        public static XmlSchemaType AcquireSchema(XmlSchemaSet xs)
+        public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
         {
             if (xs == null) throw new ArgumentNullException("xs");
 
-            var reader = new StringReader(@"<xs:schema targetNamespace='" + Constants.WsEventing.Extension.ExtensionNamespace + "' xmlns:xs='http://www.w3.org/2001/XMLSchema'><xs:element name='SubscriptionTopic' type='xs:anyURI'/></xs:schema>");
-
-            var schema = XmlSchema.Read(reader, null);
-            xs.Add(schema);
-            var type = schema.Items.OfType<XmlSchemaElement>().First(element => element.Name == "SubscriptionTopic");
-
-            return type.SchemaType;
+            return new XmlQualifiedName("anyURI", "http://www.w3.org/2001/XMLSchema");
         }
 
         #endregion

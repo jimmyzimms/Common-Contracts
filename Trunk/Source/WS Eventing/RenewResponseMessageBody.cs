@@ -135,7 +135,7 @@ namespace CommonContracts.WsEventing
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (reader == null) throw new ArgumentNullException("reader");
 
             reader.ReadStartElement("RenewResponse", Constants.WsEventing.Namespace);
             this.Expires = new Expires(reader);

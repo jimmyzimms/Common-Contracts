@@ -198,8 +198,7 @@ namespace CommonContracts.WsEventing
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
-            //Contract.Requires<ArgumentException>(reader.ReadState == ReadState.Interactive, String.Format(null, "The supplied XmlReader must be in the 'Interactive' state. The current state is '{0}'", reader.ReadState));
+            if (reader == null) throw new ArgumentNullException("reader");
 
             this.epa = EndpointAddressAugust2004.FromEndpointAddress(System.ServiceModel.EndpointAddress.ReadFrom(AddressingVersion.WSAddressingAugust2004, reader, "SubscriptionManager", Constants.WsEventing.Namespace));
         }

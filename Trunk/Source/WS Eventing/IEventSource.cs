@@ -77,11 +77,11 @@ namespace CommonContracts.WsEventing
         /// <param name="request">The <see cref="SubscribeRequestMessage">request message</see> containing the subscription request details.</param>
         /// <returns>The <see cref="SubscribeResponseMessage">SubscribeResponseMessage</see> containing the subscription details.</returns>
         [OperationContract(Action = Constants.WsEventing.Actions.Subscribe, ReplyAction = Constants.WsEventing.Actions.SubscribeReply)]
-        /*[FaultContract(typeof(SupportedDeliveryModeFault), Name = "SupportedDeliveryModeFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
+        [FaultContract(typeof(SupportedDeliveryModeFault), Name = "SupportedDeliveryModeFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
         [FaultContract(typeof(SupportedDialectFault), Name = "SupportedDialectFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
         [FaultContract(typeof(InvalidExpirationTimeFault), Name = "InvalidExpirationTimeFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
         [FaultContract(typeof(InvalidMessageFault), Name = "InvalidMessageFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
-        [TransactionFlow(TransactionFlowOption.Allowed)]*/
+        [TransactionFlow(TransactionFlowOption.Allowed)]
         SubscribeResponseMessage Subscribe(SubscribeRequestMessage request);
     }
 }

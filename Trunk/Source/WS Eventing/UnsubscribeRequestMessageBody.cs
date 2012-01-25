@@ -75,7 +75,7 @@ namespace CommonContracts.WsEventing
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
-            Contract.Requires<ArgumentNullException>(reader != null);
+            if (reader == null) throw new ArgumentNullException("reader");
 
             reader.ReadStartElement("Unsubscribe", Constants.WsEventing.Namespace);
             reader.ReadEndElement();
