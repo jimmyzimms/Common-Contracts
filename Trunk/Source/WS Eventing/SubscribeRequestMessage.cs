@@ -62,14 +62,12 @@ namespace CommonContracts.WsEventing
     {
         #region Fields
 
-        private Uri topic;
-
         #endregion
         
         #region Properties
 
         /// <summary>
-        /// Gets or sets the optional <see cref="Uri"/> for the subscription topic.
+        /// Gets or sets the optional <see cref="SubscriptionTopic"/> for the subscription.
         /// </summary>
         /// <remarks>
         /// This property represents a proprietary extension to the protocol. It is helpful
@@ -80,11 +78,7 @@ namespace CommonContracts.WsEventing
         /// </remarks>
         /// <value>The optional <see cref="Uri"/> for the subscription topic.</value>
         [MessageHeader(Name = "SubscriptionTopic", Namespace = Constants.WsEventing.Extension.ExtensionNamespace)]
-        public virtual Uri SubscriptionTopic
-        {
-            get { return this.topic; }
-            set { this.topic = value; }
-        }
+        public virtual SubscriptionTopic SubscriptionTopic { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="SubscribeRequestMessageBody"/> content contained in the
