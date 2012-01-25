@@ -160,6 +160,8 @@ namespace CommonContracts.WsEventing.Faults
 
         void IXmlSerializable.ReadXml(XmlReader reader)
         {
+            if (reader == null) throw new ArgumentNullException("reader");
+
             if (!(reader.LocalName == "SupportedDialect" && reader.NamespaceURI == Constants.WsEventing.Namespace)) return;
 
             do
