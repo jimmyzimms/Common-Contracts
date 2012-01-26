@@ -66,6 +66,7 @@ namespace CommonContracts.WsEventing.Faults
     /// for local reasons unrelated to the specific request. Usually this is the catch-all fault
     /// to be returned when a critical runtime failure has occured.
     /// </remarks>
+    [XmlSchemaProvider("AcquireSchema")]
     public sealed class UnableToRenewFault : IXmlSerializable
     {
         #region Fields
@@ -105,6 +106,20 @@ namespace CommonContracts.WsEventing.Faults
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
+        }
+
+        #endregion
+
+        #region Schema
+
+        /// <summary>
+        /// Adds an <see cref="XmlSchema"/> instance for this type to the supplied <see cref="XmlSchemaSet"/>.
+        /// </summary>
+        /// <param name="xs">The <see cref="XmlSchemaSet"/> to add an <see cref="XmlSchema"/> to.</param>
+        /// <returns>An <see cref="XmlQualifiedName"/> for the current object.</returns>
+        public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
+        {
+            return new XmlQualifiedName("any", "http://www.w3.org/2001/XMLSchema");
         }
 
         #endregion
