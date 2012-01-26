@@ -65,6 +65,7 @@ namespace CommonContracts.WsEventing.Faults
     /// and the event source or subscription manager MAY generate this fault indicating that the request is 
     /// invalid. Usually this is for malformed requests (such as XML Schema Validation failure).
     /// </remarks>
+    [XmlSchemaProvider("AcquireSchema")]
     public sealed class InvalidMessageFault : IXmlSerializable
     {
         #region Fields
@@ -104,6 +105,20 @@ namespace CommonContracts.WsEventing.Faults
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
+        }
+
+        #endregion
+
+        #region Schema
+
+        /// <summary>
+        /// Adds an <see cref="XmlSchema"/> instance for this type to the supplied <see cref="XmlSchemaSet"/>.
+        /// </summary>
+        /// <param name="xs">The <see cref="XmlSchemaSet"/> to add an <see cref="XmlSchema"/> to.</param>
+        /// <returns>An <see cref="XmlQualifiedName"/> for the current object.</returns>
+        public static XmlQualifiedName AcquireSchema(XmlSchemaSet xs)
+        {
+            return new XmlQualifiedName("any", "http://www.w3.org/2001/XMLSchema");
         }
 
         #endregion
