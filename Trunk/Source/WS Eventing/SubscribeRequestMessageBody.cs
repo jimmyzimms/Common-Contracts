@@ -272,11 +272,12 @@ namespace CommonContracts.WsEventing
                     if (String.IsNullOrEmpty(dialect) || dialect == Constants.WsEventing.Dialects.XPath)
                     {
                         this.Filter = new XPathMessageFilter(reader);
+                        this.filterDialect = Constants.WsEventing.Dialects.XPath;
                     }
                     else
                     {
-                        this.filterDialect = dialect;
                         reader.Skip();
+                        this.filterDialect = dialect;
                     }
                 }
                 reader.MoveToContent();
