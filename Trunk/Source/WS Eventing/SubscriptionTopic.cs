@@ -57,6 +57,17 @@ using System.Xml.Serialization;
 
 namespace CommonContracts.WsEventing
 {
+    /// <summary>
+    /// Provides a custom approach for indicated a specific event during a subscription process.
+    /// </summary>
+    /// <remarks>
+    /// The WS-Eventing does not provide a way to indicate a specific set of available events
+    /// actually exposed by an event producer nor a way for a subscriber to indicate a specific
+    /// event the request is valid for. This contract was designed be used for representing a
+    /// single event via a unique <see cref="Uri"/> value. No additional metadata is defined
+    /// though the type MAY be extended by specific event source implementations to support the
+    /// capability.
+    /// </remarks>
     [XmlSchemaProvider("AcquireSchema")]
     [XmlRoot(DataType = Constants.WsEventing.Extension.ExtensionNamespace + ":SubscriptionTopic", ElementName = "SubscriptionTopic", Namespace = Constants.WsEventing.Extension.ExtensionNamespace)]
     public class SubscriptionTopic : IXmlSerializable
