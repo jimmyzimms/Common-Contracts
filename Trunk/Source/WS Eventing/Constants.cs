@@ -103,7 +103,7 @@ namespace CommonContracts.WsEventing
                 /// <summary>
                 /// Provides the namespace value for the <see cref="IEventSource"/> API extensions.
                 /// </summary>
-                public const String ExtensionNamespace = Namespace + "/extensions";
+                public const String ExtensionNamespace = "urn:commoncontracts/ws-eventing/extensions";
             }
 
             /// <summary>
