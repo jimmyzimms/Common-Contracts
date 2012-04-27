@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS BaseFaults.Extensions", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS Notification", "WS Notification\WS Notification.csproj", "{2349BD5C-23E6-45D5-A870-21C32D69A1F0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System Example", "System Example", "{54676A42-F3B7-4BA2-9EC7-DCC9B4D7CF13}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 9
