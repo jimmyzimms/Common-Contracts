@@ -39,9 +39,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{5467
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Eventing", "Eventing", "{A3B211A1-F47C-49F1-AE38-3F7B0E49B066}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Producer-Consumer", "Producer-Consumer", "{7C65D34C-9F3D-4EC9-9054-BDB87327659F}"
+	ProjectSection(SolutionItems) = preProject
+		Samples\Eventing\Producer-Consumer\UacHelper.cs = Samples\Eventing\Producer-Consumer\UacHelper.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consumer", "Samples\Eventing\Producer-Consumer\Consumer\Consumer.csproj", "{657ADF94-5AFA-4361-B880-7723F7802418}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Producer", "Samples\Eventing\Producer-Consumer\Producer\Producer.csproj", "{33C0381E-57DD-4301-9CEB-AF8177F54FD7}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs14
 		SccLocalPath0 = .
@@ -69,6 +78,14 @@ Global
 		SccProjectUniqueName8 = WS\u0020Notification\\WS\u0020Notification.csproj
 		SccProjectName8 = WS\u0020Notification
 		SccLocalPath8 = WS\u0020Notification
+		SccProjectUniqueName9 = Samples\\Eventing\\Producer-Consumer\\Consumer\\Consumer.csproj
+		SccProjectTopLevelParentUniqueName9 = Common\u0020Contracts.sln
+		SccProjectName9 = Samples/Eventing/Producer-Consumer/Consumer
+		SccLocalPath9 = Samples\\Eventing\\Producer-Consumer\\Consumer
+		SccProjectUniqueName10 = Samples\\Eventing\\Producer-Consumer\\Producer\\Producer.csproj
+		SccProjectTopLevelParentUniqueName10 = Common\u0020Contracts.sln
+		SccProjectName10 = Samples/Eventing/Producer-Consumer/Producer
+		SccLocalPath10 = Samples\\Eventing\\Producer-Consumer\\Producer
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Common Contracts.vsmdi
@@ -162,11 +179,34 @@ Global
 		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2349BD5C-23E6-45D5-A870-21C32D69A1F0}.Release|x86.ActiveCfg = Release|Any CPU
+		{657ADF94-5AFA-4361-B880-7723F7802418}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{657ADF94-5AFA-4361-B880-7723F7802418}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{657ADF94-5AFA-4361-B880-7723F7802418}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{657ADF94-5AFA-4361-B880-7723F7802418}.Debug|x86.ActiveCfg = Debug|x86
+		{657ADF94-5AFA-4361-B880-7723F7802418}.Debug|x86.Build.0 = Debug|x86
+		{657ADF94-5AFA-4361-B880-7723F7802418}.Release|Any CPU.ActiveCfg = Release|x86
+		{657ADF94-5AFA-4361-B880-7723F7802418}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{657ADF94-5AFA-4361-B880-7723F7802418}.Release|Mixed Platforms.Build.0 = Release|x86
+		{657ADF94-5AFA-4361-B880-7723F7802418}.Release|x86.ActiveCfg = Release|x86
+		{657ADF94-5AFA-4361-B880-7723F7802418}.Release|x86.Build.0 = Release|x86
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7}.Debug|x86.ActiveCfg = Debug|x86
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7}.Debug|x86.Build.0 = Debug|x86
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7}.Release|Any CPU.ActiveCfg = Release|x86
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7}.Release|Mixed Platforms.Build.0 = Release|x86
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7}.Release|x86.ActiveCfg = Release|x86
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A3B211A1-F47C-49F1-AE38-3F7B0E49B066} = {54676A42-F3B7-4BA2-9EC7-DCC9B4D7CF13}
+		{7C65D34C-9F3D-4EC9-9054-BDB87327659F} = {A3B211A1-F47C-49F1-AE38-3F7B0E49B066}
+		{657ADF94-5AFA-4361-B880-7723F7802418} = {7C65D34C-9F3D-4EC9-9054-BDB87327659F}
+		{33C0381E-57DD-4301-9CEB-AF8177F54FD7} = {7C65D34C-9F3D-4EC9-9054-BDB87327659F}
 	EndGlobalSection
 EndGlobal
