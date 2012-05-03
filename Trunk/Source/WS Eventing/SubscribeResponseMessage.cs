@@ -70,6 +70,13 @@ namespace CommonContracts.WsEventing
         #region Properties
 
         /// <summary>
+        /// Gets or sets the optional <see cref="WsEventing.Identifier"/> value used as an event subscription identifier.
+        /// </summary>
+        /// <value>The optional <see cref="WsEventing.Identifier"/> value used as an event subscription identifier.</value>
+        [MessageHeader]
+        public virtual Identifier Identifier { get; set; }
+
+        /// <summary>
         /// Gets or sets the <see cref="SubscribeResponseMessageBody"/> content to be used in the
         /// response SOAP message.
         /// </summary>
