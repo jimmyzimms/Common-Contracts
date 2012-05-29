@@ -94,28 +94,34 @@ namespace CommonContracts.WsEventing
                 identifier = value;
             }
         }
-        
-        public AddressHeader AddressHeader
-        {
-            get { return AddressHeader.CreateAddressHeader("Identifier", Constants.WsEventing.Namespace, Value.ToString()); }
-        }
 
         #endregion
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Identifier"/> class.
+        /// </summary>
+        /// <remarks>This constructor is only used for deserialization.</remarks>
         [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public Identifier() : this(Guid.NewGuid())
         {
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Identifier"/> class from the supplied <see cref="UniqueId"/> value.
+        /// </summary>
         public Identifier(UniqueId id)
         {
             Contract.Requires<ArgumentNullException>(id != null, "id");
 
             this.identifier = id;
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Identifier"/> class from the supplied <see cref="String"/> value.
+        /// </summary>
+        /// <remarks>The supplied <paramref name="id"/> value will be used as <see cref="UniqueId"/> value.</remarks>
         public Identifier(String id)
         {
             Contract.Requires<ArgumentNullException>(!String.IsNullOrWhiteSpace(id), "id");
@@ -195,9 +201,9 @@ namespace CommonContracts.WsEventing
             var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wse";
 
-            writer.WriteStartElement(prefix, "Identifier", Constants.WsEventing.Namespace);
+            //writer.WriteStartElement(prefix, "Identifier", Constants.WsEventing.Namespace);
             writer.WriteValue(this.Value.ToString());
-            writer.WriteEndElement();
+            //writer.WriteEndElement();
         }
 
         #endregion

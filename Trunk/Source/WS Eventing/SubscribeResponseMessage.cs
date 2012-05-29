@@ -52,6 +52,7 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.ServiceModel;
+using System.Xml;
 
 namespace CommonContracts.WsEventing
 {
@@ -64,17 +65,31 @@ namespace CommonContracts.WsEventing
         #region Fields
 
         private SubscribeResponseMessageBody body;
-
+        [MessageHeader(Name = "Identifier", Namespace = Constants.WsEventing.Namespace)]
+        private MessageHeader<String> header;
+        private Guid? identifier;
+        //[MessageHeader]
+        private Identifier id = new Identifier(Guid.NewGuid());
         #endregion
 
         #region Properties
 
         /// <summary>
-        /// Gets or sets the optional <see cref="WsEventing.Identifier"/> value used as an event subscription identifier.
+        /// Gets or sets the optional <see cref="Guid"/> value used as an event subscription identifier.
         /// </summary>
-        /// <value>The optional <see cref="WsEventing.Identifier"/> value used as an event subscription identifier.</value>
-        [MessageHeader]
-        public virtual Identifier Identifier { get; set; }
+        /// <value>The optional <see cref="Guid"/> value used as an event subscription identifier.</value>
+        public virtual Guid? Identifier
+        {
+            get
+            {
+                return this.identifier;
+            }
+            set
+            {
+                this.identifier = value;
+                this.header = value == null ? null : new MessageHeader<String>("uuid:" + value.Value);
+            }
+        }
 
         /// <summary>
         /// Gets or sets the <see cref="SubscribeResponseMessageBody"/> content to be used in the
