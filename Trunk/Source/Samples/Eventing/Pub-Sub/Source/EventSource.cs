@@ -70,7 +70,7 @@ namespace Source
             //  will be handled via the wse:Identifier header element.
 
             var response = new SubscribeResponseMessage(new SubscribeResponseMessageBody(new SubscriptionManager(OperationContext.Current.IncomingMessageHeaders.To), new Expires(DateTime.MaxValue)));
-            response.Identifier = new Identifier(id);
+            response.Identifier = id;
             return response;
         }
     }
