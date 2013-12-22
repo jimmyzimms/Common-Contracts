@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS BaseFaults", "WS BaseFaults\WS BaseFaults.csproj", "{32432083-7A57-40B8-AD5E-6E7D59A3481D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS BaseFaults Tests", "WS BaseFaults Tests\WS BaseFaults Tests.csproj", "{41EE37E6-47B5-4E81-860E-9C5EC6838E06}"
@@ -14,13 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Logo.png = Logo.png
 		Settings.StyleCop = Settings.StyleCop
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Libraries", "External Libraries", "{240A24BB-33F2-410E-B084-330460BD6A5B}"
-	ProjectSection(SolutionItems) = preProject
-		External Libraries\Moq.dll = External Libraries\Moq.dll
-		External Libraries\Moq.xml = External Libraries\Moq.xml
-		External Libraries\nunit.framework.dll = External Libraries\nunit.framework.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WS Eventing", "WS Eventing\WS Eventing.csproj", "{A7EAFB06-148F-45FD-9535-A4A147E9C03B}"
@@ -53,6 +48,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Source", "Samples\Eventing\Pub-Sub\Source\Source.csproj", "{1FD0859F-A060-4857-89F2-5453E9C7A05A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Subscriber", "Samples\Eventing\Pub-Sub\Subscriber\Subscriber.csproj", "{62D4FE19-92BD-4ED8-8C9B-4D6FDB131BE7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9ACB83E6-6BE9-4297-BEB5-8666EEAF80AE}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -100,9 +102,6 @@ Global
 		SccProjectTopLevelParentUniqueName12 = Common\u0020Contracts.sln
 		SccProjectName12 = Samples/Eventing/Pub-Sub/Subscriber
 		SccLocalPath12 = Samples\\Eventing\\Pub-Sub\\Subscriber
-	EndGlobalSection
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Common Contracts.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -245,5 +244,8 @@ Global
 		{33C0381E-57DD-4301-9CEB-AF8177F54FD7} = {7C65D34C-9F3D-4EC9-9054-BDB87327659F}
 		{1FD0859F-A060-4857-89F2-5453E9C7A05A} = {0A32753E-737C-4EBE-B38E-D685F38EC065}
 		{62D4FE19-92BD-4ED8-8C9B-4D6FDB131BE7} = {0A32753E-737C-4EBE-B38E-D685F38EC065}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Common Contracts.vsmdi
 	EndGlobalSection
 EndGlobal
