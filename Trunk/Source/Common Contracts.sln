@@ -45,9 +45,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Producer", "Samples\Eventin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Subscription Management", "Subscription Management", "{0A32753E-737C-4EBE-B38E-D685F38EC065}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Source", "Samples\Eventing\Pub-Sub\Source\Source.csproj", "{1FD0859F-A060-4857-89F2-5453E9C7A05A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Source", "Samples\Eventing\Subscription Management\Source\Source.csproj", "{1FD0859F-A060-4857-89F2-5453E9C7A05A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Subscriber", "Samples\Eventing\Pub-Sub\Subscriber\Subscriber.csproj", "{62D4FE19-92BD-4ED8-8C9B-4D6FDB131BE7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Subscriber", "Samples\Eventing\Subscription Management\Subscriber\Subscriber.csproj", "{62D4FE19-92BD-4ED8-8C9B-4D6FDB131BE7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9ACB83E6-6BE9-4297-BEB5-8666EEAF80AE}"
 	ProjectSection(SolutionItems) = preProject
