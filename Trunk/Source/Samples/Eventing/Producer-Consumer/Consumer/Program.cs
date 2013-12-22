@@ -50,6 +50,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Messaging;
 using System.ServiceModel;
@@ -136,8 +137,9 @@ namespace Consumer
                                                   Console.WriteLine("Event received: " + a.Message.Body);
                                                   Queue.BeginReceive();
                                               }
-                                              catch (MessageQueueException exception)
+                                              catch (MessageQueueException)
                                               {
+                                                  Debugger.Break();
                                               }
 
                                           };
