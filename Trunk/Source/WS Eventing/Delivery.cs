@@ -141,7 +141,7 @@ namespace CommonContracts.WsEventing
         {
             get
             {
-                Contract.Ensures(Contract.Result<IList<AddressHeader>>() != null);
+                Contract.Ensures(Contract.Result<IList<XElement>>() != null);
                 //Contract.Ensures(Contract.ForAll(Contract.Result<IList<AddressHeader>>(), item => item != null));
 
                 return this.additionalElements;
