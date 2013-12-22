@@ -43,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consumer", "Samples\Eventin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Producer", "Samples\Eventing\Producer-Consumer\Producer\Producer.csproj", "{33C0381E-57DD-4301-9CEB-AF8177F54FD7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pub-Sub", "Pub-Sub", "{0A32753E-737C-4EBE-B38E-D685F38EC065}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Subscription Management", "Subscription Management", "{0A32753E-737C-4EBE-B38E-D685F38EC065}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Source", "Samples\Eventing\Pub-Sub\Source\Source.csproj", "{1FD0859F-A060-4857-89F2-5453E9C7A05A}"
 EndProject
