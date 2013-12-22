@@ -49,10 +49,8 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Microsoft.Moles.Framework;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
@@ -84,6 +82,3 @@ using Microsoft.Moles.Framework;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("1.0.*")]
-
-// Required for Moles to execute
-[assembly: MoledType(typeof(DateTime))]

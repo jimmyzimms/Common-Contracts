@@ -51,9 +51,9 @@
 
 using System;
 using System.IO;
-using System.Moles;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
+using Microsoft.QualityTools.Testing.Fakes;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -71,14 +71,16 @@ namespace CommonContracts.WsBaseFaults.Tests
         }
 
         [TestMethod()]
-        [HostType("Moles")]
         [Description("Confirms that the constructor uses the DateTime.UtcNow value")]
         public void ConstructorShouldSetToUtcNow()
         {
-            MDateTime.UtcNowGet = () => new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            using (ShimsContext.Create())
+            {
+                System.Fakes.ShimDateTime.UtcNowGet = () => new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
-            BaseFault target = new TestFault();
-            Assert.AreEqual(new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), target.Timestamp);
+                BaseFault target = new TestFault();
+                Assert.AreEqual(new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), target.Timestamp);
+            }
         }
 
         [TestMethod()]
@@ -107,23 +109,26 @@ namespace CommonContracts.WsBaseFaults.Tests
             Assert.AreEqual(now.ToUniversalTime(), target.Timestamp);
         }
 
-        [HostType("Moles")]
         [TestMethod()]
         [Description("Confirms that the class can be serialized")]
         public void CanSerialize()
         {
-            MDateTime.UtcNowGet = () => new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            using (ShimsContext.Create())
+            {
+                System.Fakes.ShimDateTime.UtcNowGet = () => new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
-            var serializer = new DataContractSerializer(typeof(TestFault));
-            var stream = new MemoryStream();
+                var serializer = new DataContractSerializer(typeof (TestFault));
+                var stream = new MemoryStream();
 
-            serializer.WriteObject(stream, new TestFault());
+                serializer.WriteObject(stream, new TestFault());
 
-            stream.Position = 0;
+                stream.Position = 0;
 
-            var xml = XElement.Load(stream);
-            var areEqual = XNode.DeepEquals(xml, XElement.Parse("<BaseFaultTests.TestFault xmlns='http://schemas.datacontract.org/2004/07/CommonContracts.WsBaseFaults.Tests' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><Timestamp xmlns='http://docs.oasis-open.org/wsrf/bf-2'>2000-01-01T00:00:00Z</Timestamp></BaseFaultTests.TestFault>"));
-            Assert.IsTrue(areEqual);
+                var xml = XElement.Load(stream);
+                var areEqual = XNode.DeepEquals(xml,
+                    XElement.Parse("<BaseFaultTests.TestFault xmlns='http://schemas.datacontract.org/2004/07/CommonContracts.WsBaseFaults.Tests' xmlns:i='http://www.w3.org/2001/XMLSchema-instance'><Timestamp xmlns='http://docs.oasis-open.org/wsrf/bf-2'>2000-01-01T00:00:00Z</Timestamp></BaseFaultTests.TestFault>"));
+                Assert.IsTrue(areEqual);
+            }
         }
     }
 }
