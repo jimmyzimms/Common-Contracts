@@ -94,12 +94,24 @@ namespace Consumer
 
         public static void Subscribe()
         {
-            var reader = new StringReader("<wse:Subscribe xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:Delivery><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>" + EventSinkUri + "</Address></wse:NotifyTo></wse:Delivery></wse:Subscribe>");
-            var content = XmlReader.Create(reader);
-            var request = Message.CreateMessage(MessageVersion.Soap11, Constants.WsEventing.Actions.Subscribe, content);
-            var channel = ChannelFactory<IEventSource>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://localhost:8080/eventsource"));
-            var response = channel.Subscribe(request);
-            if (response.IsFault) throw new Exception(response.GetReaderAtBodyContents().ReadOuterXml());
+            // Subscribe examples showing use of Raw XML Client vs the Message Contract based Client.
+            // Regardless of client, the service is unafected.
+            if (false)
+            { 
+                var reader = new StringReader("<wse:Subscribe xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:Delivery><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>" + EventSinkUri + "</Address></wse:NotifyTo></wse:Delivery></wse:Subscribe>");
+                var content = XmlReader.Create(reader);
+                var request = Message.CreateMessage(MessageVersion.Soap11, Constants.WsEventing.Actions.Subscribe, content);
+                var channel = ChannelFactory<IEventSourceRaw>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://localhost:8080/eventsource"));
+                var response = channel.Subscribe(request);
+                var xml = response.GetReaderAtBodyContents().ReadOuterXml();
+                if (response.IsFault) throw new Exception(xml);
+            }
+            else
+            {
+                var request = new SubscribeRequestMessage(EventSinkUri);
+                var channel = ChannelFactory<IEventSource>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://localhost:8080/eventsource"));
+                channel.Subscribe(request);
+            }
 
             Console.WriteLine("Event subscribed!");
         }
