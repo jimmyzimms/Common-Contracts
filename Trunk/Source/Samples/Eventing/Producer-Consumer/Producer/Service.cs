@@ -52,6 +52,7 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.ServiceModel.MsmqIntegration;
 using CommonContracts.WsEventing;
 
@@ -99,6 +100,12 @@ namespace Producer
 
                 Console.WriteLine("\tEvent sent!");
             }
+        }
+
+        public Message Subscribe(Message request)
+        {
+            var xml = request.GetReaderAtBodyContents().ReadOuterXml();
+            return null;
         }
     }
 }
