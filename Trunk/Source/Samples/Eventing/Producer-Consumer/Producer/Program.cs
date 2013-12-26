@@ -58,7 +58,6 @@ namespace Producer
     public class Program
     {
         public const String EventSubscribeUri = @"http://localhost:8080/eventsource";
-        public const String EventAction = @"urn:eventsink/notify";
 
         public static void Main(String[] args)
         {
