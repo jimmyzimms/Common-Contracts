@@ -73,35 +73,48 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Initializes a new instance of the <see cref="GetStatusRequestMessage"/> with the default values. This constructor should only be used for deserialization.
         /// </summary>
-        /// <remarks>This constructor will not initialize the <see cref="Identifier"/> value.</remarks>
-        [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
-        public GetStatusRequestMessage()
+        public GetStatusRequestMessage() : this(new GetStatusRequestMessageBody())
         {
-            this.body = new GetStatusRequestMessageBody();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GetStatusRequestMessage"/> with the supplied <paramref name="id"/> value.
+        /// Initializes a new instance of the <see cref="GetStatusRequestMessage"/> with the default values. This constructor should only be used for deserialization.
         /// </summary>
-        /// <remarks>This constructor will initialize the <see cref="Body"/> value to the default <see cref="GetStatusRequestMessageBody"/> instance.</remarks>
-        /// <param name="id">The identifier for the subscription request.</param>
-        public GetStatusRequestMessage(Identifier id) : this(id, new GetStatusRequestMessageBody())
+        /// <param name="identifier">The <see cref="Identifier"/> containing the subscription information.</param>
+        public GetStatusRequestMessage(Identifier identifier) : this()
         {
-            Contract.Requires<ArgumentNullException>(id != null, "id");
+            Contract.Requires<ArgumentNullException>(identifier != null, "identifier");
+
+            this.identifier = identifier;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetStatusRequestMessage"/> with the supplied <paramref name="id"/> and <paramref name="body"/> values.
         /// </summary>
-        /// <param name="id">The identifier for the subscription request.</param>
-        /// <param name="body">The body of the subscription request.</param>
-        public GetStatusRequestMessage(Identifier id, GetStatusRequestMessageBody body)
+        /// <remarks>
+        /// Generally used with custom <see cref="GetStatusRequestMessageBody"/> content types.
+        /// </remarks>
+        /// <param name="body">The body of the subscription status request.</param>
+        public GetStatusRequestMessage(GetStatusRequestMessageBody body)
         {
-            Contract.Requires<ArgumentNullException>(id != null, "id");
             Contract.Requires<ArgumentNullException>(body != null, "body");
 
-            this.identifier = id;
             this.body = body;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetStatusRequestMessage"/> with the supplied <paramref name="id"/> and <paramref name="body"/> values.
+        /// </summary>
+        /// <remarks>
+        /// Generally used with custom <see cref="GetStatusRequestMessageBody"/> content types.
+        /// </remarks>
+        /// <param name="identifier">The <see cref="Identifier"/> containing the subscription information.</param>
+        /// <param name="body">The body of the subscription status request.</param>
+        public GetStatusRequestMessage(Identifier identifier, GetStatusRequestMessageBody body) : this(body)
+        {
+            Contract.Requires<ArgumentNullException>(identifier != null, "identifier");
+
+            this.identifier = identifier;
         }
 
         #endregion
@@ -109,10 +122,10 @@ namespace CommonContracts.WsEventing
         #region Properties
 
         /// <summary>
-        /// Gets or sets the <see cref="Identifier"/> value for the subscription request.
+        /// Gets or sets the <see cref="Identifier"/> value for the subscription status request.
         /// </summary>
-        /// <value>The <see cref="Identifier"/> value for the subscription request.</value>
-        [MessageHeader(Name ="Identifier", Namespace = Constants.WsEventing.Namespace)]
+        /// <value>The <see cref="Identifier"/> value for the subscription status request.</value>
+        [MessageHeader(Name = "Identifier", Namespace = Constants.WsEventing.Namespace)]
         public virtual Identifier Identifier
         {
             get { return this.identifier; }

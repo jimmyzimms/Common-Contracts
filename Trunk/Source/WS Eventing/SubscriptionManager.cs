@@ -236,5 +236,41 @@ namespace CommonContracts.WsEventing
         }
 
         #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Replaces the <see cref="Identifier"/> value, if any, with the supplied <paramref name="id"/>, if any.
+        /// </summary>
+        /// <param name="id">The new identifier value to use, or clear if null.</param>
+        public void CreateIdentifierHeader(Guid? id)
+        {
+            var builder = new EndpointAddressBuilder(this.EndpointAddress.ToEndpointAddress());
+            var header = builder.Headers.FirstOrDefault(a => a.Name == "Identifier" && a.Namespace == Constants.WsEventing.Namespace);
+
+            if (id == null)
+            {
+                if (header == null) return;
+
+                var wasRemoved = builder.Headers.Remove(header);
+                Debug.Assert(wasRemoved);
+            }
+            else
+            {
+                if (header != null)
+                {
+                    var wasRemoved = builder.Headers.Remove(header);
+                    Debug.Assert(wasRemoved);
+                }
+                var uuid = new UniqueId(id.Value);
+                header = AddressHeader.CreateAddressHeader("Identifier", Constants.WsEventing.Namespace, uuid.ToString());
+
+                builder.Headers.Add(header);
+            }
+
+            this.epa = EndpointAddressAugust2004.FromEndpointAddress(builder.ToEndpointAddress());
+        }
+
+        #endregion
     }
 }

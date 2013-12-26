@@ -76,7 +76,6 @@ namespace CommonContracts.WsEventing
         /// This constructor performs no initialization of values and in general should not be used
         /// by subscription manager implementations.
         /// </remarks>
-        [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
         public RenewResponseMessage()
         {
         }
@@ -90,6 +89,17 @@ namespace CommonContracts.WsEventing
             Contract.Requires<ArgumentNullException>(body != null, "body");
 
             this.body = body;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenewResponseMessage"/> with the supplied <paramref name="body"/> value.
+        /// </summary>
+        /// <param name="expires">The <see cref="Expires"/> containing the details of the new subscription expiration.</param>
+        public RenewResponseMessage(Expires expires)
+        {
+            Contract.Requires<ArgumentNullException>(expires != null, "expires");
+
+            this.body = new RenewResponseMessageBody(expires);
         }
 
         #endregion

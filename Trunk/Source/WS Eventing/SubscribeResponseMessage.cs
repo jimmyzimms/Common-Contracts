@@ -52,7 +52,6 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.ServiceModel;
-using System.Xml;
 
 namespace CommonContracts.WsEventing
 {
@@ -65,11 +64,7 @@ namespace CommonContracts.WsEventing
         #region Fields
 
         private SubscribeResponseMessageBody body;
-        [MessageHeader(Name = "Identifier", Namespace = Constants.WsEventing.Namespace)]
-        private MessageHeader<String> header;
-        private Guid? identifier;
-        //[MessageHeader]
-        private Identifier id = new Identifier(Guid.NewGuid());
+        
         #endregion
 
         #region Properties
@@ -77,17 +72,28 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Gets or sets the optional <see cref="Guid"/> value used as an event subscription identifier.
         /// </summary>
+        /// <remarks>
+        /// This property provides a shortcut to manually creating a wse:Identifier element in the <see cref="EndpointAddress"/>
+        /// we use to construct the <see cref="SubscriptionManager"/> with.
+        /// </remarks>
         /// <value>The optional <see cref="Guid"/> value used as an event subscription identifier.</value>
         public virtual Guid? Identifier
         {
             get
             {
-                return this.identifier;
+                var identifier = this.body.SubscriptionManager.Identifier;
+                if (identifier == null) return null;
+                
+                if (!identifier.Value.IsGuid) return null;
+
+                Guid result;
+                if (identifier.Value.TryGetGuid(out result)) return result;
+
+                return null;
             }
             set
             {
-                this.identifier = value;
-                this.header = value == null ? null : new MessageHeader<String>("uuid:" + value.Value);
+                this.Body.SubscriptionManager.CreateIdentifierHeader(value);
             }
         }
 
@@ -122,12 +128,29 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Initializes a new instance of the <see cref="SubscribeResponseMessage"/> class with the supplied content.
         /// </summary>
-        /// <param name="body">The <see cref="SubscribeResponseMessageBody"/> this repsonse message will return to the subscriber.</param>
+        /// <param name="body">The <see cref="SubscribeResponseMessageBody"/> this response message will return to the subscriber.</param>
         public SubscribeResponseMessage(SubscribeResponseMessageBody body)
         {
             Contract.Requires<ArgumentNullException>(body != null, "body");
 
             this.body = body;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeResponseMessage"/> class with the supplied content.
+        /// </summary>
+        /// <remarks>
+        /// Generally used as a convienence method to quickly create a response message with a body containing the provided
+        /// <paramref name="subscriptionManager"/> and <paramref name="expires"/> information.
+        /// </remarks>
+        /// <param name="subscriptionManager">The <see cref="SubscriptionManager"/> this response message will return to the subscriber.</param>
+        /// <param name="expires">The <see cref="Expires"/> information for the new subscription.</param>
+        public SubscribeResponseMessage(SubscriptionManager subscriptionManager, Expires expires)
+        {
+            Contract.Requires<ArgumentNullException>(subscriptionManager != null, "subscriptionManager");
+            Contract.Requires<ArgumentNullException>(expires != null, "expires");
+
+            this.body = new SubscribeResponseMessageBody(subscriptionManager, expires);
         }
 
         #endregion

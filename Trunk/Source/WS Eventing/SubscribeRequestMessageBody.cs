@@ -290,7 +290,7 @@ namespace CommonContracts.WsEventing
             var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wse";
 
-            writer.WriteStartElement(prefix, "Subscribe", Constants.WsEventing.Namespace);
+            //writer.WriteStartElement(prefix, "Subscribe", Constants.WsEventing.Namespace);
             if (this.EndTo != null)
             {
                 this.EndTo.ToEndpointAddress().WriteTo(AddressingVersion.WSAddressingAugust2004, writer, "EndTo", Constants.WsEventing.Namespace);
@@ -307,7 +307,7 @@ namespace CommonContracts.WsEventing
             {
                 this.Filter.WriteXPathTo(writer, prefix, "Filter", Constants.WsEventing.Namespace, true);
             }
-            writer.WriteEndElement();
+            //writer.WriteEndElement();
         }
 
         #endregion

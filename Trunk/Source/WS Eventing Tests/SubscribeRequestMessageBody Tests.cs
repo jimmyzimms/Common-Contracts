@@ -99,7 +99,7 @@ namespace CommonContracts.WsEventing.Tests
             var serializer = new XmlSerializer(typeof(SubscribeRequestMessageBody));
 
             var xml = XElement.Parse("<wse:Subscribe xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:EndTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/endTo</Address></wse:EndTo><wse:Delivery><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>http://tempuri.org/</Address></wse:NotifyTo></wse:Delivery><wse:Expires>2010-08-23T00:00:00Z</wse:Expires><wse:Filter>/foo</wse:Filter></wse:Subscribe>");
-            SubscribeRequestMessageBody body = (SubscribeRequestMessageBody)serializer.Deserialize(xml.CreateReader());
+            var body = (SubscribeRequestMessageBody)serializer.Deserialize(xml.CreateReader());
             Assert.That(body.Delivery, Is.Not.Null);
             Assert.That(body.Expires, Is.Not.Null);
             Assert.That(body.Filter.XPath, Is.EqualTo(@"/foo"));

@@ -53,7 +53,6 @@ using System;
 using System.IO;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 using System.Xml;
 using CommonContracts.WsEventing;
 
@@ -61,89 +60,83 @@ namespace Subscriber
 {
     public class Program
     {
-        public static ServiceHost Host = new ServiceHost(typeof(Service));
-
-        public const String QueueName = @".\private$\consumer-eventsink";
         public const String EventSinkUri = @"http://localhost:8081/eventsink";
-        public const String EventAction = @"urn:eventsink/notify";
 
         public static void Main(String[] args)
         {
-            //if (!UacHelper.IsProcessElevated)
-            //{
-            //    Console.Beep();
-            //    Console.WriteLine("This application requires full administrative privledges to run");
-            //    Console.ReadKey(true);
-            //    return;
-            //}
-
             Console.WriteLine("Press any key to subscribe...");
             Console.ReadKey(true);
 
-            Subscribe();
-            StartListener();
+            var manager = Subscribe();
+            
+            Console.WriteLine("Press any key to Check Status...");
+            Console.ReadKey(true);
+
+            CheckStatus(manager);
+
+            Console.WriteLine("Press any key to Renew...");
+            Console.ReadKey(true);
+
+            Renew(manager);
+
+            Console.WriteLine("Press any key to Unsubscribe...");
+            Console.ReadKey(true);
+
+            Unsubscribe(manager);
 
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey(true);
-
-            Unsubscribe();
-            EndListener();
         }
 
-        public static void Subscribe()
+        public static SubscriptionManager Subscribe()
         {
-            var reader = new StringReader("<wse:Subscribe xmlns:wse='http://schemas.xmlsoap.org/ws/2004/08/eventing'><wse:Delivery><wse:NotifyTo><Address xmlns='http://schemas.xmlsoap.org/ws/2004/08/addressing'>" + EventSinkUri + "</Address></wse:NotifyTo></wse:Delivery></wse:Subscribe>");
-            var content = XmlReader.Create(reader);
-            var request = Message.CreateMessage(MessageVersion.Soap11, Constants.WsEventing.Actions.Subscribe, content);
+            var request = new SubscribeRequestMessage(EventSinkUri);
             var channel = ChannelFactory<IEventSource>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://localhost:8080/eventsource"));
             var response = channel.Subscribe(request);
-            if (response.IsFault) throw new Exception(response.GetReaderAtBodyContents().ReadOuterXml());
 
-            Console.WriteLine("Event subscribed!");
+            var expirationDate = response.Body.Expires.Value;
+            var id = response.Identifier;
+            var uri = response.Body.SubscriptionManager.EndpointAddress.ToEndpointAddress().ToString();
+
+            Console.WriteLine("Event {0} subscribed till {1}. Manager @ {2}", id, expirationDate, uri);
+
+            return response.Body.SubscriptionManager;
         }
 
-        public static void StartListener()
+        public static void CheckStatus(SubscriptionManager manager)
         {
-            Console.WriteLine("Starting event sink...");
+            var epa = manager.EndpointAddress.ToEndpointAddress();
+            var request = new GetStatusRequestMessage(manager.Identifier);
+            var channel = ChannelFactory<ISubscriptionManager>.CreateChannel(new BasicHttpBinding(), epa);
+            var response = channel.GetStatus(request);
 
-            // Enable metadata publishing.
-            var smb = new ServiceMetadataBehavior();
-            smb.HttpGetEnabled = true;
-            smb.HttpGetUrl = new Uri(EventSinkUri + "/mex");
-            smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
-            Host.Description.Behaviors.Add(smb);
-
-            // Add an endpoint
-            Host.AddServiceEndpoint(typeof(Service), new BasicHttpBinding(), new Uri(EventSinkUri));
-            Host.Open();
-
-            Console.WriteLine("Eventing sink listening @" + EventSinkUri);
+            var expiration = response.Body.Expires;
+            if (expiration == null)
+            {
+                Console.WriteLine("Subscription {0} is already expired", manager.Identifier.Value);
+            }
+            else
+            {
+                Console.WriteLine("Status for {0} expires at {1}", manager.Identifier.Value, expiration.Value);
+            }
         }
 
-        public static void Unsubscribe()
+        public static void Renew(SubscriptionManager manager)
         {
-            //Since we're not actually running a Subscription Mananger in this example
-            //  the code is commented out but is useful to show an example of a non-identified
-            //  unsubscribe request.
+            var request = new RenewRequestMessage(manager.Identifier); // Request the default expiration extension from the service
+            var channel = ChannelFactory<ISubscriptionManager>.CreateChannel(new BasicHttpBinding(), manager.EndpointAddress.ToEndpointAddress());
+            var response = channel.Renew(request);
 
-            //var reader = new StringReader("<UnsubscribeRequestMessage xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" />"");
-            //var content = XmlReader.Create(reader);
-            //var request = Message.CreateMessage(MessageVersion.Soap11, Constants.WsEventing.Actions.Unsubscribe, content);
-            //var channel = ChannelFactory<ISubscriptionManager>.CreateChannel(new BasicHttpBinding(), new EndpointAddress("http://localhost:8080/eventsource"));
-            //var response = channel.Unsubscribe(request);
-            //if (response.IsFault) throw new Exception(response.GetReaderAtBodyContents().ReadOuterXml());
+            Console.WriteLine("Status for {0} now expires at {1}", manager.Identifier.Value, response.Body.Expires.Value);
+        }
+
+        public static void Unsubscribe(SubscriptionManager manager)
+        {
+            var request = new UnsubscribeRequestMessage(manager.Identifier); // Perform the default unsubscribe request from the service
+            var channel = ChannelFactory<ISubscriptionManager>.CreateChannel(new BasicHttpBinding(), manager.EndpointAddress.ToEndpointAddress());
+            channel.Unsubscribe(request);
 
             Console.WriteLine("Event unsubscribed!");
-        }
-
-        public static void EndListener()
-        {
-            Console.WriteLine("Ending event sink...");
-            //Queue.Dispose();
-            //if (MessageQueue.Exists(QueueName))
-            //{
-            //    MessageQueue.Delete(QueueName);
-            //}
         }
     }
 }

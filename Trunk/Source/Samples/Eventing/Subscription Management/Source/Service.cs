@@ -58,30 +58,9 @@ namespace Source
     [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
     public partial class Service
     {
-        public static Dictionary<Guid, Uri> Subscribers = new Dictionary<Guid, Uri>();
-
-        public static void RaiseEvent()
-        {
-            var id = Guid.NewGuid();
-
-            Console.WriteLine("Raising event with id = " + id + " ...");
-
-            //foreach (var subscriber in Subscribers)
-            //{
-            //    Console.WriteLine("\tSending event to-> " + subscriber);
-
-            //    var binding = new MsmqIntegrationBinding();
-            //    binding.Durable = false;
-            //    binding.ExactlyOnce = false;
-            //    binding.Security.Mode = MsmqIntegrationSecurityMode.None;
-            //    binding.SerializationFormat = MsmqMessageSerializationFormat.Xml;
-            //    binding.UseMsmqTracing = true;
-
-            //    var channel = ChannelFactory<IEventCallback>.CreateChannel(binding, new EndpointAddress(subscriber));
-            //    channel.Raise(new MsmqMessage<Guid>(id));
-
-            //    Console.WriteLine("\tEvent sent!");
-            //}
-        }
+        /// <summary>
+        /// Contains the list of distinct subscribers to this service.
+        /// </summary>
+        public static Dictionary<Guid, Tuple<Uri, DateTime>> Subscribers = new Dictionary<Guid, Tuple<Uri, DateTime>>();
     }
 }
