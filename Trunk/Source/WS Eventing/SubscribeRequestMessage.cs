@@ -50,6 +50,7 @@
 #endregion
 
 using System;
+using System.Diagnostics.Contracts;
 using System.ServiceModel;
 
 namespace CommonContracts.WsEventing
@@ -62,8 +63,83 @@ namespace CommonContracts.WsEventing
     {
         #region Fields
 
+        private SubscribeRequestMessageBody body;
+
         #endregion
-        
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeRequestMessage"/> class.
+        /// </summary>
+        /// <remarks>
+        /// Generally used in deserialization routines.
+        /// </remarks>
+        public SubscribeRequestMessage()
+        {
+#pragma warning disable 618
+            this.body = new SubscribeRequestMessageBody();
+#pragma warning restore 618
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeRequestMessage"/> class with
+        /// the <see cref="EndpointAddress"/> containing the location to receive event notifications
+        /// at for the subscriber.
+        /// </summary>
+        /// <remarks>
+        /// This is a convienence overload allowing the caller to quickly craft a request to subscribe
+        /// using the basic most common use case. The default <see cref="Constants.WsEventing.DeliverModes">Delivery Mode</see>
+        /// of Push will be created.
+        /// </remarks>
+        public SubscribeRequestMessage(String notifyTo, Uri mode = null) : this(new EndpointAddress(notifyTo), mode)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeRequestMessage"/> class with
+        /// the <see cref="EndpointAddress"/> containing the location to receive event notifications
+        /// at for the subscriber.
+        /// </summary>
+        /// <remarks>
+        /// This is a convienence overload allowing the caller to quickly craft a request to subscribe
+        /// using the basic most common use case. The default <see cref="Constants.WsEventing.DeliverModes">Delivery Mode</see>
+        /// of Push will be created.
+        /// </remarks>
+        public SubscribeRequestMessage(EndpointAddress notifyTo, Uri mode = null) : this()
+        {
+            if (mode == null) mode = new Uri(Constants.WsEventing.DeliverModes.Push);
+            this.body.Delivery = new Delivery(mode, notifyTo);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeRequestMessage"/> class with the supplied <see cref="Delivery"/> value.
+        /// </summary>
+        /// <remarks>
+        /// Generally used by client subscribers.
+        /// </remarks>
+        public SubscribeRequestMessage(Delivery delivery) : this(delivery, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubscribeRequestMessage"/> class with
+        /// the supplied <see cref="Delivery"/> value and optional <see cref="EndpointAddress"/>
+        /// containing the endpoint to contact when a subscription is ended by the
+        /// <see cref="IEventSource">event source</see>.
+        /// </summary>
+        /// <remarks>
+        /// Generally used by client subscribers.
+        /// </remarks>
+        public SubscribeRequestMessage(Delivery delivery, EndpointAddress endTo)
+        {
+            Contract.Requires<ArgumentNullException>(delivery != null, "delivery");
+
+            this.body = new SubscribeRequestMessageBody(delivery, endTo);
+        }
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -89,8 +165,8 @@ namespace CommonContracts.WsEventing
         [MessageBodyMember(Name = "Subscribe", Namespace = Constants.WsEventing.Namespace, Order = 0)]
         public virtual SubscribeRequestMessageBody Body
         {
-            get;
-            set;
+            get { return this.body; }
+            set { this.body = value; }
         }
 
         #endregion

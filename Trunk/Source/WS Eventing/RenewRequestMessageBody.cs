@@ -112,8 +112,10 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Initializes a new instance of the <see cref="RenewRequestMessageBody"/> class.
         /// </summary>
-        /// <remarks>This constructor will not initialize the <see cref="Expires"/> value.</remarks>
-        [Obsolete("This method is required for the XmlSerializer and not to be directly called")]
+        /// <remarks>
+        /// This overload does not request a specific expiration time (relying on the event source default)
+        /// to be applied to the subscription.
+        /// </remarks>
         public RenewRequestMessageBody()
         {
         }
@@ -143,19 +145,26 @@ namespace CommonContracts.WsEventing
             if (reader == null) throw new ArgumentNullException("reader");
 
             reader.ReadStartElement("Renew", Constants.WsEventing.Namespace);
-            this.Expires = new Expires(reader);
+            reader.Read();
+
+            if (reader.IsStartElement("Expires", Constants.WsEventing.Namespace))
+            {
+                this.Expires = new Expires(reader);
+            }
+
+            if (reader.LocalName == "Expires") reader.ReadEndElement();
+
             reader.ReadEndElement();
         }
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            if (this.Expires == null) throw new XmlException("The Expires element is null");
 
             var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wse";
 
             writer.WriteStartElement(prefix, "Renew", Constants.WsEventing.Namespace);
-            ((IXmlSerializable)this.Expires).WriteXml(writer);
+            if (this.Expires != null) ((IXmlSerializable) this.Expires).WriteXml(writer);
             writer.WriteEndElement();
         }
 

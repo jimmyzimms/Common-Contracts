@@ -61,16 +61,24 @@ namespace Source
         {
             var deliverTo = request.Body.Delivery.NotifyTo.ToEndpointAddress().Uri;
             var id = Guid.NewGuid();
-            Subscribers.Add(id, deliverTo);
 
-            Console.WriteLine("\tSubscription request for " + deliverTo);
+            var subscription = new Tuple<Uri, DateTime>(deliverTo, DateTime.UtcNow.AddMinutes(5));
+            Subscribers.Add(id, subscription);
+
+            Console.WriteLine("\tSubscription request for {0}", deliverTo);
+            Console.WriteLine("\tSubscription ID {0}", id);
+            Console.WriteLine("\tSubscription Expires {0}", subscription.Item2);
 
             // We're going to run the event source as the Subscription Manager as
-            //  well so the endpoint will be the same. Event subscriber identification
-            //  will be handled via the wse:Identifier header element.
+            //  well so the endpoint will be the same. Because they have the same
+            //  EPA.To, Event subscriber identification will be handled via the
+            //  wse:Identifier header element and will be a reference header in
+            //  the EPA for the subscription manager endpoint.
+            var manager = new SubscriptionManager(OperationContext.Current.IncomingMessageHeaders.To);
 
-            var response = new SubscribeResponseMessage(new SubscribeResponseMessageBody(new SubscriptionManager(OperationContext.Current.IncomingMessageHeaders.To), new Expires(DateTime.MaxValue)));
-            response.Identifier = id;
+            var response = new SubscribeResponseMessage(manager, new Expires(subscription.Item2));
+            response.Identifier = id; // This will insert the wse:Identifier address header to the EPA we return to the subscriber
+
             return response;
         }
     }

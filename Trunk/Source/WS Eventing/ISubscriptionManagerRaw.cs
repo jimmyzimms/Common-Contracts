@@ -49,13 +49,25 @@
 
 #endregion
 
-using System;
-using System.Linq;
-using CommonContracts.WsEventing;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using CommonContracts.WsEventing.Faults;
 
-namespace Source
+namespace CommonContracts.WsEventing
 {
-    public partial class Service : ISubscriptionManager
+    /// <summary>
+    /// Represents the WSDL portType contract used in the WS-Eventing subscription management specification.
+    /// </summary>
+    /// <remarks>
+    /// This version of the contract is used to model the subscription manager API directly on
+    /// the WCF infrastructure. Many implementations, client and service, leverage messages
+    /// at the low level API to remove the overhead of serialization and message formatting.
+    /// This version of the subscription manager contract allows clients to work directly
+    /// in handling the messages. 
+    /// </remarks>
+    [ServiceContract(Name = "SubscriptionManager", Namespace = Constants.WsEventing.Namespace)]
+    [XmlSerializerFormat(Style = OperationFormatStyle.Document)]
+    public interface ISubscriptionManagerRaw
     {
         /// <summary>
         /// Operation to get the status of a subscription. The subscriber sends a request to the subscription manager
@@ -63,19 +75,10 @@ namespace Source
         /// </summary>
         /// <param name="request">The <see cref="GetStatusRequestMessage">request message</see> containing the subscription status request details.</param>
         /// <returns>The <see cref="GetStatusResponseMessage">GetStatusResponseMessage</see> containing the subscription status details.</returns>
-        public GetStatusResponseMessage GetStatus(GetStatusRequestMessage request)
-        {
-            Guid id;
-            request.Identifier.Value.TryGetGuid(out id);
-
-            var exists = Subscribers.ContainsKey(id);
-            if (!exists) return new GetStatusResponseMessage(new GetStatusResponseMessageBody());
-
-            var isExpired = Subscribers[id].Item2 < DateTime.UtcNow;
-            return !isExpired
-                ? new GetStatusResponseMessage(new GetStatusResponseMessageBody(new Expires(Subscribers[id].Item2)))
-                : new GetStatusResponseMessage(new GetStatusResponseMessageBody());
-        }
+        [OperationContract(Action = Constants.WsEventing.Actions.GetStatus, ReplyAction = Constants.WsEventing.Actions.GetStatusReply)]
+        [FaultContract(typeof(InvalidMessageFault), Name = "InvalidMessageFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
+        [TransactionFlow(TransactionFlowOption.Allowed)]
+        Message GetStatus(Message request);
 
         /// <summary>
         /// Operation to update the expiration for a subscription. The subscriber sends a request to the subscription manager
@@ -83,33 +86,19 @@ namespace Source
         /// </summary>
         /// <param name="request">The <see cref="RenewRequestMessage">request message</see> containing the renewal request details.</param>
         /// <returns>The <see cref="RenewResponseMessage">RenewResponseMessage</see> containing the new subscription expiration details.</returns>
-        public RenewResponseMessage Renew(RenewRequestMessage request)
-        {
-            Guid id = Subscribers.Keys.First();
-            request.Identifier.Value.TryGetGuid(out id);
-
-            var exists = Subscribers.ContainsKey(id);
-            if (!exists) return new RenewResponseMessage();
-
-            Subscribers[id] = new Tuple<Uri, DateTime>(Subscribers[id].Item1, DateTime.UtcNow.AddDays(5));
-            
-            return new RenewResponseMessage(new Expires(Subscribers[id].Item2)); 
-        }
+        [OperationContract(Action = Constants.WsEventing.Actions.Renew, ReplyAction = Constants.WsEventing.Actions.RenewReply)]
+        [FaultContract(typeof(InvalidExpirationTimeFault), Name = "InvalidExpirationTimeFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
+        [FaultContract(typeof(InvalidMessageFault), Name = "InvalidMessageFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
+        [TransactionFlow(TransactionFlowOption.Allowed)]
+        Message Renew(Message request);
 
         /// <summary>
         /// Operation to unsubscribe an event sink for an existing subscription.
         /// </summary>
         /// <param name="request">The <see cref="UnsubscribeRequestMessage">request message</see> containing the unsubscription request details.</param>
-        public void Unsubscribe(UnsubscribeRequestMessage request)
-        {
-            Guid id;
-            request.Identifier.Value.TryGetGuid(out id);
-
-            var exists = Subscribers.ContainsKey(id);
-            if (exists)
-            {
-                Subscribers.Remove(id);
-            }
-        }
+        [OperationContract(Action = Constants.WsEventing.Actions.Unsubscribe, ReplyAction = Constants.WsEventing.Actions.UnsubscribeReply)]
+        [FaultContract(typeof(InvalidMessageFault), Name = "InvalidMessageFault", Action = "http://schemas.xmlsoap.org/ws/2004/08/addressing/fault")]
+        [TransactionFlow(TransactionFlowOption.Allowed)]
+        Message Unsubscribe(Message request);
     }
 }

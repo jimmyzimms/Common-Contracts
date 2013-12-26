@@ -58,17 +58,16 @@ namespace Source
     public class Program
     {
         public const String EventSubscribeUri = @"http://localhost:8080/eventsource";
-        public const String EventAction = @"urn:eventsink/notify";
 
         public static void Main(String[] args)
         {
-            //if (!UacHelper.IsProcessElevated)
-            //{
-            //    Console.Beep();
-            //    Console.WriteLine("This application requires full administrative privledges to run");
-            //    Console.ReadKey(true);
-            //    return;
-            //}
+            if (!UacHelper.IsProcessElevated)
+            {
+                Console.Beep();
+                Console.WriteLine("This application requires full administrative privledges to run");
+                Console.ReadKey(true);
+                return;
+            }
             Console.WriteLine("Starting event source...");
 
             using (var host = new ServiceHost(typeof(Service)))
@@ -81,24 +80,14 @@ namespace Source
                 host.Description.Behaviors.Add(smb);
 
                 // Add an endpoint
-                host.AddServiceEndpoint(typeof(CommonContracts.WsEventing.IEventSource), new BasicHttpBinding(), new Uri(EventSubscribeUri));
+                var binding = new BasicHttpBinding();
+                host.AddServiceEndpoint(typeof(CommonContracts.WsEventing.IEventSource), binding, new Uri(EventSubscribeUri));
+                host.AddServiceEndpoint(typeof(CommonContracts.WsEventing.ISubscriptionManager), binding, new Uri(EventSubscribeUri));
                 host.Open();
 
                 Console.WriteLine("Eventing host listening @" + EventSubscribeUri);
-                Console.WriteLine("Press 1 to raise random event; 2 to exit");
-                while (true)
-                {
-                    var key = Console.ReadKey(true);
-                    if (key.KeyChar == '1')
-                    {
-                        Service.RaiseEvent();
-                    }
-                    else if (key.KeyChar == '2')
-                    {
-                        Console.WriteLine("Exiting...");
-                        return;
-                    }
-                }
+                Console.WriteLine("Press enter to exit...");
+                Console.ReadLine();
             }
         }
     }

@@ -52,7 +52,6 @@
 using System;
 using System.Diagnostics.Contracts;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -128,7 +127,11 @@ namespace CommonContracts.WsEventing
 
             this.identifier = new UniqueId(id);
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Identifier"/> class from the supplied <see cref="Identifier"/> value.
+        /// </summary>
+        /// <remarks>The supplied <paramref name="id"/> value will be used as <see cref="UniqueId"/> value.</remarks>
         public Identifier(Identifier id)
         {
             Contract.Requires<ArgumentNullException>(id != null, "id");
@@ -136,7 +139,11 @@ namespace CommonContracts.WsEventing
 
             this.identifier = id.Value;
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Identifier"/> class from the supplied <see cref="Guid"/> value.
+        /// </summary>
+        /// <remarks>The supplied <paramref name="id"/> value will be used as <see cref="UniqueId"/> value.</remarks>
         public Identifier(Guid id) : this(String.Concat("uuid:", id))
         {
         }
@@ -150,7 +157,7 @@ namespace CommonContracts.WsEventing
         {
             Contract.Requires<ArgumentNullException>(epa != null, "epa");
             
-            AddressHeader header = epa.Headers.FindHeader("Identifier", Constants.WsEventing.Namespace);
+            var header = epa.Headers.FindHeader("Identifier", Constants.WsEventing.Namespace);
             if (header == null) throw new ArgumentException("No AddressHeader was found in the supplied EndpointAddress for the " + Constants.WsEventing.Namespace + ":Identifier QName");
 
             ((IXmlSerializable)this).ReadXml(header.GetAddressHeaderReader());
@@ -198,12 +205,7 @@ namespace CommonContracts.WsEventing
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
-            if (String.IsNullOrEmpty(prefix)) prefix = "wse";
-
-            //writer.WriteStartElement(prefix, "Identifier", Constants.WsEventing.Namespace);
             writer.WriteValue(this.Value.ToString());
-            //writer.WriteEndElement();
         }
 
         #endregion

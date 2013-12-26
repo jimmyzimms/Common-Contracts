@@ -73,22 +73,55 @@ namespace CommonContracts.WsEventing
         /// <summary>
         /// Initializes a new instance of the <see cref="RenewRequestMessage"/> class.
         /// </summary>
-        /// <remarks>This constructor will not initialize an <see cref="Identifier"/> for the request.</remarks>
+        /// <remarks>
+        /// Generally used for serialization.
+        /// </remarks>
         public RenewRequestMessage()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RenewRequestMessage"/> class with the supplied values.
+        /// Initializes a new instance of the <see cref="RenewRequestMessage"/> class.
         /// </summary>
-        /// <param name="id">The <</param>
-        /// <param name="body"></param>
-        public RenewRequestMessage(Identifier id, RenewRequestMessageBody body)
+        /// <remarks>
+        /// This overload does not request a specific expiration time (relying on the event source default)
+        /// to be applied to the subscription.
+        /// </remarks>
+        /// <param name="identifier">The <see cref="Identifier"/> containing the subscription information.</param>
+        public RenewRequestMessage(Identifier identifier) : this(new RenewRequestMessageBody())
         {
-            Contract.Requires<ArgumentNullException>(id != null, "id");
+            Contract.Requires<ArgumentNullException>(identifier != null, "identifier");
+
+            this.identifier = identifier;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenewRequestMessage"/> class.
+        /// </summary>
+        /// <remarks>
+        /// This overload will create the default <see cref="RenewRequestMessageBody"/> type and use to the supplied <paramref name="expires"/>
+        /// information to the event source (which MAY be honored) to be applied to the subscription.
+        /// </remarks>
+        /// <param name="identifier">The <see cref="Identifier"/> containing the subscription information.</param>
+        /// <param name="expires">The <see cref="Expires"/> containing the time when the subscription would like expiration, as requested by the subscriber.</param>
+        public RenewRequestMessage(Identifier identifier, Expires expires) : this(identifier)
+        {
+            Contract.Requires<ArgumentNullException>(expires != null, "expires");
+
+            this.body = new RenewRequestMessageBody(expires);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RenewRequestMessage"/> with the supplied <paramref name="body"/> value.
+        /// </summary>
+        /// <remarks>
+        /// Generally used with custom <see cref="RenewRequestMessageBody"/> content types.
+        /// </remarks>
+        /// <param name="body">The body of the subscription renew request.</param>
+        public RenewRequestMessage(RenewRequestMessageBody body)
+        {
             Contract.Requires<ArgumentNullException>(body != null, "body");
 
-            this.identifier = id;
             this.body = body;
         }
 
@@ -97,10 +130,10 @@ namespace CommonContracts.WsEventing
         #region Properties
 
         /// <summary>
-        /// Gets or sets the optional <see cref="WsEventing.Identifier"/> value used as an event subscription identifier.
+        /// Gets or sets the <see cref="Identifier"/> value for the subscription status request.
         /// </summary>
-        /// <value>The optional <see cref="WsEventing.Identifier"/> value used as an event subscription identifier.</value>
-        [MessageHeader()]
+        /// <value>The <see cref="Identifier"/> value for the subscription status request.</value>
+        [MessageHeader(Name = "Identifier", Namespace = Constants.WsEventing.Namespace)]
         public virtual Identifier Identifier
         {
             get { return this.identifier; }
@@ -117,7 +150,10 @@ namespace CommonContracts.WsEventing
         public virtual RenewRequestMessageBody Body
         {
             get { return this.body; }
-            set { this.body = value; }
+            set
+            {
+                this.body = value;
+            }
         }
 
         #endregion

@@ -51,7 +51,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;

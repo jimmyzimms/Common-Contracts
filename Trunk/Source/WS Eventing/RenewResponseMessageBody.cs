@@ -138,7 +138,9 @@ namespace CommonContracts.WsEventing
             if (reader == null) throw new ArgumentNullException("reader");
 
             reader.ReadStartElement("RenewResponse", Constants.WsEventing.Namespace);
-            this.Expires = new Expires(reader);
+
+            if (reader.IsStartElement("Expires", Constants.WsEventing.Namespace)) this.Expires = new Expires(reader);
+            
             reader.ReadEndElement();
         }
 
@@ -146,12 +148,7 @@ namespace CommonContracts.WsEventing
         {
             if (Expires == null) throw new XmlException("Expires cannot be null");
 
-            var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
-            if (String.IsNullOrEmpty(prefix)) prefix = "wse";
-
-            writer.WriteStartElement(prefix, "RenewResponse", Constants.WsEventing.Namespace);
             ((IXmlSerializable)this.Expires).WriteXml(writer);
-            writer.WriteEndElement();
         }
 
         #endregion

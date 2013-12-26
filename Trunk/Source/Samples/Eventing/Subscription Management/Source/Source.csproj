@@ -50,7 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventCallback.cs" />
+    <Compile Include="..\..\Producer-Consumer\UacHelper.cs">
+      <Link>UacHelper.cs</Link>
+    </Compile>
     <Compile Include="EventSource.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

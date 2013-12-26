@@ -174,7 +174,6 @@ namespace CommonContracts.WsEventing
             var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
             if (String.IsNullOrEmpty(prefix)) prefix = "wse";
 
-            writer.WriteStartElement(prefix, "SubscribeResponse", Constants.WsEventing.Namespace);
             if (this.SubscriptionManager != null)
             {
                 ((IXmlSerializable)this.SubscriptionManager).WriteXml(writer);
@@ -183,7 +182,6 @@ namespace CommonContracts.WsEventing
             {
                 ((IXmlSerializable)this.Expires).WriteXml(writer);
             }
-            writer.WriteEndElement();
         }
 
         #endregion

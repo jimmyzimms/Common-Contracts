@@ -132,14 +132,7 @@ namespace CommonContracts.WsEventing
 
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            var prefix = writer.LookupPrefix(Constants.WsEventing.Namespace);
-            if (String.IsNullOrEmpty(prefix)) prefix = "wse";
-
-            writer.WriteStartElement(prefix, "GetStatusResponse", Constants.WsEventing.Namespace);
-
             if (this.Expires != null) ((IXmlSerializable)this.Expires).WriteXml(writer);
-
-            writer.WriteEndElement();
         }
 
         #endregion
